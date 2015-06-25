@@ -36,7 +36,13 @@ public class CouchbaseDatabase : MonoBehaviour {
 	#region Private Methods
 	void Awake(){
 		CreateDatabase ();
+
+	}
+
+	void Start(){
 		syncGateWayURI = "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
+		pullReplication = database.CreatePullReplication (new Uri (syncGateWayURI));
+		pushReplication = database.CreatePushReplication (new Uri (syncGateWayURI));
 	}
 	
 
@@ -152,11 +158,19 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	public void PullRemoteChanges(){
-		DoReplication (database.CreatePullReplication (new Uri (syncGateWayURI)));
+		DoReplication (pullReplication);
 	}
 
 	public void PushRemoteChanges(){
-		DoReplication (database.CreatePushReplication (new Uri (syncGateWayURI)));
+		DoReplication (pushReplication);
+	}
+
+	public Replication GetPullReplication(){
+		return pullReplication;
+	}
+
+	public Replication GetPushReplication(){
+		return pushReplication;
 	}
 
 	public string GetUUID(){
