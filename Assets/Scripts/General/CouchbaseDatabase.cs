@@ -36,16 +36,11 @@ public class CouchbaseDatabase : MonoBehaviour {
 	#region Private Methods
 	void Awake(){
 		CreateDatabase ();
-
-	}
-
-	void Start(){
 		syncGateWayURI = "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
 		pullReplication = database.CreatePullReplication (new Uri (syncGateWayURI));
 		pushReplication = database.CreatePushReplication (new Uri (syncGateWayURI));
 	}
 	
-
 	IEnumerator DoReplication(Replication replication){
 		replication.Start ();
 		
@@ -114,9 +109,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 	static public Manager CouchbaseLiteManager{
 		get{
 			if(couchbaseLiteManager == null){
-				ManagerOptions options = Manager.DefaultOptions;
-				options.CallbackScheduler = UnityMainThreadScheduler.TaskScheduler;
-				couchbaseLiteManager = new Manager(new DirectoryInfo(Application.persistentDataPath), options);
+				couchbaseLiteManager = new Manager();
 			}
 			
 			return couchbaseLiteManager;
