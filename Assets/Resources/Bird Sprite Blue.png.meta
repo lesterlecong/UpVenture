@@ -1,0 +1,213 @@
+fileFormatVersion: 2
+guid: 2c71c3ae765776249a6e27f05dab6d08
+timeCreated: 1429694312
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Bird Sprite Blue_0
+    21300002: Bird Sprite Blue_1
+    21300004: Bird Sprite Blue_2
+    21300006: Bird Sprite Blue_3
+    21300008: Bird Sprite Blue_4
+    21300010: Bird Sprite Blue_5
+    21300012: Bird Sprite Blue_6
+    21300014: Bird Sprite Blue_7
+    21300016: Bird Sprite Blue_8
+    21300018: Bird Sprite Blue_9
+    21300020: Bird Sprite Blue_10
+    21300022: Bird Sprite Blue_11
+    21300024: Bird Sprite Blue_12
+    21300026: Bird Sprite Blue_13
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings:
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -3
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: Bird Sprite Blue_0
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 362
+        width: 146
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_1
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 363
+        width: 146
+        height: 141
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_2
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 364
+        width: 146
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_3
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 367
+        width: 171
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_4
+      rect:
+        serializedVersion: 2
+        x: 728
+        y: 370
+        width: 182
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_5
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 171
+        width: 146
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_6
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 166
+        width: 146
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_7
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 170
+        width: 146
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_8
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 180
+        width: 146
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_9
+      rect:
+        serializedVersion: 2
+        x: 762
+        y: 177
+        width: 146
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_10
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 6
+        width: 146
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_11
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 6
+        width: 146
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_12
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 23
+        width: 168
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Bird Sprite Blue_13
+      rect:
+        serializedVersion: 2
+        x: 546
+        y: 22
+        width: 180
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: toons
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
