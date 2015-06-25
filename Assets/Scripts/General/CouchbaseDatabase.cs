@@ -30,38 +30,22 @@ public class CouchbaseDatabase : MonoBehaviour {
 	//private string fbTokenKey = "fbtoken";
 	private UserDefineKeys userDefineKey;
 	private string UserUUID;
+	private string syncGateWayURI;
 	#endregion
 
 	#region Private Methods
 	void Awake(){
 		CreateDatabase ();
+		syncGateWayURI = "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
 	}
 	
-	IEnumerator StartPullChanges(){
-		string uri =  "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
 
-		/*****DO IT LATER***********************************************
-		try{
-			pullReplication.Authenticator = facebookAuthenticator;
-		}catch (NullReferenceException e){
-			Debug.Log ("At StartPullChanges: " + e.Message);
-		}
-		****************************************************************/
-
-		pullReplication = database.CreatePullReplication (new Uri (uri));
-		pullReplication.Continuous = true;
-		pullReplication.Start ();
+	IEnumerator DoReplication(Replication replication){
+		replication.Start ();
 		
-		while (pullReplication != null && pullReplication.Status == ReplicationStatus.Active) {
+		while (replication != null && replication.Status == ReplicationStatus.Active) {
 			yield return new WaitForSeconds(0.5f);
 		}
-		
-	}
-
-	void StartPushChanges(){
-		string uri =  "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
-		pushReplication = database.CreatePushReplication (new Uri (uri));
-		pushReplication.Start ();
 	}
 
 	void CreateDatabase(){
@@ -165,8 +149,14 @@ public class CouchbaseDatabase : MonoBehaviour {
 			return;
 		}
 		**********************************************************/
-		StartCoroutine(StartPullChanges ());
-		StartPushChanges ();
+	}
+
+	public void PullRemoteChanges(){
+		DoReplication (database.CreatePullReplication (new Uri (syncGateWayURI)));
+	}
+
+	public void PushRemoteChanges(){
+		DoReplication (database.CreatePushReplication (new Uri (syncGateWayURI)));
 	}
 
 	public string GetUUID(){
@@ -200,7 +190,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 		if (database == null) {
 			CreateDatabase();
 		}
-		Debug.Log ("At CouchbaseDatabase::CreateDocument() doc id = " + DocumentID);
+
 		doc = database.GetExistingDocument (DocumentID);
 		if (doc == null) {
 			doc = database.GetDocument(DocumentID);
@@ -222,8 +212,6 @@ public class CouchbaseDatabase : MonoBehaviour {
 			properties [key] = value;
 			return true;
 		});
-
-		StartPushChanges ();
 	}
 
 
