@@ -65,6 +65,18 @@ namespace AssemblyCSharp
 				return "Total";
 			}
 		}
+
+		public string NextScene{
+			get{
+				return "NextScene";
+			}
+		}
+
+		public string UpdateSceneName{
+			get{
+				return "data update";
+			}
+		}
 	}
 }
 
