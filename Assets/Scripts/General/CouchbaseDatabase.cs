@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using System.Threading.Tasks;
+using PreviewLabs;
 
 public class CouchbaseDatabase : MonoBehaviour {
 
@@ -100,7 +101,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	string GetPreference(string key){
-		return PlayerPrefs.GetString (key);
+		return PreviewLabs.PlayerPrefs.GetString (key);
 	}
 
 	#endregion

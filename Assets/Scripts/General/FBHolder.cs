@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using AssemblyCSharp;
+using PreviewLabs;
 
 public class FBHolder : MonoBehaviour {
 	public Button loginButton;
@@ -89,7 +90,8 @@ public class FBHolder : MonoBehaviour {
 	}
 
 	void SavePreferences(string key, string value){
-		PlayerPrefs.SetString (key, value);
+		PreviewLabs.PlayerPrefs.SetString (key, value);
+		PreviewLabs.PlayerPrefs.Flush ();
 	}
 
 	IEnumerator RegisterToCouchbase(){

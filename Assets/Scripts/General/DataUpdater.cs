@@ -7,6 +7,7 @@ using AssemblyCSharp;
 using Couchbase.Lite;
 using Couchbase.Lite.Unity;
 using Newtonsoft;
+using PreviewLabs;
 
 public class DataUpdater : MonoBehaviour {
 	public GameObject couchbaseDatabaseObject;
@@ -32,7 +33,7 @@ public class DataUpdater : MonoBehaviour {
 			yield return new WaitForSeconds(1.0f);
 		}
 
-		Application.LoadLevel (PlayerPrefs.GetString (defineKeys.NextScene));
+		Application.LoadLevel (PreviewLabs.PlayerPrefs.GetString (defineKeys.NextScene));
 
 	}
 }

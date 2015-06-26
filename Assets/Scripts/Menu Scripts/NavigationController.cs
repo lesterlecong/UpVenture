@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using AssemblyCSharp;
-
+using PreviewLabs;
 
 public class NavigationController : MonoBehaviour {
 	
 
 	public void LoadScene(string SceneName){
 		UserDefineKeys defineKeys;
-		PlayerPrefs.SetString (defineKeys.NextScene, SceneName);
+		PreviewLabs.PlayerPrefs.SetString (defineKeys.NextScene, SceneName);
+		PreviewLabs.PlayerPrefs.Flush ();
 		Application.LoadLevel (defineKeys.UpdateSceneName);
 	}
 
