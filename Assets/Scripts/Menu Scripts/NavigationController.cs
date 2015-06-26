@@ -4,12 +4,11 @@ using AssemblyCSharp;
 using PreviewLabs;
 
 public class NavigationController : MonoBehaviour {
-	
 
-	public void LoadScene(string SceneName){
+
+	public void LoadScene(string sceneName){
 		UserDefineKeys defineKeys;
-		PreviewLabs.PlayerPrefs.SetString (defineKeys.NextScene, SceneName);
-		PreviewLabs.PlayerPrefs.Flush ();
+		NextSceneNameHolder.nextScene = sceneName;
 		Application.LoadLevel (defineKeys.UpdateSceneName);
 	}
 
