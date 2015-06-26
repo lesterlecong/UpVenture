@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
+using UnityEditor;
 using System.Collections;
 using AssemblyCSharp;
 
@@ -33,7 +33,7 @@ public class DataUpdater : MonoBehaviour {
 			yield return new WaitForSeconds(1.0f);
 		}
 
-		Application.LoadLevel (PreviewLabs.PlayerPrefs.GetString (defineKeys.NextScene));
+		Application.LoadLevel (NextSceneNameHolder.nextScene);
 
 	}
 }
