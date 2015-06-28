@@ -11,7 +11,6 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using System.Threading.Tasks;
-using PreviewLabs;
 
 public class CouchbaseDatabase : MonoBehaviour {
 
@@ -32,6 +31,11 @@ public class CouchbaseDatabase : MonoBehaviour {
 	private UserDefineKeys userDefineKey;
 	private string UserUUID;
 	private string syncGateWayURI;
+
+	private string fbEmail;
+	private string fbid;
+	private string fbUserName;
+	private string fbToken;
 	#endregion
 
 	#region Private Methods
@@ -40,6 +44,11 @@ public class CouchbaseDatabase : MonoBehaviour {
 		syncGateWayURI = "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
 		pullReplication = database.CreatePullReplication (new Uri (syncGateWayURI));
 		pushReplication = database.CreatePushReplication (new Uri (syncGateWayURI));
+
+		fbEmail = GetPreference (userDefineKey.FBEmail);
+		fbid = GetPreference (userDefineKey.FBUserID);
+		fbUserName = GetPreference (userDefineKey.FBUsername);
+		fbToken = GetPreference (userDefineKey.FBToken);
 	}
 	
 	IEnumerator DoReplication(Replication replication){
@@ -73,25 +82,27 @@ public class CouchbaseDatabase : MonoBehaviour {
 	string GenerateNewUUID(){
 		Document newDocument = database.CreateDocument ();
 		string docID = "";
+
+
 		newDocument.Update ((UnsavedRevision newRevision) => {
 			Dictionary<string, object> properties = (Dictionary<string, object>)newRevision.Properties;
-			properties [userDefineKey.FBUsername] = GetPreference (userDefineKey.FBUsername);
-			properties [userDefineKey.FBUserID] = GetPreference (userDefineKey.FBUserID);
-			properties [userDefineKey.FBEmail] = GetPreference (userDefineKey.FBEmail);
-			properties [userDefineKey.FBToken] = GetPreference (userDefineKey.FBToken);
+			properties [userDefineKey.FBUsername] = fbUserName;
+			properties [userDefineKey.FBUserID] = fbid;
+			properties [userDefineKey.FBEmail] = fbEmail;
+			properties [userDefineKey.FBToken] = fbToken;
 			docID = properties["_id"].ToString();
 			Debug.Log ("_id: " + properties["_id"]);
 			return true;
 		});
 		
-		DocumentID = userDefineKey.FBUserID + "::" + GetPreference(userDefineKey.FBUserID);
+		DocumentID = userDefineKey.FBUserID + "::" + fbid;
 		CreateDocument ();
 		saveData (userDefineKey.UUID, docID);
 
-		if(String.IsNullOrEmpty(GetPreference(userDefineKey.FBEmail))){
-			DocumentID = userDefineKey.FBEmail + "::" + GetPreference(userDefineKey.FBUserID) + "@noemail.com";
+		if(String.IsNullOrEmpty(fbEmail)){
+			DocumentID = userDefineKey.FBEmail + "::" + fbid + "@noemail.com";
 		}else{
-			DocumentID = userDefineKey.FBEmail + "::" + GetPreference(userDefineKey.FBEmail);//change this one
+			DocumentID = userDefineKey.FBEmail + "::" + fbEmail;
 		}
 		CreateDocument ();
 		saveData (userDefineKey.UUID, docID);
@@ -101,7 +112,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	string GetPreference(string key){
-		return PreviewLabs.PlayerPrefs.GetString (key);
+		return PlayerPrefs.GetString (key);
 	}
 
 	#endregion
@@ -174,13 +185,13 @@ public class CouchbaseDatabase : MonoBehaviour {
 		string UUID = "";
 		
 
-		doc = database.GetExistingDocument (userDefineKey.FBUserID + "::" + GetPreference (userDefineKey.FBUserID));
+		doc = database.GetExistingDocument (userDefineKey.FBUserID + "::" + fbid);
 		if (doc != null) {
 			UUID = readDataAsString(userDefineKey.UUID);
 		}
 		
 		if(string.IsNullOrEmpty(UUID)){
-			doc = database.GetExistingDocument (userDefineKey.FBEmail + "::" + GetPreference(userDefineKey.FBEmail));
+			doc = database.GetExistingDocument (userDefineKey.FBEmail + "::" + fbEmail);
 			if (doc != null) {
 				UUID = readDataAsString(userDefineKey.UUID);
 			}
