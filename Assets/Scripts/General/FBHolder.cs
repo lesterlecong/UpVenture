@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using AssemblyCSharp;
-using PreviewLabs;
 
 public class FBHolder : MonoBehaviour {
 	public Button loginButton;
@@ -35,6 +34,7 @@ public class FBHolder : MonoBehaviour {
 
 		SavePreferences (userDefineKey.FBToken, GetAcessToken ());
 		SavePreferences(userDefineKey.FBUserID, GetUserID());
+
 		NextScene ();
 	}
 	
@@ -89,10 +89,6 @@ public class FBHolder : MonoBehaviour {
 		return accessToken;
 	}
 
-	void SavePreferences(string key, string value){
-		PreviewLabs.PlayerPrefs.SetString (key, value);
-		PreviewLabs.PlayerPrefs.Flush ();
-	}
 
 	IEnumerator RegisterToCouchbase(){
 		string syncGatewayURL = "http://localhost:4984/adventuredb/_facebook";
@@ -116,8 +112,12 @@ public class FBHolder : MonoBehaviour {
 			
 			
 		}
+
 		
-		
+	}
+
+	void SavePreferences(string key, string value){
+		PlayerPrefs.SetString (key, value);
 	}
 
 	void NextScene(){
