@@ -75,6 +75,7 @@ public class FBHolder : MonoBehaviour {
 		Debug.Log ("Email:" + fbdata ["email"].ToString());
 		email = fbdata ["email"].ToString ();
 		userFullName = fbdata ["name"].ToString ();
+		Debug.Log ("userFullName:" + fbdata ["name"].ToString());
 
 		SavePreferences (userDefineKey.FBEmail, email);
 		SavePreferences (userDefineKey.FBUsername, userFullName);
