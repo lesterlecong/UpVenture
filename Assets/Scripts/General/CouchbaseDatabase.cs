@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AssemblyCSharp;
 using Couchbase.Lite;
 using Couchbase.Lite.Unity;
@@ -40,17 +40,19 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	#region Private Methods
 	void Awake(){
-		CreateDatabase ();
-		syncGateWayURI = "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
-		pullReplication = database.CreatePullReplication (new Uri (syncGateWayURI));
-		pushReplication = database.CreatePushReplication (new Uri (syncGateWayURI));
 
 		fbEmail = GetPreference (userDefineKey.FBEmail);
 		fbid = GetPreference (userDefineKey.FBUserID);
 		fbUserName = GetPreference (userDefineKey.FBUsername);
 		fbToken = GetPreference (userDefineKey.FBToken);
 	}
-	
+
+	void SetupReplication(){
+		syncGateWayURI = "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
+		pullReplication = database.CreatePullReplication (new Uri (syncGateWayURI));
+		pushReplication = database.CreatePushReplication (new Uri (syncGateWayURI));
+	}
+
 	IEnumerator DoReplication(Replication replication){
 		replication.Start ();
 		
@@ -60,17 +62,19 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	void CreateDatabase(){
-		if (CouchbaseLiteManager == null) {
+		/*if (CouchbaseLiteManager == null) {
 			Debug.LogError("Manager is NULL");
 			return;
-		}
+		}*/
 		
 		if (String.IsNullOrEmpty(databaseName)) {
 			Debug.LogError("Databasename is Empty");
 			return ;
 		}
-		
-		database = CouchbaseLiteManager.GetDatabase(databaseName);
+
+		//database = CouchbaseLiteManager.GetDatabase(databaseName);
+		Manager manager = new Manager ();
+		database = manager.GetDatabase (databaseName);
 		if (database == null) {
 			Debug.LogError("Cannot Create Database!!");
 			return;
@@ -91,7 +95,6 @@ public class CouchbaseDatabase : MonoBehaviour {
 			properties [userDefineKey.FBEmail] = fbEmail;
 			properties [userDefineKey.FBToken] = fbToken;
 			docID = properties["_id"].ToString();
-			Debug.Log ("_id: " + properties["_id"]);
 			return true;
 		});
 		
@@ -162,6 +165,11 @@ public class CouchbaseDatabase : MonoBehaviour {
 		**********************************************************/
 	}
 
+	public void InitializeReplication(){
+		CreateDatabase ();
+		SetupReplication ();
+	}
+
 	public void PullRemoteChanges(){
 		DoReplication (pullReplication);
 	}
@@ -171,11 +179,11 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	public Replication GetPullReplication(){
-		return pullReplication;
+		return database.CreatePullReplication (new Uri (syncGateWayURI));
 	}
 
 	public Replication GetPushReplication(){
-		return pushReplication;
+		return database.CreatePushReplication (new Uri (syncGateWayURI));
 	}
 
 	public string GetUUID(){
@@ -200,8 +208,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 		if (string.IsNullOrEmpty (UUID)) {
 			UUID = GenerateNewUUID();
 		}
-
-		Debug.Log ("Returned UUID: " + UUID);
+		
 		return UUID;
 	}
 
@@ -236,25 +243,34 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	
 	public object readDataAsObject(string key){
-		Debug.Log ("At CouchbaseDatabase doc id = " + doc.Id);
 		object objectData = doc.GetProperty (key);
 		return objectData;
 	}
 	
 	public string readDataAsString(string key){
-		Debug.Log ("At CouchbaseDatabase key: " + key);
 		object objectData = readDataAsObject (key);
 		string dataAsString = "";
 		
 		if (objectData != null) {
 			dataAsString = objectData.ToString ();
-		} else {
-			Debug.Log("At CouchbaseDatabase: object data is null");
-		}
+		} 
 		
 		return dataAsString;
 	}
-	
+
+
+	public bool IsDatabaseNull(){
+		return (database == null);
+	}
+
+	public bool IsDocumentNull(){
+		return (doc == null);
+	}
+
+	public bool ReplicationsNull(){
+		return ((pullReplication == null) || (pullReplication == null));
+	}
+
 	#endregion
 	
 }
