@@ -61,6 +61,16 @@ public class FBHolder : MonoBehaviour {
 		return userID;
 	}
 
+	public void ShareHighscore(){
+		FB.Feed (
+			linkCaption: "Now Playing this Exciting Game!",
+			picture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLKbsRXTELAZg42dYThTnNBXO_EBqXrEHtFOqMUR0Y9vKowty3-g",
+			linkName: "Check out this game",
+			link: "http://apps.facebook.com/" + FB.AppId + "/?challenge_brag=" + (FB.IsLoggedIn ? FB.UserId : "guest")
+		);
+
+	}
+
 	void GetFBData(){
 
 		FB.API ("/me", Facebook.HttpMethod.GET, FBDataGetCallback);
