@@ -40,7 +40,8 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	#region Private Methods
 	void Awake(){
-
+		CreateDatabase ();
+		SetupReplication ();
 		fbEmail = GetPreference (userDefineKey.FBEmail);
 		fbid = GetPreference (userDefineKey.FBUserID);
 		fbUserName = GetPreference (userDefineKey.FBUsername);
@@ -124,7 +125,6 @@ public class CouchbaseDatabase : MonoBehaviour {
 		get{
 			if(couchbaseLiteManager == null){
 				ManagerOptions options = Manager.DefaultOptions;
-				options.CallbackScheduler = UnityMainThreadScheduler.TaskScheduler;
 				couchbaseLiteManager = new Manager(new DirectoryInfo (Application.persistentDataPath), options);
 			}
 			
@@ -166,10 +166,6 @@ public class CouchbaseDatabase : MonoBehaviour {
 		**********************************************************/
 	}
 
-	public void InitializeReplication(){
-		CreateDatabase ();
-		SetupReplication ();
-	}
 
 	public void PullRemoteChanges(){
 		DoReplication (pullReplication);
@@ -180,11 +176,11 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	public Replication GetPullReplication(){
-		return database.CreatePullReplication (new Uri (syncGateWayURI));
+		return pullReplication;
 	}
 
 	public Replication GetPushReplication(){
-		return database.CreatePushReplication (new Uri (syncGateWayURI));
+		return pushReplication;
 	}
 
 	public string GetUUID(){
