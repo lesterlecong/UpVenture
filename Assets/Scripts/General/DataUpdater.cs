@@ -26,7 +26,7 @@ public class DataUpdater : MonoBehaviour {
 		} else {
 			logText.text += "Couchbase is not null \n";
 		}
-		couchbaseDatabase.InitializeReplication ();
+		//couchbaseDatabase.InitializeReplication ();
 		logText.text += "Database is" + (couchbaseDatabase.IsDatabaseNull() ? " indeed" : " not") + " null" + "\n";
 		logText.text += "Document is" + (couchbaseDatabase.IsDocumentNull() ? " indeed" : " not") + " null" + "\n";
 		logText.text += "Replications are" + (couchbaseDatabase.ReplicationsNull() ? " indeed" : " not") + " null" + "\n";

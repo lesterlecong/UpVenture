@@ -62,19 +62,18 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	void CreateDatabase(){
-		/*if (CouchbaseLiteManager == null) {
+		if (CouchbaseLiteManager == null) {
 			Debug.LogError("Manager is NULL");
 			return;
-		}*/
+		}
 		
 		if (String.IsNullOrEmpty(databaseName)) {
 			Debug.LogError("Databasename is Empty");
 			return ;
 		}
 
-		//database = CouchbaseLiteManager.GetDatabase(databaseName);
-		Manager manager = new Manager ();
-		database = manager.GetDatabase (databaseName);
+		database = CouchbaseLiteManager.GetDatabase(databaseName);
+
 		if (database == null) {
 			Debug.LogError("Cannot Create Database!!");
 			return;
@@ -124,7 +123,9 @@ public class CouchbaseDatabase : MonoBehaviour {
 	static public Manager CouchbaseLiteManager{
 		get{
 			if(couchbaseLiteManager == null){
-				couchbaseLiteManager = new Manager();
+				ManagerOptions options = Manager.DefaultOptions;
+				options.CallbackScheduler = UnityMainThreadScheduler.TaskScheduler;
+				couchbaseLiteManager = new Manager(new DirectoryInfo (Application.persistentDataPath), options);
 			}
 			
 			return couchbaseLiteManager;
