@@ -13,6 +13,7 @@ public class FBHolder : MonoBehaviour {
 	private string email;
 	private string userFullName;
 
+
 	void Awake(){
 		FB.Init (SetInit, OnHideUnity);
 	}
@@ -61,12 +62,13 @@ public class FBHolder : MonoBehaviour {
 		return userID;
 	}
 
-	public void ShareHighscore(){
+
+	public void ShareHighscore(int score){
 		FB.Feed (
-			linkCaption: "Now Playing this Exciting Game!",
-			picture: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLKbsRXTELAZg42dYThTnNBXO_EBqXrEHtFOqMUR0Y9vKowty3-g",
-			linkName: "Check out this game",
-			link: "http://apps.facebook.com/" + FB.AppId + "/?challenge_brag=" + (FB.IsLoggedIn ? FB.UserId : "guest")
+			linkName: "Whooah I passed " + score.ToString() + " obstacle" + ((score > 1)? "s!":"!" + "\n Can you beat my score?"),
+			picture: "https://farm1.staticflickr.com/355/19332490282_5e3201c652_n.jpg",
+			linkCaption: "Play this exciting Game!!!",
+			link: "www.facebook.com/upventuregame"
 		);
 
 	}
@@ -132,6 +134,8 @@ public class FBHolder : MonoBehaviour {
 	}
 
 	void NextScene(){
-		Application.LoadLevel(homeSceneName);
+		if (!string.IsNullOrEmpty (homeSceneName)) {
+			Application.LoadLevel (homeSceneName);
+		}
 	}
 }
