@@ -28,6 +28,9 @@ public class GameController : MonoBehaviour {
 	private GameScoreHandler scoreHandler;
 	private string scoreField = "score";
 
+	private GameObject fbObject;
+	private FBHolder fbHolder;
+
 	void Awake(){
 		if (current == null) {
 			current = this;
@@ -48,6 +51,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	void Start () {
+		SetupFBObject ();
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
 
@@ -55,7 +59,13 @@ public class GameController : MonoBehaviour {
 		scoreHandler.ScoreFieldName = scoreField;
 		scoreHandler.initGameScoreHandlerDocument ();
 	}
-	
+
+	void SetupFBObject(){
+		fbObject = GameObject.Find ("fbObject");
+		if (fbObject != null) {
+			fbHolder = (FBHolder) fbObject.GetComponent(typeof(FBHolder));
+		}
+	}
 
 	public virtual void PlayerScored(){
 		if (isGameOver) {
@@ -98,6 +108,13 @@ public class GameController : MonoBehaviour {
 		return isPaused;
 	}
 
+	public void ShareScore(){
+		if (fbHolder != null) {
+			fbHolder.ShareHighscore (score);
+		} else {
+			Debug.LogError("FB Holder is null");
+		}
+	}
 
 	protected virtual void SetupGameOverObject(){
 		currentScoreText.text = score.ToString ();
