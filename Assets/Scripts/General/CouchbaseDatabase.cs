@@ -26,26 +26,14 @@ public class CouchbaseDatabase : MonoBehaviour {
 	private Replication pullReplication;
 	private Replication pushReplication;
 	private string documentID;
-	//private IAuthenticator facebookAuthenticator;
-	//private string fbTokenKey = "fbtoken";
 	private UserDefineKeys userDefineKey;
-	private string UserUUID;
 	private string syncGateWayURI;
-
-	private string fbEmail;
-	private string fbid;
-	private string fbUserName;
-	private string fbToken;
 	#endregion
 
 	#region Private Methods
 	void Awake(){
 		CreateDatabase ();
 		SetupReplication ();
-		fbEmail = GetPreference (userDefineKey.FBEmail);
-		fbid = GetPreference (userDefineKey.FBUserID);
-		fbUserName = GetPreference (userDefineKey.FBUsername);
-		fbToken = GetPreference (userDefineKey.FBToken);
 	}
 
 	void SetupReplication(){
@@ -82,42 +70,6 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	}
 
-	
-	string GenerateNewUUID(){
-		Document newDocument = database.CreateDocument ();
-		string docID = "";
-
-
-		newDocument.Update ((UnsavedRevision newRevision) => {
-			Dictionary<string, object> properties = (Dictionary<string, object>)newRevision.Properties;
-			properties [userDefineKey.FBUsername] = fbUserName;
-			properties [userDefineKey.FBUserID] = fbid;
-			properties [userDefineKey.FBEmail] = fbEmail;
-			properties [userDefineKey.FBToken] = fbToken;
-			docID = properties["_id"].ToString();
-			return true;
-		});
-		
-		DocumentID = userDefineKey.FBUserID + "::" + fbid;
-		CreateDocument ();
-		saveData (userDefineKey.UUID, docID);
-
-		if(String.IsNullOrEmpty(fbEmail)){
-			DocumentID = userDefineKey.FBEmail + "::" + fbid + "@noemail.com";
-		}else{
-			DocumentID = userDefineKey.FBEmail + "::" + fbEmail;
-		}
-		CreateDocument ();
-		saveData (userDefineKey.UUID, docID);
-
-
-		return docID;
-	}
-
-	string GetPreference(string key){
-		return PlayerPrefs.GetString (key);
-	}
-
 	#endregion
 
 	#region Properties
@@ -143,29 +95,29 @@ public class CouchbaseDatabase : MonoBehaviour {
 		}
 	}
 
+	public Document CouchbaseDocument{
+		set{
+			doc = value;
+		}
+		get{
+			return doc;
+		}
+	}
+
 	#endregion
 
 	#region Public Method
 	public void StartCouchbase(){
-		/****DO IT LATER******************************************
-		string facebookToken = PlayerPrefs.GetString (fbTokenKey);
 
-		Debug.Log ("Facebook Token: " + facebookToken);
-		if (String.IsNullOrEmpty (facebookToken)) {
-			Debug.LogError("Please provide facebook token");
-			return;
-		}
-		
-		
-		facebookAuthenticator = AuthenticatorFactory.CreateFacebookAuthenticator (facebookToken);
-		Debug.Log ("User Info: " + facebookAuthenticator.UserInfo);
-		if (facebookAuthenticator == null) {
-			Debug.Log ("facebookAuthenticator is null");
-			return;
-		}
-		**********************************************************/
 	}
 
+	public Database GetCouchbaseDatabase(){
+		if (database == null) {
+			CreateDatabase();
+		}
+
+		return database;
+	}
 
 	public void PullRemoteChanges(){
 		DoReplication (pullReplication);
@@ -183,43 +135,17 @@ public class CouchbaseDatabase : MonoBehaviour {
 		return pushReplication;
 	}
 
-	public string GetUUID(){
-		if (database == null) {
-			CreateDatabase();
-		}
-		string UUID = "";
-		
 
-		doc = database.GetExistingDocument (userDefineKey.FBUserID + "::" + fbid);
-		if (doc != null) {
-			UUID = readDataAsString(userDefineKey.UUID);
-		}
-		
-		if(string.IsNullOrEmpty(UUID)){
-			doc = database.GetExistingDocument (userDefineKey.FBEmail + "::" + fbEmail);
-			if (doc != null) {
-				UUID = readDataAsString(userDefineKey.UUID);
-			}
-		}
-		
-		if (string.IsNullOrEmpty (UUID)) {
-			UUID = GenerateNewUUID();
-		}
-		
-		return UUID;
-	}
 
 	public void CreateDocument(){
 		if (database == null) {
 			CreateDatabase();
 		}
 
-		doc = database.GetExistingDocument (DocumentID);
-		if (doc == null) {
-			doc = database.GetDocument(DocumentID);
+		CouchbaseDocument = database.GetExistingDocument (DocumentID);
+		if (CouchbaseDocument == null) {
+			CouchbaseDocument = database.GetDocument(DocumentID);
 		}
-
-
 	}
 
 	public void saveData(Dictionary<string, object> data){
@@ -230,17 +156,15 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 	
 	public void saveData(string key, object value){
-		doc.Update ((UnsavedRevision newRevision) => {
+		CouchbaseDocument.Update ((UnsavedRevision newRevision) => {
 			Dictionary<string, object> properties = (Dictionary<string, object>)newRevision.Properties;
 			properties [key] = value;
 			return true;
 		});
 	}
 
-
-	
 	public object readDataAsObject(string key){
-		object objectData = doc.GetProperty (key);
+		object objectData = CouchbaseDocument.GetProperty (key);
 		return objectData;
 	}
 	
@@ -261,7 +185,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	public bool IsDocumentNull(){
-		return (doc == null);
+		return (CouchbaseDocument == null);
 	}
 
 	public bool ReplicationsNull(){

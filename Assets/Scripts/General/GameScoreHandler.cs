@@ -104,9 +104,10 @@ public class GameScoreHandler : MonoBehaviour {
 	
 	void Start(){
 		level = 0;
+		UUIDGenerator uuidGenerator = new UUIDGenerator();
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
 		couchbaseDatabase.StartCouchbase ();
-		userUUID = couchbaseDatabase.GetUUID ();
+		userUUID = uuidGenerator.GetUUID ();
 		Debug.Log ("At GameScoreHandler: " + userUUID);
 
 	}
