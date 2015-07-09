@@ -8,13 +8,113 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
+using Couchbase.Lite;
+using Couchbase.Lite.Unity;
+using Couchbase.Lite.Util;
+
+using System.Collections;
+using System.Collections.Generic;
+
 namespace AssemblyCSharp
 {
 	public class UUIDGenerator
 	{
+		private UserDefineKeys userDefineKey;
+		private string fbEmail;
+		private string fbid;
+		private string fbUserName;
+		private string fbToken;
+
+		private CouchbaseDatabase couchbaseDatabase;
+		private GameObject couchbaseGameObject;
+
+		#region Public Method
 		public UUIDGenerator ()
 		{
+			fbEmail = GetPreference (userDefineKey.FBEmail);
+			fbid = GetPreference (userDefineKey.FBUserID);
+			fbUserName = GetPreference (userDefineKey.FBUsername);
+			fbToken = GetPreference (userDefineKey.FBToken);
+
+			SetupCouchbaseDatabase ();
 		}
+
+		public string GetUUID(){
+			if (couchbaseDatabase == null) {
+				SetupCouchbaseDatabase();
+			}
+			Database database = couchbaseDatabase.GetCouchbaseDatabase ();
+			string UUID = "";
+			
+			
+			couchbaseDatabase.CouchbaseDocument = database.GetExistingDocument (userDefineKey.FBUserID + "::" + fbid);
+			if (couchbaseDatabase.CouchbaseDocument != null) {
+				UUID = couchbaseDatabase.readDataAsString(userDefineKey.UUID);
+			}
+			
+			if(string.IsNullOrEmpty(UUID)){
+				couchbaseDatabase.CouchbaseDocument = database.GetExistingDocument (userDefineKey.FBEmail + "::" + fbEmail);
+				if (couchbaseDatabase.CouchbaseDocument != null) {
+					UUID = couchbaseDatabase.readDataAsString(userDefineKey.UUID);
+				}
+			}
+			
+			if (string.IsNullOrEmpty (UUID)) {
+				UUID = GenerateNewUUID();
+			}
+			
+			return UUID;
+		}
+
+		#endregion
+
+		#region Private Methods
+		void SetupCouchbaseDatabase(){
+			couchbaseGameObject = GameObject.FindGameObjectWithTag ("CouchbaseDatabase");
+			couchbaseDatabase = (CouchbaseDatabase)couchbaseGameObject.GetComponent (typeof(CouchbaseDatabase));
+		}
+
+		string GetPreference(string key){
+			return PlayerPrefs.GetString (key);
+		}
+
+		string GenerateNewUUID(){
+			if (couchbaseDatabase == null) {
+				SetupCouchbaseDatabase();
+			}
+
+			Document newDocument = couchbaseDatabase.GetCouchbaseDatabase().CreateDocument ();
+			string docID = "";
+			
+			
+			newDocument.Update ((UnsavedRevision newRevision) => {
+				Dictionary<string, object> properties = (Dictionary<string, object>)newRevision.Properties;
+				properties [userDefineKey.FBUsername] = fbUserName;
+				properties [userDefineKey.FBUserID] = fbid;
+				properties [userDefineKey.FBEmail] = fbEmail;
+				properties [userDefineKey.FBToken] = fbToken;
+				docID = properties["_id"].ToString();
+				return true;
+			});
+			
+			couchbaseDatabase.DocumentID = userDefineKey.FBUserID + "::" + fbid;
+			couchbaseDatabase.CreateDocument ();
+			couchbaseDatabase.saveData (userDefineKey.UUID, docID);
+			
+			if(String.IsNullOrEmpty(fbEmail)){
+				couchbaseDatabase.DocumentID = userDefineKey.FBEmail + "::" + fbid + "@noemail.com";
+			}else{
+				couchbaseDatabase.DocumentID = userDefineKey.FBEmail + "::" + fbEmail;
+			}
+			couchbaseDatabase.CreateDocument ();
+			couchbaseDatabase.saveData (userDefineKey.UUID, docID);
+			
+			
+			return docID;
+		}
+		#endregion
+
 	}
 }
 
