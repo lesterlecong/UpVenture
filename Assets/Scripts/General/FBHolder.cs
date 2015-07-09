@@ -6,7 +6,6 @@ using AssemblyCSharp;
 
 public class FBHolder : MonoBehaviour {
 	public Button loginButton;
-	public string homeSceneName;
 	
 	private UserDefineKeys userDefineKey;
 
@@ -20,7 +19,7 @@ public class FBHolder : MonoBehaviour {
 
 	void SetInit(){
 		if (FB.IsLoggedIn) {
-			NextScene();
+			OnLoggedIn();
 		}
 	}
 
@@ -35,8 +34,7 @@ public class FBHolder : MonoBehaviour {
 
 		SavePreferences (userDefineKey.FBToken, GetAcessToken ());
 		SavePreferences(userDefineKey.FBUserID, GetUserID());
-
-		NextScene ();
+	
 	}
 	
 
@@ -133,9 +131,4 @@ public class FBHolder : MonoBehaviour {
 		PlayerPrefs.SetString (key, value);
 	}
 
-	void NextScene(){
-		if (!string.IsNullOrEmpty (homeSceneName)) {
-			Application.LoadLevel (homeSceneName);
-		}
-	}
 }
