@@ -14,11 +14,15 @@ public class FBHolder : MonoBehaviour {
 
 
 	void Awake(){
+		if (!PlayerPrefs.HasKey (userDefineKey.FBLoginStatus)) {
+			SavePreferences(userDefineKey.FBLoginStatus, "out");
+		}
+
 		FB.Init (SetInit, OnHideUnity);
 	}
 
 	void SetInit(){
-		if (FB.IsLoggedIn) {
+		if (FB.IsLoggedIn || (PlayerPrefs.GetString(userDefineKey.FBLoginStatus) == "in")) {
 			OnLoggedIn();
 		}
 	}
@@ -30,10 +34,12 @@ public class FBHolder : MonoBehaviour {
 	void OnLoggedIn(){
 		Debug.Log ("Your Facebook is already logged in");
 		loginButton.interactable = false;
-		GetFBData();
-
-		SavePreferences (userDefineKey.FBToken, GetAcessToken ());
-		SavePreferences(userDefineKey.FBUserID, GetUserID());
+		
+		if (PlayerPrefs.GetString (userDefineKey.FBLoginStatus) == "out") {
+			GetFBData();
+			SavePreferences (userDefineKey.FBToken, GetAcessToken ());
+			SavePreferences (userDefineKey.FBUserID, GetUserID ());
+		}
 	
 	}
 	
