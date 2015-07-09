@@ -35,7 +35,13 @@ namespace AssemblyCSharp
 				return "FBUsername";
 			}
 		}
-		
+
+		public string FBLoginStatus{
+			get{
+				return "FBLoginStatus";
+			}
+		}
+
 		public string UUID{
 			get{
 				return "UUID";
