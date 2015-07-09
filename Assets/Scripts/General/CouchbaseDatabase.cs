@@ -148,6 +148,13 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	}
 
+	public Database GetCouchbaseDatabase(){
+		if (database == null) {
+			CreateDatabase();
+		}
+
+		return database;
+	}
 
 	public void PullRemoteChanges(){
 		DoReplication (pullReplication);
