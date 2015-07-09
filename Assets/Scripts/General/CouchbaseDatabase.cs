@@ -26,8 +26,6 @@ public class CouchbaseDatabase : MonoBehaviour {
 	private Replication pullReplication;
 	private Replication pushReplication;
 	private string documentID;
-	//private IAuthenticator facebookAuthenticator;
-	//private string fbTokenKey = "fbtoken";
 	private UserDefineKeys userDefineKey;
 	private string UserUUID;
 	private string syncGateWayURI;
@@ -147,23 +145,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	#region Public Method
 	public void StartCouchbase(){
-		/****DO IT LATER******************************************
-		string facebookToken = PlayerPrefs.GetString (fbTokenKey);
 
-		Debug.Log ("Facebook Token: " + facebookToken);
-		if (String.IsNullOrEmpty (facebookToken)) {
-			Debug.LogError("Please provide facebook token");
-			return;
-		}
-		
-		
-		facebookAuthenticator = AuthenticatorFactory.CreateFacebookAuthenticator (facebookToken);
-		Debug.Log ("User Info: " + facebookAuthenticator.UserInfo);
-		if (facebookAuthenticator == null) {
-			Debug.Log ("facebookAuthenticator is null");
-			return;
-		}
-		**********************************************************/
 	}
 
 
