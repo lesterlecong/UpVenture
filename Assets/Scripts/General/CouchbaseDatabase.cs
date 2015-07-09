@@ -141,6 +141,15 @@ public class CouchbaseDatabase : MonoBehaviour {
 		}
 	}
 
+	public Document CouchbaseDocument{
+		set{
+			doc = value;
+		}
+		get{
+			return doc;
+		}
+	}
+
 	#endregion
 
 	#region Public Method
@@ -203,9 +212,9 @@ public class CouchbaseDatabase : MonoBehaviour {
 			CreateDatabase();
 		}
 
-		doc = database.GetExistingDocument (DocumentID);
-		if (doc == null) {
-			doc = database.GetDocument(DocumentID);
+		CouchbaseDocument = database.GetExistingDocument (DocumentID);
+		if (CouchbaseDocument == null) {
+			CouchbaseDocument = database.GetDocument(DocumentID);
 		}
 
 
@@ -219,7 +228,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 	
 	public void saveData(string key, object value){
-		doc.Update ((UnsavedRevision newRevision) => {
+		CouchbaseDocument.Update ((UnsavedRevision newRevision) => {
 			Dictionary<string, object> properties = (Dictionary<string, object>)newRevision.Properties;
 			properties [key] = value;
 			return true;
@@ -229,7 +238,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	
 	public object readDataAsObject(string key){
-		object objectData = doc.GetProperty (key);
+		object objectData = CouchbaseDocument.GetProperty (key);
 		return objectData;
 	}
 	
@@ -250,7 +259,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	public bool IsDocumentNull(){
-		return (doc == null);
+		return (CouchbaseDocument == null);
 	}
 
 	public bool ReplicationsNull(){
