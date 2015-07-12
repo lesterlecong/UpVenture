@@ -4,9 +4,15 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using AssemblyCSharp;
 
+public enum LogStatus {
+	OUT,
+	IN
+}
+
 public class FBHolder : MonoBehaviour {
 	public Button loginButton;
-	
+	public Text debugText;
+
 	private UserDefineKeys userDefineKey;
 
 	private string email;
@@ -14,15 +20,13 @@ public class FBHolder : MonoBehaviour {
 
 
 	void Awake(){
-		if (!PlayerPrefs.HasKey (userDefineKey.FBLoginStatus)) {
-			SavePreferences(userDefineKey.FBLoginStatus, "out");
-		}
 
+		
 		FB.Init (SetInit, OnHideUnity);
 	}
 
 	void SetInit(){
-		if (FB.IsLoggedIn || (PlayerPrefs.GetString(userDefineKey.FBLoginStatus) == "in")) {
+		if ((PlayerPrefs.GetString(userDefineKey.FBLoginStatus) == LogStatus.IN.ToString()) || FB.IsLoggedIn) {
 			OnLoggedIn();
 		}
 	}
@@ -35,7 +39,7 @@ public class FBHolder : MonoBehaviour {
 		Debug.Log ("Your Facebook is already logged in");
 		loginButton.interactable = false;
 		
-		if (PlayerPrefs.GetString (userDefineKey.FBLoginStatus) == "out") {
+		if (PlayerPrefs.GetString (userDefineKey.FBLoginStatus) == LogStatus.OUT.ToString()) {
 			GetFBData();
 			SavePreferences (userDefineKey.FBToken, GetAcessToken ());
 			SavePreferences (userDefineKey.FBUserID, GetUserID ());
@@ -51,6 +55,7 @@ public class FBHolder : MonoBehaviour {
 	void AuthCallback(FBResult result){
 		if (FB.IsLoggedIn){
 			OnLoggedIn();
+			SavePreferences(userDefineKey.FBLoginStatus, LogStatus.IN.ToString());
 			//StartCoroutine(RegisterToCouchbase());
 		}else{
 			Debug.Log("Failed Logged in");
