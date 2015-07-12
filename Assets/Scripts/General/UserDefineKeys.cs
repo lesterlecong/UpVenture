@@ -42,6 +42,18 @@ namespace AssemblyCSharp
 			}
 		}
 
+		public string FBIsLogin{
+			get{
+				return "Login";
+			}
+		}
+
+		public string FBIsLogout{
+			get{
+				return "Logout";
+			}
+		}
+
 		public string UUID{
 			get{
 				return "UUID";
@@ -81,6 +93,30 @@ namespace AssemblyCSharp
 		public string UpdateSceneName{
 			get{
 				return "data update";
+			}
+		}
+
+		public string TemporaryEmail{
+			get{
+				return "temp@noemail.com";
+			}
+		}
+
+		public string TemporaryID{
+			get{
+				return "00000000";
+			}
+		}
+
+		public string TemporaryUser{
+			get{
+				return "Temp User";
+			}
+		}
+
+		public string TemporaryToken{
+			get{
+				return "fffffff";
 			}
 		}
 	}
