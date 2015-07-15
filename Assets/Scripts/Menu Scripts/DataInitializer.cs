@@ -28,13 +28,13 @@ public class DataInitializer : MonoBehaviour {
 
 	void InitializeData(){
 
-		UUIDGenerator uuidGenerator = new UUIDGenerator (couchbaseDatabase);
-		uuidGenerator.UserEmail = userDefineKey.TemporaryEmail;
-		uuidGenerator.UserID = userDefineKey.TemporaryID;
-		uuidGenerator.UserName = userDefineKey.TemporaryUser;
-		uuidGenerator.UserToken = userDefineKey.TemporaryToken;
+		UserAccount userAccount = new UserAccount (couchbaseDatabase);
+		userAccount.UserEmail = userDefineKey.TemporaryEmail;
+		userAccount.UserID = userDefineKey.TemporaryID;
+		userAccount.UserName = userDefineKey.TemporaryUser;
+		userAccount.UserToken = userDefineKey.TemporaryToken;
 
-		string UUID = uuidGenerator.GetUUID ();
+		string UUID = userAccount.Create ();
 
 		PlayerPrefs.SetString (userDefineKey.UUID, UUID);
 	}
