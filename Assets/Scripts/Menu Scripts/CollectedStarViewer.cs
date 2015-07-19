@@ -30,13 +30,13 @@ public class CollectedStarViewer : MonoBehaviour {
 
 		UnlockLevel ();
 		if (!isLock) {
-			StarCount (scoreHandler.HighScore);
+			EnableStarImages (scoreHandler.HighScore);
 		}
 
 	}
 
 
-	void StarCount(int count){
+	void EnableStarImages(int count){
 		for (int index = 0; index < count; index++) {
 			starImages[index].enabled = true;
 		}
