@@ -4,44 +4,49 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using AssemblyCSharp;
 
-public class FBHolder : MonoBehaviour {
-	public Button loginButton;
+public class FacebookHandler : MonoBehaviour {
+
+	public Button facebookButton;
 	
 	private UserDefineKeys userDefineKey;
-
+	
 	private string email;
 	private string userFullName;
-
-
+	
+	
 	void Awake(){
 		FB.Init (SetInit, OnHideUnity);
 	}
-
+	
 	void SetInit(){
 		if (FB.IsLoggedIn) {
 			OnLoggedIn();
 		}
 	}
-
+	
 	void OnHideUnity(bool isGameShown){
 		Time.timeScale = (!isGameShown)? 0:1;
 	}
 
+	public bool IsLoggedIn(){
+		return FB.IsLoggedIn;
+	}
+
 	void OnLoggedIn(){
 		Debug.Log ("Your Facebook is already logged in");
-		loginButton.interactable = false;
+		facebookButton.interactable = false;
 		GetFBData();
-
+		
 		SavePreferences (userDefineKey.FBToken, GetAcessToken ());
 		SavePreferences(userDefineKey.FBUserID, GetUserID());
-	
+		
 	}
 	
-
+	
 	public void LoginFacebook(){
 		FB.Login ("public_profile,email,user_friends", AuthCallback);
 	}
-
+	
 	void AuthCallback(FBResult result){
 		if (FB.IsLoggedIn){
 			OnLoggedIn();
@@ -50,48 +55,48 @@ public class FBHolder : MonoBehaviour {
 			Debug.Log("Failed Logged in");
 		}
 	}
-
+	
 	public string GetUserID(){
 		string userID = "None";
 		if (FB.IsLoggedIn) {
 			userID = FB.UserId;
 		}
-
+		
 		return userID;
 	}
-
-
+	
+	
 	public void ShareHighscore(int score){
 		FB.Feed (
 			linkName: "Whooah I passed " + score.ToString() + " obstacle" + ((score > 1)? "s!":"!" + "\n Can you beat my score?"),
 			picture: "https://farm1.staticflickr.com/355/19332490282_5e3201c652_n.jpg",
 			linkCaption: "Play this exciting Game!!!",
 			link: "www.facebook.com/upventuregame"
-		);
-
+			);
+		
 	}
-
-	void GetFBData(){
-
-		FB.API ("/me", Facebook.HttpMethod.GET, FBDataGetCallback);
 	
+	void GetFBData(){
+		
+		FB.API ("/me", Facebook.HttpMethod.GET, FBDataGetCallback);
+		
 	}
-
+	
 	void FBDataGetCallback(FBResult result){
-
-
+		
+		
 		Debug.Log ("Result:" + result.Text);
 		IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
 		Debug.Log ("Email:" + fbdata ["email"].ToString());
 		email = fbdata ["email"].ToString ();
 		userFullName = fbdata ["name"].ToString ();
 		Debug.Log ("userFullName:" + fbdata ["name"].ToString());
-
+		
 		SavePreferences (userDefineKey.FBEmail, email);
 		SavePreferences (userDefineKey.FBUsername, userFullName);
-
+		
 	}
-
+	
 	string GetAcessToken(){
 		string accessToken = "";
 		if (FB.IsLoggedIn) {
@@ -99,8 +104,8 @@ public class FBHolder : MonoBehaviour {
 		}
 		return accessToken;
 	}
-
-
+	
+	
 	IEnumerator RegisterToCouchbase(){
 		string syncGatewayURL = "http://localhost:4984/adventuredb/_facebook";
 		System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding ();
@@ -123,10 +128,10 @@ public class FBHolder : MonoBehaviour {
 			
 			
 		}
-
+		
 		
 	}
-
+	
 	void SavePreferences(string key, string value){
 		PlayerPrefs.SetString (key, value);
 	}

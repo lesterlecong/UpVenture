@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour {
 	private string scoreField = "score";
 
 	private GameObject fbObject;
-	private FBHolder fbHolder;
+	private FacebookHandler facebookHandler;
 
 	void Awake(){
 		if (current == null) {
@@ -63,7 +63,7 @@ public class GameController : MonoBehaviour {
 	void SetupFBObject(){
 		fbObject = GameObject.Find ("fbObject");
 		if (fbObject != null) {
-			fbHolder = (FBHolder) fbObject.GetComponent(typeof(FBHolder));
+			facebookHandler = (FacebookHandler) fbObject.GetComponent(typeof(FacebookHandler));
 		}
 	}
 
@@ -109,8 +109,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void ShareScore(){
-		if (fbHolder != null) {
-			fbHolder.ShareHighscore (score);
+		if (facebookHandler != null) {
+			facebookHandler.ShareHighscore (score);
 		} else {
 			Debug.LogError("FB Holder is null");
 		}
