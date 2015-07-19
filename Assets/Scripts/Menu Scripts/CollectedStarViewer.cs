@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using AssemblyCSharp;
 
-public class StarCountActivator : MonoBehaviour {
+public class CollectedStarViewer : MonoBehaviour {
 
 	public Image[] starImages;
 	public GameObject gameScoreHandler;
