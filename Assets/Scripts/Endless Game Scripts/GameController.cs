@@ -6,6 +6,7 @@ using AssemblyCSharp;
 
 public class GameController : MonoBehaviour {
 
+	#region Public Member Variables
 	public GameObject gameScoreHandler;
 	public static GameController current;
 	public BirdSpawner birdSpawner;
@@ -13,74 +14,20 @@ public class GameController : MonoBehaviour {
 	public Text scoreText;
 	public Text currentScoreText;
 	public Text highScoreText;
-
 	public Button playButton;
 	public Button pauseButton;
-
+	#endregion
+	#region Protected Member Variables
 	protected bool isGameOver = false;
 	protected bool isPaused = false;
-
-
 	protected Sprite gameOverSprite;
+	protected GameObject fbObject;
+	protected FacebookHandler facebookHandler;
+	#endregion
 
-	private int score = 0;
-	private int previousGameLevel = 5;
-	private GameScoreHandler scoreHandler;
-	private string scoreField = "score";
-
-	private GameObject fbObject;
-	private FacebookHandler facebookHandler;
-
-	void Awake(){
-		if (current == null) {
-			current = this;
-		} else if (current != this) {
-			Destroy(gameObject);
-		}
-
-		gameOverObject.SetActive (false);
-	}
-
-	void Update(){
-
-
-	}
-
+	#region Public Method
 	public void RestartScene(){
 		Application.LoadLevel(Application.loadedLevel);
-	}
-
-	void Start () {
-		SetupFBObject ();
-		pauseButton.gameObject.SetActive (true);
-		playButton.gameObject.SetActive (false);
-
-		scoreHandler = (GameScoreHandler)gameScoreHandler.GetComponent (typeof(GameScoreHandler));
-		scoreHandler.ScoreFieldName = scoreField;
-		scoreHandler.InitGameScoreHandlerDocument ();
-	}
-
-	void SetupFBObject(){
-		fbObject = GameObject.Find ("fbObject");
-		if (fbObject != null) {
-			facebookHandler = (FacebookHandler) fbObject.GetComponent(typeof(FacebookHandler));
-		}
-	}
-
-	public virtual void PlayerScored(){
-		if (isGameOver) {
-			return;
-		}
-
-		score++;
-
-		if (score >= (previousGameLevel + 2)) {
-			birdSpawner.increaseGameLevel();
-			previousGameLevel = score;
-		}
-
-
-		scoreText.text = "Score: " + score.ToString();
 	}
 
 	public void PlayerDied(){
@@ -89,7 +36,6 @@ public class GameController : MonoBehaviour {
 		gameOverObject.SetActive (true);
 		SaveToDatabase ();
 		SetupGameOverObject ();
-
 	}
 
 	public void Pause(){
@@ -103,29 +49,57 @@ public class GameController : MonoBehaviour {
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
 	}
-
+	
 	public bool IsPaused(){
 		return isPaused;
 	}
 
-	public void ShareScore(){
-		if (facebookHandler != null) {
-			facebookHandler.ShareHighscore (score);
-		} else {
-			Debug.LogError("FB Holder is null");
-		}
+	#endregion
+
+	#region Public Virtual Method
+
+	public virtual void ShareScore(){
+		
 	}
 
-	protected virtual void SetupGameOverObject(){
-		currentScoreText.text = score.ToString ();
-		highScoreText.text = scoreHandler.HighScore.ToString();
+	public virtual void PlayerScored(){
 	}
 
-	protected virtual void SaveToDatabase(){
-		scoreHandler.HighScore = score;
-	}
+	#endregion
 
+	#region Protected Virtual Method
 
 	
+	protected virtual void SetupGameOverObject(){
+		
+	}
+	
+	protected virtual void SaveToDatabase(){
+		
+	}
+
+	#endregion
+
+	#region Protected Method
+	protected void Initialized(){
+		if (current == null) {
+			current = this;
+		} else if (current != this) {
+			Destroy(gameObject);
+		}
+		
+		gameOverObject.SetActive (false);
+		pauseButton.gameObject.SetActive (true);
+		playButton.gameObject.SetActive (false);
+		SetupFBObject ();
+	}
+
+	protected void SetupFBObject(){
+		fbObject = GameObject.Find ("fbObject");
+		if (fbObject != null) {
+			facebookHandler = (FacebookHandler) fbObject.GetComponent(typeof(FacebookHandler));
+		}
+	}
+	#endregion
 
 }

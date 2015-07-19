@@ -19,7 +19,7 @@ namespace AssemblyCSharp
 	
 			if (gameType == GameType.Endless) {
 
-				gameController = GameController.current;
+				gameController = EndlessGameController.current;
 
 			} else if (gameType == GameType.MountainAdventure || 
 				gameType == GameType.CityAdventure ||

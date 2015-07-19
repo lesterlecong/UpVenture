@@ -20,7 +20,11 @@ public class AdventureGameController : GameController {
 	private int starCount = 0;
 	private UserDefineKeys userDefineKey;
 	private GameScoreHandler scoreHandler;
-	
+
+	void Awake(){
+		Initialized ();
+	}
+
 	void Start () {
 
 		pauseButton.gameObject.SetActive (true);
