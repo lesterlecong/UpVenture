@@ -84,68 +84,51 @@ public class CouchbaseDatabase : MonoBehaviour {
 		}
 	}
 	static private Manager couchbaseLiteManager;
-	
-
-	public string DocumentID{
-		set{
-			documentID = value;
-		}
-		get{
-			return documentID;
-		}
-	}
-
-	public Document CouchbaseDocument{
-		set{
-			doc = value;
-		}
-		get{
-			return doc;
-		}
-	}
 
 	#endregion
 
 	#region Public Method
-	public void StartCouchbase(){
 
-	}
-
-	public Database GetCouchbaseDatabase(){
-		if (database == null) {
-			CreateDatabase();
-		}
-
-		return database;
-	}
-
-	public void PullRemoteChanges(){
+	public void PullDataChanges(){
 		DoReplication (pullReplication);
 	}
 
-	public void PushRemoteChanges(){
+	public void PushDataChanges(){
 		DoReplication (pushReplication);
 	}
 
-	public Replication GetPullReplication(){
-		return pullReplication;
-	}
 
-	public Replication GetPushReplication(){
-		return pushReplication;
-	}
-
-
-
-	public void CreateDocument(){
+	public string CreateDocument(){
 		if (database == null) {
 			CreateDatabase();
 		}
 
-		CouchbaseDocument = database.GetExistingDocument (DocumentID);
-		if (CouchbaseDocument == null) {
-			CouchbaseDocument = database.GetDocument(DocumentID);
+		return database.CreateDocument ().Id;
+	}
+
+	public void CreateDocumentWithID(string ID){
+		if (database == null) {
+			CreateDatabase();
 		}
+
+		 database.GetDocument(ID);
+	}
+
+	public void SelectDocumentWithID(string ID){
+		if (database == null) {
+			CreateDatabase();
+		}
+
+		doc = database.GetExistingDocument (ID);
+
+		if (doc == null) {
+			doc = database.GetDocument(ID);
+		}
+	}
+
+	public void DeleteDocumentWithID(string ID){
+		doc = database.GetDocument(ID);
+		doc.Delete();
 	}
 
 	public void SaveData(Dictionary<string, object> data){
@@ -156,7 +139,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 	
 	public void SaveData(string key, object value){
-		CouchbaseDocument.Update ((UnsavedRevision newRevision) => {
+		doc.Update ((UnsavedRevision newRevision) => {
 			Dictionary<string, object> properties = (Dictionary<string, object>)newRevision.Properties;
 			properties [key] = value;
 			return true;
@@ -164,7 +147,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	public object ReadDataAsObject(string key){
-		object objectData = CouchbaseDocument.GetProperty (key);
+		object objectData = doc.GetProperty (key);
 		return objectData;
 	}
 	
@@ -185,13 +168,20 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	public bool IsDocumentNull(){
-		return (CouchbaseDocument == null);
+		return (doc == null);
 	}
 
 	public bool ReplicationsNull(){
 		return ((pullReplication == null) || (pullReplication == null));
 	}
 
+	public bool IsPullReplicationOnline(){
+		return pullReplication.Status != ReplicationStatus.Offline;
+	}
+
+	public bool IsPushReplicationOnline(){
+		return pushReplication.Status != ReplicationStatus.Offline;
+	}
 	#endregion
 	
 }
