@@ -75,8 +75,8 @@ public class GameScoreHandler : MonoBehaviour {
 	}
 
 	public void InitGameScoreHandlerDocument(){
-		couchbaseDatabase.DocumentID = GetAdventureType(gameType) + userUUID;
-		couchbaseDatabase.CreateDocument ();
+		couchbaseDatabase.CreateDocumentWithID(GetAdventureType(gameType) + userUUID);
+		couchbaseDatabase.SelectDocumentWithID(GetAdventureType(gameType) + userUUID);
 	}
 
 	int GetPreviousScore(){
@@ -106,7 +106,6 @@ public class GameScoreHandler : MonoBehaviour {
 		level = 0;
 		UUIDGenerator uuidGenerator = new UUIDGenerator();
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
-		couchbaseDatabase.StartCouchbase ();
 		userUUID = uuidGenerator.GetUUID ();
 		Debug.Log ("At GameScoreHandler: " + userUUID);
 
