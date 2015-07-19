@@ -16,96 +16,132 @@ using Couchbase.Lite.Util;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace AssemblyCSharp
-{
-	public class UUIDGenerator
-	{
+namespace AssemblyCSharp {
+
+	public class UserAccount {
+
 		private UserDefineKeys userDefineKey;
-		private string fbEmail;
-		private string fbid;
-		private string fbUserName;
-		private string fbToken;
+		private string userEmail ="";
+		private string userId = "";
+		private string userName = "";
+		private string userToken = "";
 
 		private CouchbaseDatabase couchbaseDatabase;
 		private GameObject couchbaseGameObject;
 
 		#region Public Method
-		public UUIDGenerator ()
+		public UserAccount (CouchbaseDatabase  couchbase)
 		{
-			fbEmail = GetPreference (userDefineKey.FBEmail);
-			fbid = GetPreference (userDefineKey.FBUserID);
-			fbUserName = GetPreference (userDefineKey.FBUsername);
-			fbToken = GetPreference (userDefineKey.FBToken);
+			couchbaseDatabase = couchbase;
+		}
 
-			SetupCouchbaseDatabase ();
+		public string Create(){
+			return GenerateNewUUID ();
+		}
+
+		public void Update(string UUID){
+			//Get Existing database using uuid
+			//Get current userID
+			//Remove FBID::userID
+			//Get current userEmail
+			//Remove FBEmail::userEmail
+			//Update the info inside uuid document
+			//Create new FBID::userID
+			//Create new FBID::userEmail
 		}
 
 		public string GetUUID(){
-			if (couchbaseDatabase == null) {
-				SetupCouchbaseDatabase();
-			}
 			Database database = couchbaseDatabase.GetCouchbaseDatabase ();
 			string UUID = "";
 
 			
-			couchbaseDatabase.CouchbaseDocument = database.GetExistingDocument (userDefineKey.FBUserID + "::" + fbid);
+			couchbaseDatabase.CouchbaseDocument = database.GetExistingDocument (userDefineKey.FBUserID + "::" + UserID);
 			if (couchbaseDatabase.CouchbaseDocument != null) {
 				UUID = couchbaseDatabase.ReadDataAsString(userDefineKey.UUID);
 			}
 
 			if(string.IsNullOrEmpty(UUID)){
-				couchbaseDatabase.CouchbaseDocument = database.GetExistingDocument (userDefineKey.FBEmail + "::" + fbEmail);
+				couchbaseDatabase.CouchbaseDocument = database.GetExistingDocument (userDefineKey.FBEmail + "::" + UserEmail);
 				if (couchbaseDatabase.CouchbaseDocument != null) {
 					UUID = couchbaseDatabase.ReadDataAsString(userDefineKey.UUID);
 				}
 			}
 			
-			if (string.IsNullOrEmpty (UUID)) {
-				UUID = GenerateNewUUID();
-			}
-			
 			return UUID;
 		}
+		#endregion
 
+		#region Public Properties
+		public string UserName{
+			set{
+				userName = value;
+			}
+			get{
+				return userName;
+			}
+		}
+
+		public string UserEmail{
+			set{
+				userEmail = value;
+			}
+			get{
+				return userEmail;
+			}
+
+		}
+
+		public string UserID{
+			set{
+				userId = value;
+			}
+			get{
+				return userId;
+			}
+		}
+
+		public string UserToken{
+			set{
+				userToken = value;
+			}
+			get{
+				return userToken;
+			}
+		}
 		#endregion
 
 		#region Private Methods
-		void SetupCouchbaseDatabase(){
-			couchbaseGameObject = GameObject.FindGameObjectWithTag ("CouchbaseDatabase");
-			couchbaseDatabase = (CouchbaseDatabase)couchbaseGameObject.GetComponent (typeof(CouchbaseDatabase));
-		}
-
+		
 		string GetPreference(string key){
 			return PlayerPrefs.GetString (key);
 		}
 
-		string GenerateNewUUID(){
-			if (couchbaseDatabase == null) {
-				SetupCouchbaseDatabase();
-			}
 
+
+		string GenerateNewUUID(){
 			Document newDocument = couchbaseDatabase.GetCouchbaseDatabase().CreateDocument ();
 			string docID = "";
 			
 			
 			newDocument.Update ((UnsavedRevision newRevision) => {
 				Dictionary<string, object> properties = (Dictionary<string, object>)newRevision.Properties;
-				properties [userDefineKey.FBUsername] = fbUserName;
-				properties [userDefineKey.FBUserID] = fbid;
-				properties [userDefineKey.FBEmail] = fbEmail;
-				properties [userDefineKey.FBToken] = fbToken;
+				properties [userDefineKey.FBUsername] = UserName;
+				properties [userDefineKey.FBUserID] = UserID;
+				properties [userDefineKey.FBEmail] = UserEmail;
+				properties [userDefineKey.FBToken] = UserToken;
 				docID = properties["_id"].ToString();
 				return true;
 			});
 
-			couchbaseDatabase.DocumentID = userDefineKey.FBUserID + "::" + fbid;
+			couchbaseDatabase.DocumentID = userDefineKey.FBUserID + "::" + UserID;
+
 			couchbaseDatabase.CreateDocument ();
 			couchbaseDatabase.SaveData (userDefineKey.UUID, docID);
 			
-			if(String.IsNullOrEmpty(fbEmail)){
-				couchbaseDatabase.DocumentID = userDefineKey.FBEmail + "::" + fbid + "@noemail.com";
+			if(String.IsNullOrEmpty(UserEmail)){
+				couchbaseDatabase.DocumentID = userDefineKey.FBEmail + "::" + UserID + "@noemail.com";
 			}else{
-				couchbaseDatabase.DocumentID = userDefineKey.FBEmail + "::" + fbEmail;
+				couchbaseDatabase.DocumentID = userDefineKey.FBEmail + "::" + UserEmail;
 			}
 			couchbaseDatabase.CreateDocument ();
 			couchbaseDatabase.SaveData (userDefineKey.UUID, docID);

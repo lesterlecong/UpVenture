@@ -104,13 +104,23 @@ public class GameScoreHandler : MonoBehaviour {
 	
 	void Start(){
 		level = 0;
-		UUIDGenerator uuidGenerator = new UUIDGenerator();
+
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
-		userUUID = uuidGenerator.GetUUID ();
+
+		userUUID = GetUserUUID();
+		
 		Debug.Log ("At GameScoreHandler: " + userUUID);
 
 	}
 
+	string GetUserUUID(){
+		UserAccount userAccount = new UserAccount(couchbaseDatabase);
+		userAccount.UserEmail = PlayerPrefs.GetString (userDefineKey.FBEmail);
+		userAccount.UserID = PlayerPrefs.GetString(userDefineKey.FBUserID);
+		userAccount.UserName = PlayerPrefs.GetString (userDefineKey.FBUsername);
+		userAccount.UserToken = PlayerPrefs.GetString (userDefineKey.FBToken);
+		return userAccount.GetUUID ();
+	}
 
 	
 	string GetAdventureType(GameType type){

@@ -4,10 +4,14 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using AssemblyCSharp;
 
-public class FacebookHandler : MonoBehaviour {
-
-	public Button facebookButton;
 	
+public enum LogStatus {
+	OUT,
+	IN
+}
+public class FacebookHandler : MonoBehaviour {
+	
+	public Button facebookButton;
 	private UserDefineKeys userDefineKey;
 	
 	private string email;
@@ -15,11 +19,13 @@ public class FacebookHandler : MonoBehaviour {
 	
 	
 	void Awake(){
+
+		
 		FB.Init (SetInit, OnHideUnity);
 	}
 	
 	void SetInit(){
-		if (FB.IsLoggedIn) {
+		if ((PlayerPrefs.GetString(userDefineKey.FBLoginStatus) == LogStatus.IN.ToString()) || FB.IsLoggedIn) {
 			OnLoggedIn();
 		}
 	}
@@ -34,12 +40,13 @@ public class FacebookHandler : MonoBehaviour {
 
 	void OnLoggedIn(){
 		Debug.Log ("Your Facebook is already logged in");
+
 		facebookButton.interactable = false;
 		GetFBData();
 		
 		SavePreferences (userDefineKey.FBToken, GetAcessToken ());
 		SavePreferences(userDefineKey.FBUserID, GetUserID());
-		
+
 	}
 	
 	
@@ -50,6 +57,7 @@ public class FacebookHandler : MonoBehaviour {
 	void AuthCallback(FBResult result){
 		if (FB.IsLoggedIn){
 			OnLoggedIn();
+			SavePreferences(userDefineKey.FBLoginStatus, LogStatus.IN.ToString());
 			//StartCoroutine(RegisterToCouchbase());
 		}else{
 			Debug.Log("Failed Logged in");
