@@ -16,16 +16,21 @@ namespace AssemblyCSharp
 
 		public GameController controller(GameType gameType){
 			GameController gameController;
-			switch (gameType) {
-				case GameType.Endless:
-					gameController = GameController.current;
-					break;
-				case GameType.Adventure:
-					gameController = AdventureGameController.current;
-					break;
-				default:
-					gameController = null;
-					break;
+	
+			if (gameType == GameType.Endless) {
+
+				gameController = GameController.current;
+
+			} else if (gameType == GameType.MountainAdventure || 
+				gameType == GameType.CityAdventure ||
+				gameType == GameType.BeachAdventure) {
+
+				gameController = AdventureGameController.current;
+
+			}else{
+
+				gameController = null;
+
 			}
 
 			return gameController;

@@ -9,7 +9,7 @@ using Newtonsoft;
 
 public class GameScoreHandler : MonoBehaviour {
 
-	public AdventureType adventureType;
+	public GameType gameType;
 	public GameObject couchbaseDatabaseObject;
 	
 	private string scoreFieldName;
@@ -75,7 +75,7 @@ public class GameScoreHandler : MonoBehaviour {
 	}
 	
 	public void initGameScoreHandlerDocument(){
-		couchbaseDatabase.DocumentID = GetAdventureType(adventureType) + userUUID;
+		couchbaseDatabase.DocumentID = GetAdventureType(gameType) + userUUID;
 		couchbaseDatabase.CreateDocument ();
 	}
 
@@ -114,20 +114,20 @@ public class GameScoreHandler : MonoBehaviour {
 
 
 	
-	string GetAdventureType(AdventureType type){
+	string GetAdventureType(GameType type){
 		string advetureTypeName = "";
 
 		switch (type) {
-			case AdventureType.MountainAdventure:
+			case GameType.MountainAdventure:
 				advetureTypeName = "MA_";
 				break;
-			case AdventureType.CityAdventure:
+			case GameType.CityAdventure:
 				advetureTypeName = "CA_";
 				break;
-			case AdventureType.BeachAdventure:
+			case GameType.BeachAdventure:
 				advetureTypeName = "BA_";
 				break;
-			case AdventureType.Endless:
+			case GameType.Endless:
 				advetureTypeName = "EL_";
 				break;
 			default:
@@ -138,7 +138,7 @@ public class GameScoreHandler : MonoBehaviour {
 	}
 
 	string GetFieldNameForHighScore(){
-		return (adventureType == AdventureType.Endless)? scoreFieldName:(userDefineKey.Level + Level.ToString () + ScoreFieldName);
+		return (gameType == GameType.Endless)? scoreFieldName:(userDefineKey.Level + Level.ToString () + ScoreFieldName);
 	}
 	
 }
