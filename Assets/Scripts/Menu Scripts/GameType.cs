@@ -12,8 +12,10 @@ namespace AssemblyCSharp
 {
 	public enum GameType
 	{
-		Endless,
-		Adventure
+		MountainAdventure,
+		CityAdventure,
+		BeachAdventure,
+		Endless
 	}
 }
 
