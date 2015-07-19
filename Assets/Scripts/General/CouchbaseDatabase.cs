@@ -175,12 +175,12 @@ public class CouchbaseDatabase : MonoBehaviour {
 		return ((pullReplication == null) || (pullReplication == null));
 	}
 
-	public bool IsPullReplicationOnline(){
-		return pullReplication.Status != ReplicationStatus.Offline;
+	public bool IsPullReplicationOffline(){
+		return pullReplication.Status == ReplicationStatus.Offline;
 	}
 
-	public bool IsPushReplicationOnline(){
-		return pushReplication.Status != ReplicationStatus.Offline;
+	public bool IsPushReplicationOffline(){
+		return pushReplication.Status == ReplicationStatus.Offline;
 	}
 	#endregion
 	
