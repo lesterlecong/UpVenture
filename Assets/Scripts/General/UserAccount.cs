@@ -40,14 +40,17 @@ namespace AssemblyCSharp {
 		}
 
 		public void Update(string UUID){
-			//Get Existing database using uuid
-			//Get current userID
-			//Remove FBID::userID
-			//Get current userEmail
-			//Remove FBEmail::userEmail
-			//Update the info inside uuid document
-			//Create new FBID::userID
-			//Create new FBID::userEmail
+			couchbaseDatabase.SelectDocumentWithID (UUID);
+			string fbID = couchbaseDatabase.ReadDataAsString ("FBID");
+			couchbaseDatabase.DeleteDocumentWithID (userDefineKey.FBUserID + "::" + fbID);
+			string fbEmail = couchbaseDatabase.ReadDataAsString ("FBEmail");
+			couchbaseDatabase.DeleteDocumentWithID (userDefineKey.FBEmail + "::" + fbEmail);
+
+			couchbaseDatabase.SaveData (userDefineKey.FBUserID, UserID);
+			couchbaseDatabase.SaveData (userDefineKey.FBEmail, UserEmail);
+
+			FBIDDocumentLookUp (UUID);
+			FBEmailDocumentLookUp (UUID);
 		}
 
 		public string GetUUID(){
@@ -127,11 +130,19 @@ namespace AssemblyCSharp {
 			couchbaseDatabase.SaveData(userDefineKey.FBEmail, UserEmail);
 			couchbaseDatabase.SaveData(userDefineKey.FBToken, UserToken);
 
+			FBIDDocumentLookUp (docID);
+			FBEmailDocumentLookUp (docID);
 
+			return docID;
+		}
+
+		void FBIDDocumentLookUp(string ID){
 			couchbaseDatabase.CreateDocumentWithID(userDefineKey.FBUserID + "::" + UserID);
 			couchbaseDatabase.SelectDocumentWithID (userDefineKey.FBUserID + "::" + UserID);
-			couchbaseDatabase.SaveData (userDefineKey.UUID, docID);
-			
+			couchbaseDatabase.SaveData (userDefineKey.UUID, ID);
+		}
+
+		void FBEmailDocumentLookUp(string ID){
 			if(String.IsNullOrEmpty(UserEmail)){
 				couchbaseDatabase.CreateDocumentWithID(userDefineKey.FBEmail + "::" + UserID + "@noemail.com");
 				couchbaseDatabase.SelectDocumentWithID(userDefineKey.FBEmail + "::" + UserID + "@noemail.com");
@@ -139,11 +150,8 @@ namespace AssemblyCSharp {
 				couchbaseDatabase.CreateDocumentWithID(userDefineKey.FBEmail + "::" + UserEmail);
 				couchbaseDatabase.SelectDocumentWithID(userDefineKey.FBEmail + "::" + UserEmail);
 			}
-		
-			couchbaseDatabase.SaveData (userDefineKey.UUID, docID);
-			
-			
-			return docID;
+
+			couchbaseDatabase.SaveData (userDefineKey.UUID, ID);
 		}
 		#endregion
 
