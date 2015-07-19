@@ -16,7 +16,6 @@ public class DataInitializer : MonoBehaviour {
 
 	void Awake(){
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
-		couchbaseDatabase.StartCouchbase ();
 
 		if (!PlayerPrefs.HasKey (userDefineKey.FBLoginStatus)) {
 			PlayerPrefs.SetString (userDefineKey.FBLoginStatus, userDefineKey.FBIsLogout);
