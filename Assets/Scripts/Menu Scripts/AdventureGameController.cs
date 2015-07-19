@@ -34,7 +34,7 @@ public class AdventureGameController : GameController {
 		scoreHandler = (GameScoreHandler)gameScoreHandler.GetComponent (typeof(GameScoreHandler));
 		scoreHandler.ScoreFieldName = userDefineKey.Score;
 		scoreHandler.Level = level;
-		scoreHandler.initGameScoreHandlerDocument ();
+		scoreHandler.InitGameScoreHandlerDocument ();
 
 		Debug.Log ("Accumulated Score:" + scoreHandler.AccumulatedScore.ToString ());
 

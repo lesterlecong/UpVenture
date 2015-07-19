@@ -148,14 +148,14 @@ public class CouchbaseDatabase : MonoBehaviour {
 		}
 	}
 
-	public void saveData(Dictionary<string, object> data){
+	public void SaveData(Dictionary<string, object> data){
 		Dictionary<string, object>.KeyCollection keys = data.Keys;
 		foreach (string key in keys) {
-			saveData(key, data[key]);
+			SaveData(key, data[key]);
 		}
 	}
 	
-	public void saveData(string key, object value){
+	public void SaveData(string key, object value){
 		CouchbaseDocument.Update ((UnsavedRevision newRevision) => {
 			Dictionary<string, object> properties = (Dictionary<string, object>)newRevision.Properties;
 			properties [key] = value;
@@ -163,13 +163,13 @@ public class CouchbaseDatabase : MonoBehaviour {
 		});
 	}
 
-	public object readDataAsObject(string key){
+	public object ReadDataAsObject(string key){
 		object objectData = CouchbaseDocument.GetProperty (key);
 		return objectData;
 	}
 	
-	public string readDataAsString(string key){
-		object objectData = readDataAsObject (key);
+	public string ReadDataAsString(string key){
+		object objectData = ReadDataAsObject (key);
 		string dataAsString = "";
 		
 		if (objectData != null) {

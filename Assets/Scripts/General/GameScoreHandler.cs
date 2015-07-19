@@ -41,7 +41,7 @@ public class GameScoreHandler : MonoBehaviour {
 		set{
 			if (value > GetPreviousScore ()) {
 				Debug.Log("At GameScoreHandler::Highscore Field: " + GetFieldNameForHighScore());
-				couchbaseDatabase.saveData(GetFieldNameForHighScore(), value.ToString());
+				couchbaseDatabase.SaveData(GetFieldNameForHighScore(), value.ToString());
 			}
 		}
 		get{
@@ -54,7 +54,7 @@ public class GameScoreHandler : MonoBehaviour {
 		set{
 			if(value > GetPreviousScore()){
 				int accumulatedScore = GetAccumulatedScore() + (value - GetPreviousScore());
-				couchbaseDatabase.saveData(userDefineKey.Total, accumulatedScore.ToString());
+				couchbaseDatabase.SaveData(userDefineKey.Total, accumulatedScore.ToString());
 				Debug.Log("Save accumulated score:" + accumulatedScore.ToString());
 			}
 		}
@@ -66,28 +66,28 @@ public class GameScoreHandler : MonoBehaviour {
 
 	public int ScoreRequired{
 		set{
-			couchbaseDatabase.saveData(userDefineKey.Level + Level.ToString () + userDefineKey.RequiredScore, value.ToString()); 
+			couchbaseDatabase.SaveData(userDefineKey.Level + Level.ToString () + userDefineKey.RequiredScore, value.ToString()); 
 		}
 		get{
-			return ConvertDataStoreReadingToInt(couchbaseDatabase.readDataAsString(userDefineKey.Level + Level.ToString () + userDefineKey.RequiredScore));
+			return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString(userDefineKey.Level + Level.ToString () + userDefineKey.RequiredScore));
 		}
 
 	}
-	
-	public void initGameScoreHandlerDocument(){
+
+	public void InitGameScoreHandlerDocument(){
 		couchbaseDatabase.DocumentID = GetAdventureType(gameType) + userUUID;
 		couchbaseDatabase.CreateDocument ();
 	}
 
 	int GetPreviousScore(){
 		Debug.Log ("At GameScoreHandler::GetPreviousScore Field: " + GetFieldNameForHighScore ());
-		return ConvertDataStoreReadingToInt(couchbaseDatabase.readDataAsString (GetFieldNameForHighScore()));
+		return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString (GetFieldNameForHighScore()));
 	}
 	
 
 	int GetAccumulatedScore(){
-		Debug.Log ("At GameScoreHandler accumulated score = " + couchbaseDatabase.readDataAsString (userDefineKey.Total));
-		return ConvertDataStoreReadingToInt(couchbaseDatabase.readDataAsString (userDefineKey.Total));
+		Debug.Log ("At GameScoreHandler accumulated score = " + couchbaseDatabase.ReadDataAsString (userDefineKey.Total));
+		return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString (userDefineKey.Total));
 	}
 	
 	int ConvertDataStoreReadingToInt(string reading){

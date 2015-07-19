@@ -26,23 +26,23 @@ public class StarCountActivator : MonoBehaviour {
 		scoreHandler.ScoreFieldName = userDefineKey.Score;;
 		scoreHandler.Level = level;
 		scoreHandler.ScoreRequired = scoreRequired;
-		scoreHandler.initGameScoreHandlerDocument ();
+		scoreHandler.InitGameScoreHandlerDocument ();
 
-		unlockLevel ();
+		UnlockLevel ();
 		if (!isLock) {
-			starCount (scoreHandler.HighScore);
+			StarCount (scoreHandler.HighScore);
 		}
 
 	}
 
 
-	void starCount(int count){
+	void StarCount(int count){
 		for (int index = 0; index < count; index++) {
 			starImages[index].enabled = true;
 		}
 	}
 
-	void unlockLevel(){
+	void UnlockLevel(){
 
 		int accumulatedScore = scoreHandler.AccumulatedScore;
 		scoreUpdate.text = accumulatedScore.ToString () + "/" + scoreRequired.ToString ();

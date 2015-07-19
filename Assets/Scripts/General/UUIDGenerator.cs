@@ -46,17 +46,17 @@ namespace AssemblyCSharp
 			}
 			Database database = couchbaseDatabase.GetCouchbaseDatabase ();
 			string UUID = "";
-			
+
 			
 			couchbaseDatabase.CouchbaseDocument = database.GetExistingDocument (userDefineKey.FBUserID + "::" + fbid);
 			if (couchbaseDatabase.CouchbaseDocument != null) {
-				UUID = couchbaseDatabase.readDataAsString(userDefineKey.UUID);
+				UUID = couchbaseDatabase.ReadDataAsString(userDefineKey.UUID);
 			}
-			
+
 			if(string.IsNullOrEmpty(UUID)){
 				couchbaseDatabase.CouchbaseDocument = database.GetExistingDocument (userDefineKey.FBEmail + "::" + fbEmail);
 				if (couchbaseDatabase.CouchbaseDocument != null) {
-					UUID = couchbaseDatabase.readDataAsString(userDefineKey.UUID);
+					UUID = couchbaseDatabase.ReadDataAsString(userDefineKey.UUID);
 				}
 			}
 			
@@ -97,10 +97,10 @@ namespace AssemblyCSharp
 				docID = properties["_id"].ToString();
 				return true;
 			});
-			
+
 			couchbaseDatabase.DocumentID = userDefineKey.FBUserID + "::" + fbid;
 			couchbaseDatabase.CreateDocument ();
-			couchbaseDatabase.saveData (userDefineKey.UUID, docID);
+			couchbaseDatabase.SaveData (userDefineKey.UUID, docID);
 			
 			if(String.IsNullOrEmpty(fbEmail)){
 				couchbaseDatabase.DocumentID = userDefineKey.FBEmail + "::" + fbid + "@noemail.com";
@@ -108,7 +108,7 @@ namespace AssemblyCSharp
 				couchbaseDatabase.DocumentID = userDefineKey.FBEmail + "::" + fbEmail;
 			}
 			couchbaseDatabase.CreateDocument ();
-			couchbaseDatabase.saveData (userDefineKey.UUID, docID);
+			couchbaseDatabase.SaveData (userDefineKey.UUID, docID);
 			
 			
 			return docID;

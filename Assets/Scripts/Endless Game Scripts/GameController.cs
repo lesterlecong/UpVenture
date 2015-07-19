@@ -57,7 +57,7 @@ public class GameController : MonoBehaviour {
 
 		scoreHandler = (GameScoreHandler)gameScoreHandler.GetComponent (typeof(GameScoreHandler));
 		scoreHandler.ScoreFieldName = scoreField;
-		scoreHandler.initGameScoreHandlerDocument ();
+		scoreHandler.InitGameScoreHandlerDocument ();
 	}
 
 	void SetupFBObject(){

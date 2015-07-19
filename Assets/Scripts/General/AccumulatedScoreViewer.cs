@@ -25,12 +25,12 @@ public class AccumulatedScoreViewer : MonoBehaviour {
 	void Start(){
 		scoreHandler = (GameScoreHandler)gameScoreHandler.GetComponent (typeof(GameScoreHandler));
 		scoreHandler.ScoreFieldName = userDefineKey.Score;
-		scoreHandler.initGameScoreHandlerDocument ();
+		scoreHandler.InitGameScoreHandlerDocument ();
 		score = scoreHandler.AccumulatedScore;
-		
+
 		previousScoreHandler = (GameScoreHandler)previousgameScoreHandler.GetComponent (typeof(GameScoreHandler));
 		previousScoreHandler.ScoreFieldName = userDefineKey.Score;
-		previousScoreHandler.initGameScoreHandlerDocument ();
+		previousScoreHandler.InitGameScoreHandlerDocument ();
 		previousScore = previousScoreHandler.AccumulatedScore;
 		Debug.Log ("At AccumulatedScoreViewer total score = " + scoreHandler.AccumulatedScore.ToString ());
 

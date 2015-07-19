@@ -27,11 +27,11 @@ public class PlayerController : MonoBehaviour {
 		smoke.SetActive (false);
 
 		GetComponent<Rigidbody2D> ().velocity = new Vector2 (forwardSpeed, 0);
-		setupMaxHeight ();
+		SetupMaxHeight ();
 
 	}
 
-	void setupMaxHeight(){
+	void SetupMaxHeight(){
 		if (cam == null) {
 			cam = Camera.main;
 		}
