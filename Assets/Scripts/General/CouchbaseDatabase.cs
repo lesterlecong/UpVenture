@@ -103,7 +103,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 	}
 
 	static public void AddChannel(string channel){
-		if (!replicationChannelList.Exists (channel)) {
+		if (!replicationChannelList.Contains(channel)) {
 			replicationChannelList.Add (channel);
 		}
 	}
