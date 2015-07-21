@@ -9,29 +9,30 @@
 //------------------------------------------------------------------------------
 using System;
 using UnityEngine;
-using Couchbase.Lite;
-using Couchbase.Lite.Unity;
-using Couchbase.Lite.Util;
-
 using System.Collections;
 using System.Collections.Generic;
 
 namespace AssemblyCSharp {
 
 	public class UserAccount {
+		
+		protected string userEmail ="";
+		protected string userId = "";
+		protected string userName = "";
+		protected CouchbaseDatabase couchbaseDatabase;
 
-		private UserDefineKeys userDefineKey;
-		private string userEmail ="";
-		private string userId = "";
-		private string userName = "";
-		private string userToken = "";
-
-		private CouchbaseDatabase couchbaseDatabase;
-		private GameObject couchbaseGameObject;
 
 		#region Public Method
-		public UserAccount (CouchbaseDatabase  couchbase)
-		{
+		public UserAccount(){
+
+		}
+
+		public UserAccount (CouchbaseDatabase  couchbase){
+
+			couchbaseDatabase = couchbase;
+		}
+
+		public void SetDatabase(CouchbaseDatabase couchbase){
 			couchbaseDatabase = couchbase;
 		}
 
@@ -39,38 +40,14 @@ namespace AssemblyCSharp {
 			return GenerateNewUUID ();
 		}
 
-		public void Update(string UUID){
-			couchbaseDatabase.SelectDocumentWithID (UUID);
-			string fbID = couchbaseDatabase.ReadDataAsString ("FBID");
-			couchbaseDatabase.DeleteDocumentWithID (userDefineKey.FBUserID + "::" + fbID);
-			string fbEmail = couchbaseDatabase.ReadDataAsString ("FBEmail");
-			couchbaseDatabase.DeleteDocumentWithID (userDefineKey.FBEmail + "::" + fbEmail);
+		public virtual void Update(string UUID){
 
-			couchbaseDatabase.SaveData (userDefineKey.FBUserID, UserID);
-			couchbaseDatabase.SaveData (userDefineKey.FBEmail, UserEmail);
-
-			FBIDDocumentLookUp (UUID);
-			FBEmailDocumentLookUp (UUID);
 		}
 
-		public string GetUUID(){
-
-			string UUID = "";
-
-			couchbaseDatabase.SelectDocumentWithID(userDefineKey.FBUserID + "::" + UserID);
-			if (!couchbaseDatabase.IsDocumentNull()) {
-				UUID = couchbaseDatabase.ReadDataAsString(userDefineKey.UUID);
-			}
-
-			if(string.IsNullOrEmpty(UUID)){
-				couchbaseDatabase.SelectDocumentWithID(userDefineKey.FBEmail + "::" + UserEmail);
-				if (!couchbaseDatabase.IsDocumentNull()) {
-					UUID = couchbaseDatabase.ReadDataAsString(userDefineKey.UUID);
-				}
-			}
-			
-			return UUID;
+		public virtual string GetUUID(){
+			return "";
 		}
+
 		#endregion
 
 		#region Public Properties
@@ -101,57 +78,18 @@ namespace AssemblyCSharp {
 				return userId;
 			}
 		}
-
-		public string UserToken{
-			set{
-				userToken = value;
-			}
-			get{
-				return userToken;
-			}
-		}
+		
 		#endregion
 
-		#region Private Methods
-		
-		string GetPreference(string key){
-			return PlayerPrefs.GetString (key);
+		#region Protected Methods
+		protected virtual string GenerateNewUUID(){
+			return "";
 		}
 
-
-
-		string GenerateNewUUID(){
-
-			string docID = couchbaseDatabase.CreateDocument();
-			couchbaseDatabase.SelectDocumentWithID (docID);
-
-			couchbaseDatabase.SaveData(userDefineKey.FBUsername, UserName);
-			couchbaseDatabase.SaveData(userDefineKey.FBUserID, UserID);
-			couchbaseDatabase.SaveData(userDefineKey.FBEmail, UserEmail);
-			couchbaseDatabase.SaveData(userDefineKey.FBToken, UserToken);
-
-			FBIDDocumentLookUp (docID);
-			FBEmailDocumentLookUp (docID);
-
-			return docID;
+		protected virtual void IDDocumentLookUp(string ID){
 		}
 
-		void FBIDDocumentLookUp(string ID){
-			couchbaseDatabase.CreateDocumentWithID(userDefineKey.FBUserID + "::" + UserID);
-			couchbaseDatabase.SelectDocumentWithID (userDefineKey.FBUserID + "::" + UserID);
-			couchbaseDatabase.SaveData (userDefineKey.UUID, ID);
-		}
-
-		void FBEmailDocumentLookUp(string ID){
-			if(String.IsNullOrEmpty(UserEmail)){
-				couchbaseDatabase.CreateDocumentWithID(userDefineKey.FBEmail + "::" + UserID + "@noemail.com");
-				couchbaseDatabase.SelectDocumentWithID(userDefineKey.FBEmail + "::" + UserID + "@noemail.com");
-			}else{
-				couchbaseDatabase.CreateDocumentWithID(userDefineKey.FBEmail + "::" + UserEmail);
-				couchbaseDatabase.SelectDocumentWithID(userDefineKey.FBEmail + "::" + UserEmail);
-			}
-
-			couchbaseDatabase.SaveData (userDefineKey.UUID, ID);
+		protected virtual void EmailDocumentLookUp(string ID){
 		}
 		#endregion
 

@@ -114,11 +114,11 @@ public class GameScoreHandler : MonoBehaviour {
 	}
 
 	string GetUserUUID(){
-		UserAccount userAccount = new UserAccount(couchbaseDatabase);
-		userAccount.UserEmail = PlayerPrefs.GetString (userDefineKey.FBEmail);
-		userAccount.UserID = PlayerPrefs.GetString(userDefineKey.FBUserID);
-		userAccount.UserName = PlayerPrefs.GetString (userDefineKey.FBUsername);
-		userAccount.UserToken = PlayerPrefs.GetString (userDefineKey.FBToken);
+		FBUserAccount userAccount = new FBUserAccount(couchbaseDatabase);
+		userAccount.UserEmail = PlayerPrefs.GetString (UserAccountDefineKeys.FBEmail);
+		userAccount.UserID = PlayerPrefs.GetString(UserAccountDefineKeys.FBID);
+		userAccount.UserName = PlayerPrefs.GetString (UserAccountDefineKeys.FBUsername);
+		userAccount.UserToken = PlayerPrefs.GetString (UserAccountDefineKeys.FBToken);
 		return userAccount.GetUUID ();
 	}
 

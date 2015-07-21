@@ -12,7 +12,6 @@ public enum LogStatus {
 public class FacebookHandler : MonoBehaviour {
 	
 	public Button facebookButton;
-	private UserDefineKeys userDefineKey;
 	
 	private string email;
 	private string userFullName;
@@ -25,7 +24,7 @@ public class FacebookHandler : MonoBehaviour {
 	}
 	
 	void SetInit(){
-		if ((PlayerPrefs.GetString(userDefineKey.FBLoginStatus) == LogStatus.IN.ToString()) || FB.IsLoggedIn) {
+		if ((PlayerPrefs.GetString(UserAccountDefineKeys.FBLoginStatus) == LogStatus.IN.ToString()) || FB.IsLoggedIn) {
 			OnLoggedIn();
 		}
 	}
@@ -44,8 +43,8 @@ public class FacebookHandler : MonoBehaviour {
 		facebookButton.interactable = false;
 		GetFBData();
 		
-		SavePreferences (userDefineKey.FBToken, GetAcessToken ());
-		SavePreferences(userDefineKey.FBUserID, GetUserID());
+		SavePreferences (UserAccountDefineKeys.FBToken, GetAcessToken ());
+		SavePreferences(UserAccountDefineKeys.FBID, GetUserID());
 
 	}
 	
@@ -57,7 +56,7 @@ public class FacebookHandler : MonoBehaviour {
 	void AuthCallback(FBResult result){
 		if (FB.IsLoggedIn){
 			OnLoggedIn();
-			SavePreferences(userDefineKey.FBLoginStatus, LogStatus.IN.ToString());
+			SavePreferences(UserAccountDefineKeys.FBLoginStatus, LogStatus.IN.ToString());
 			//StartCoroutine(RegisterToCouchbase());
 		}else{
 			Debug.Log("Failed Logged in");
@@ -100,8 +99,8 @@ public class FacebookHandler : MonoBehaviour {
 		userFullName = fbdata ["name"].ToString ();
 		Debug.Log ("userFullName:" + fbdata ["name"].ToString());
 		
-		SavePreferences (userDefineKey.FBEmail, email);
-		SavePreferences (userDefineKey.FBUsername, userFullName);
+		SavePreferences (UserAccountDefineKeys.FBEmail, email);
+		SavePreferences (UserAccountDefineKeys.FBUsername, userFullName);
 		
 	}
 	

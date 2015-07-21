@@ -12,53 +12,6 @@ namespace AssemblyCSharp
 {
 	public struct UserDefineKeys
 	{
-		public string FBToken{
-			get{
-				return "FBToken";
-			}
-		}
-		
-		public string FBEmail{
-			get{
-				return "FBEmail";
-			}
-		}
-		
-		public string FBUserID{
-			get{
-				return "FBID";
-			}
-		}
-		
-		public string FBUsername{
-			get{
-				return "FBUsername";
-			}
-		}
-
-		public string FBLoginStatus{
-			get{
-				return "FBLoginStatus";
-			}
-		}
-
-		public string FBIsLogin{
-			get{
-				return "Login";
-			}
-		}
-
-		public string FBIsLogout{
-			get{
-				return "Logout";
-			}
-		}
-
-		public string UUID{
-			get{
-				return "UUID";
-			}
-		}
 		
 		public string Level{
 			get{
@@ -96,29 +49,7 @@ namespace AssemblyCSharp
 			}
 		}
 
-		public string TemporaryEmail{
-			get{
-				return "temp@noemail.com";
-			}
-		}
 
-		public string TemporaryID{
-			get{
-				return "00000000";
-			}
-		}
-
-		public string TemporaryUser{
-			get{
-				return "Temp User";
-			}
-		}
-
-		public string TemporaryToken{
-			get{
-				return "fffffff";
-			}
-		}
 	}
 }
 
