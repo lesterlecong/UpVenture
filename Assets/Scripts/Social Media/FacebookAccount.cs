@@ -19,6 +19,7 @@ namespace AssemblyCSharp
 	{
 		private string fbEmail;
 		private string fbID;
+		private string fbName;
 
 		public FacebookAccount ()
 		{
@@ -52,6 +53,10 @@ namespace AssemblyCSharp
 
 		public override string GetAccountID(){
 			return fbID;
+		}
+
+		public override string GetAccountName(){
+			return fbName;
 		}
 
 		public string GetAcessToken(){
@@ -115,6 +120,19 @@ namespace AssemblyCSharp
 			Debug.Log ("ID:" + fbdata ["id"].ToString());
 			
 			fbID = fbdata ["id"].ToString ();
+		}
+
+		void GetName(){
+			FB.API ("/me?fields=name", Facebook.HttpMethod.GET, GetNameCallback);
+		}
+		
+		void GetNameCallback(FBResult result){
+			Debug.Log ("Result:" + result.Text);
+			
+			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
+			Debug.Log ("Name:" + fbdata ["name"].ToString());
+			
+			fbName = fbdata ["name"].ToString ();
 		}
 
 

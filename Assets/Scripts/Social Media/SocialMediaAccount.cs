@@ -23,7 +23,8 @@ namespace AssemblyCSharp
 		public abstract void ShareMessage(string message);
 		public abstract string GetAccountEmail();
 		public abstract string GetAccountID();
-		
+		public abstract string GetAccountName();
+
 		public void SocialMediaButton(Button socialMediaButton){
 			this.socialMediaButton = socialMediaButton;
 		}
