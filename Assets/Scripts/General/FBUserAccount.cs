@@ -86,6 +86,7 @@ namespace AssemblyCSharp {
 		protected override void IDDocumentLookUp(string ID){
 			couchbaseDatabase.CreateDocumentWithID(UserAccountDefineKeys.FBID + "::" + UserID);
 			couchbaseDatabase.SelectDocumentWithID (UserAccountDefineKeys.FBID + "::" + UserID);
+			couchbaseDatabase.SaveData (UserAccountDefineKeys.FBID, UserID);
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.UUID, ID);
 		}
 		
@@ -97,7 +98,8 @@ namespace AssemblyCSharp {
 				couchbaseDatabase.CreateDocumentWithID(UserAccountDefineKeys.FBEmail + "::" + UserEmail);
 				couchbaseDatabase.SelectDocumentWithID(UserAccountDefineKeys.FBEmail + "::" + UserEmail);
 			}
-			
+
+			couchbaseDatabase.SaveData (UserAccountDefineKeys.FBID, UserID);
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.UUID, ID);
 		}
 
