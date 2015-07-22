@@ -28,7 +28,8 @@ public class CouchbaseDatabase : MonoBehaviour {
 	private string documentID;
 	private UserDefineKeys userDefineKey;
 	private string syncGateWayURI;
-	static private List<string> replicationChannelList = new List<string>();
+	private List<string> replicationChannelList = new List<string>();
+
 	#endregion
 
 	#region Private Methods
@@ -102,7 +103,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 		DoReplication (pushReplication);
 	}
 
-	static public void AddChannel(string channel){
+	public void AddChannel(string channel){
 		if (!replicationChannelList.Contains(channel)) {
 			replicationChannelList.Add (channel);
 		}
