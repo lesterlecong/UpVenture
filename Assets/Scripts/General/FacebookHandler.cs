@@ -5,10 +5,6 @@ using System.Collections.Generic;
 using AssemblyCSharp;
 
 	
-public enum LogStatus {
-	OUT,
-	IN
-}
 public class FacebookHandler : MonoBehaviour {
 	
 	public Button facebookButton;
@@ -24,7 +20,7 @@ public class FacebookHandler : MonoBehaviour {
 	}
 	
 	void SetInit(){
-		if ((PlayerPrefs.GetString(UserAccountDefineKeys.FBLoginStatus) == LogStatus.IN.ToString()) || FB.IsLoggedIn) {
+		if ((PlayerPrefs.GetString(UserAccountDefineKeys.FBLoginStatus) == UserAccountDefineKeys.FBIsLogin) || FB.IsLoggedIn) {
 			OnLoggedIn();
 		}
 	}
@@ -40,7 +36,10 @@ public class FacebookHandler : MonoBehaviour {
 	void OnLoggedIn(){
 		Debug.Log ("Your Facebook is already logged in");
 
-		facebookButton.interactable = false;
+		if (facebookButton != null) {
+			facebookButton.interactable = false;
+		}
+
 		GetFBData();
 		
 		SavePreferences (UserAccountDefineKeys.FBToken, GetAcessToken ());
@@ -56,7 +55,7 @@ public class FacebookHandler : MonoBehaviour {
 	void AuthCallback(FBResult result){
 		if (FB.IsLoggedIn){
 			OnLoggedIn();
-			SavePreferences(UserAccountDefineKeys.FBLoginStatus, LogStatus.IN.ToString());
+			SavePreferences(UserAccountDefineKeys.FBLoginStatus, UserAccountDefineKeys.FBIsLogin);
 			//StartCoroutine(RegisterToCouchbase());
 		}else{
 			Debug.Log("Failed Logged in");
