@@ -9,12 +9,13 @@
 //------------------------------------------------------------------------------
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AssemblyCSharp
 {
 	public abstract class SocialMediaAccount
 	{
-		protected GameObject socialMediaButton;
+		protected Button socialMediaButton;
 
 		public abstract void Initialized();
 		public abstract void Login();
@@ -23,7 +24,7 @@ namespace AssemblyCSharp
 		public abstract string GetAccountEmail();
 		public abstract string GetAccountID();
 		
-		public void SocialMediaButton(GameObject socialMediaButton){
+		public void SocialMediaButton(Button socialMediaButton){
 			this.socialMediaButton = socialMediaButton;
 		}
 
