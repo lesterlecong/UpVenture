@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using AssemblyCSharp;
@@ -21,8 +21,8 @@ public class GameController : MonoBehaviour {
 	protected bool isGameOver = false;
 	protected bool isPaused = false;
 	protected Sprite gameOverSprite;
-	protected GameObject fbObject;
-	protected FacebookHandler facebookHandler;
+	protected GameObject socialMediaHandlerObject;
+	protected SocialMediaHandler socialMediaHandler;
 	#endregion
 
 	#region Public Method
@@ -70,7 +70,7 @@ public class GameController : MonoBehaviour {
 	#region Protected Virtual Method
 
 	
-	protected virtual void SetupGameOverObject(){
+	protected virtual void SetupGameOverObject(){ 
 		
 	}
 	
@@ -91,13 +91,13 @@ public class GameController : MonoBehaviour {
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
-		SetupFBObject ();
+		SetupSocialMediaHandlerObject ();
 	}
 
-	protected void SetupFBObject(){
-		fbObject = GameObject.Find ("fbObject");
-		if (fbObject != null) {
-			facebookHandler = (FacebookHandler) fbObject.GetComponent(typeof(FacebookHandler));
+	protected void SetupSocialMediaHandlerObject(){
+		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
+		if (socialMediaHandlerObject != null) {
+			socialMediaHandler = (SocialMediaHandler) socialMediaHandlerObject.GetComponent(typeof(SocialMediaHandler));
 		}
 	}
 	#endregion
