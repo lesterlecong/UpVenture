@@ -71,14 +71,17 @@ namespace AssemblyCSharp
 
 		protected override void OnLoggedIn(){
 			Debug.Log ("Your Facebook is already logged in");
-			
+
+			if (socialMediaButton != null) {
 			socialMediaButton.interactable = false;
+			}
+
 			GetEmail ();
 			GetID ();
 		}
 
 		void SetInit(){
-			if ((PlayerPrefs.GetString(UserAccountDefineKeys.FBLoginStatus) == LogStatus.IN.ToString()) || FB.IsLoggedIn) {
+			if ((PlayerPrefs.GetString(UserAccountDefineKeys.FBLoginStatus) == UserAccountDefineKeys.FBIsLogin) || FB.IsLoggedIn) {
 				OnLoggedIn();
 			}
 		}
@@ -90,7 +93,7 @@ namespace AssemblyCSharp
 		void LoginCallback(FBResult result){
 			if (FB.IsLoggedIn){
 				OnLoggedIn();
-				PlayerPrefs.SetString(UserAccountDefineKeys.FBLoginStatus, LogStatus.IN.ToString());
+				PlayerPrefs.SetString(UserAccountDefineKeys.FBLoginStatus, UserAccountDefineKeys.FBIsLogin);
 			}else{
 				Debug.Log("Failed Logged in");
 			}
