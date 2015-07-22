@@ -8,13 +8,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
+
 namespace AssemblyCSharp
 {
-	public class SocialMediaAccount
+	public abstract class SocialMediaAccount
 	{
-		public SocialMediaAccount ()
-		{
+		protected GameObject socialMediaButton;
+
+		public abstract void Initialized();
+		public abstract void Login();
+		public abstract bool IsLoggedIn();
+		public abstract void ShareMessage(string message);
+		public abstract string GetAccountEmail();
+		public abstract string GetAccountID();
+		
+		public void SocialMediaButton(GameObject socialMediaButton){
+			this.socialMediaButton = socialMediaButton;
 		}
+
+		protected abstract void OnLoggedIn();
 	}
 }
 
