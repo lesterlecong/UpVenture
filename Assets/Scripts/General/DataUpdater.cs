@@ -9,19 +9,19 @@ using Newtonsoft;
 
 public class DataUpdater : MonoBehaviour {
 	public GameObject couchbaseDatabaseObject;
-	public GameObject facebookHandlerObject;
+	public GameObject socialMediaHandlerObject;
 	public Text logText;
 
 	private CouchbaseDatabase couchbaseDatabase;
-	private FacebookHandler facebookHandler;
+	private SocialMediaHandler socialMediaHandler;
 	void Start () {
 
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
-		facebookHandler = (FacebookHandler)facebookHandlerObject.GetComponent (typeof(FacebookHandler));
+		socialMediaHandler = (SocialMediaHandler)socialMediaHandlerObject.GetComponent (typeof(SocialMediaHandler));
 
-		if (couchbaseDatabase != null && facebookHandler != null) {
-			if(facebookHandler.IsLoggedIn()){
-				couchbaseDatabase.AddChannel(facebookHandler.GetUserID());
+		if (couchbaseDatabase != null && socialMediaHandler != null) {
+			if(socialMediaHandler.IsLoggedIn()){
+				couchbaseDatabase.AddChannel(socialMediaHandler.GetAccountID());
 				Invoke ("StartReplicate", 0.1f);
 			}else{
 				NextScene();
