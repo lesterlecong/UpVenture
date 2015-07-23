@@ -37,6 +37,10 @@ public class SocialMediaHandler : MonoBehaviour {
 
 	void Awake () {
 		DontDestroyOnLoad (transform.gameObject);
+		SetupSocialMediaAccount ();
+	}
+
+	void SetupSocialMediaAccount(){
 		socialMediaAccount = SocialMediaAccountFactory.Instance ().GetSocialMediaAccount (socialMediaType);
 		if (socialMediaAccount != null && socialMediaButton != null) {
 			Debug.Log ("SocialMediaHandler awake");
