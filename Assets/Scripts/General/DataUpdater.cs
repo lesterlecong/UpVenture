@@ -34,7 +34,7 @@ public class DataUpdater : MonoBehaviour {
 	void StartReplicate(){
 
 		couchbaseDatabase.PullDataChanges();
-		if (!couchbaseDatabase.IsPullReplicationOffline()) {
+		if (!couchbaseDatabase.IsPullReplicationOffline() && couchbaseDatabase.IsPullReplicationActive()) {
 			logText.text += "Sync Gateway is Online\n";
 			couchbaseDatabase.PushDataChanges ();
 		} else {

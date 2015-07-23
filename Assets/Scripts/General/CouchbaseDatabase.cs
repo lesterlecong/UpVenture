@@ -193,6 +193,14 @@ public class CouchbaseDatabase : MonoBehaviour {
 	public bool IsPushReplicationOffline(){
 		return pushReplication.Status == ReplicationStatus.Offline;
 	}
+
+	public bool IsPullReplicationActive(){
+		return pullReplication.Status == ReplicationStatus.Active;
+	}
+
+	public bool IsPushReplicationActive(){
+		return pushReplication.Status == ReplicationStatus.Active;
+	}
 	#endregion
 	
 }
