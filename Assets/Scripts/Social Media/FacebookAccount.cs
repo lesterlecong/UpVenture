@@ -119,7 +119,7 @@ namespace AssemblyCSharp
 		}
 
 		void GetID(){
-			FB.API ("/me?fields=email", Facebook.HttpMethod.GET, GetIDCallback);
+			FB.API ("/me?fields=id", Facebook.HttpMethod.GET, GetIDCallback);
 		}
 
 		void GetIDCallback(FBResult result){
