@@ -10,6 +10,7 @@ public class SocialMediaHandler : MonoBehaviour {
 	public SocialMediaType socialMediaType = SocialMediaType.FACEBOOK;
 
 	private SocialMediaAccount socialMediaAccount;
+	private static SocialMediaHandler instance;
 
 	public void Login(){
 		socialMediaAccount.Login ();
@@ -36,8 +37,18 @@ public class SocialMediaHandler : MonoBehaviour {
 	}
 
 	void Awake () {
+		CheckInstance ();
 		DontDestroyOnLoad (transform.gameObject);
 		SetupSocialMediaAccount ();
+	}
+
+	void CheckInstance(){
+		if (!instance) {
+			instance = this;
+		} else {
+			Destroy(this.gameObject);
+		}
+
 	}
 
 	void SetupSocialMediaAccount(){
