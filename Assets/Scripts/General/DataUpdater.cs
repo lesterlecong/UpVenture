@@ -21,6 +21,7 @@ public class DataUpdater : MonoBehaviour {
 
 		if (couchbaseDatabase != null && socialMediaHandler != null) {
 			if(socialMediaHandler.IsLoggedIn()){
+				logText.text += "Account ID:" + socialMediaHandler.GetAccountID() + "\n";
 				couchbaseDatabase.AddChannel(socialMediaHandler.GetAccountID());
 				Invoke ("StartReplicate", 0.1f);
 			}else{
