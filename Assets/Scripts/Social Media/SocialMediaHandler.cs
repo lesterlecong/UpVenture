@@ -37,10 +37,16 @@ public class SocialMediaHandler : MonoBehaviour {
 
 	void Awake () {
 		socialMediaAccount = SocialMediaAccountFactory.Instance ().GetSocialMediaAccount (socialMediaType);
-		if (socialMediaAccount != null) {
-			socialMediaAccount.SocialMediaButton(socialMediaButton);
-			socialMediaAccount.Initialized();
-		}
+		if (socialMediaAccount != null && socialMediaButton != null) {
+			Debug.Log ("SocialMediaHandler awake");
+			if (!socialMediaAccount.IsLoggedIn ()) {
+				Debug.Log ("SocialMediaHandler::Initialized");
+				socialMediaAccount.SocialMediaButton (socialMediaButton);
+				socialMediaAccount.Initialized ();
+			}else {
+				socialMediaButton.interactable = false;
+			}
+		} 
 	}
 
 }
