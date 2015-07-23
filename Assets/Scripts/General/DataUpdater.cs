@@ -17,7 +17,7 @@ public class DataUpdater : MonoBehaviour {
 	private SocialMediaHandler socialMediaHandler;
 	void Start () {
 
-		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
+
 
 		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
 		if(socialMediaHandlerObject != null){
@@ -37,6 +37,11 @@ public class DataUpdater : MonoBehaviour {
 
 
 	}
+
+	void SetupDatabase(){
+		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
+	}
+
 
 	void StartReplicate(){
 
