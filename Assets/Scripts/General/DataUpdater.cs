@@ -15,11 +15,13 @@ public class DataUpdater : MonoBehaviour {
 	private CouchbaseDatabase couchbaseDatabase;
 	private GameObject socialMediaHandlerObject;
 	private SocialMediaHandler socialMediaHandler;
+
+	void Awake(){
+		SetupDatabase ();
+		SetupSocialMediaHandler ();
+	}
+
 	void Start () {
-
-
-
-
 
 		if (couchbaseDatabase != null && socialMediaHandler != null) {
 			if(socialMediaHandler.IsLoggedIn()){
