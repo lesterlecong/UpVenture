@@ -19,11 +19,7 @@ public class DataUpdater : MonoBehaviour {
 
 
 
-		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
-		if(socialMediaHandlerObject != null){
-			socialMediaHandler = (SocialMediaHandler) socialMediaHandlerObject.GetComponent(typeof(SocialMediaHandler));
-			socialMediaHandler.socialMediaType = this.socialMediaType;
-		}
+
 
 		if (couchbaseDatabase != null && socialMediaHandler != null) {
 			if(socialMediaHandler.IsLoggedIn()){
@@ -42,6 +38,13 @@ public class DataUpdater : MonoBehaviour {
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
 	}
 
+	void SetupSocialMediaHandler(){
+		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
+		if(socialMediaHandlerObject != null){
+			socialMediaHandler = (SocialMediaHandler) socialMediaHandlerObject.GetComponent(typeof(SocialMediaHandler));
+			socialMediaHandler.socialMediaType = this.socialMediaType;
+		}
+	}
 
 	void StartReplicate(){
 
