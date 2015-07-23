@@ -9,15 +9,19 @@ using Newtonsoft;
 
 public class DataUpdater : MonoBehaviour {
 	public GameObject couchbaseDatabaseObject;
-	public GameObject socialMediaHandlerObject;
 	public Text logText;
 
 	private CouchbaseDatabase couchbaseDatabase;
+	private GameObject socialMediaHandlerObject;
 	private SocialMediaHandler socialMediaHandler;
 	void Start () {
 
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
-		socialMediaHandler = (SocialMediaHandler)socialMediaHandlerObject.GetComponent (typeof(SocialMediaHandler));
+
+		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
+		if(socialMediaHandlerObject != null){
+			socialMediaHandler = (SocialMediaHandler) socialMediaHandlerObject.GetComponent(typeof(SocialMediaHandler));
+		}
 
 		if (couchbaseDatabase != null && socialMediaHandler != null) {
 			if(socialMediaHandler.IsLoggedIn()){
