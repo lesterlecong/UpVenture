@@ -10,6 +10,7 @@ using Newtonsoft;
 public class DataUpdater : MonoBehaviour {
 	public GameObject couchbaseDatabaseObject;
 	public Text logText;
+	public SocialMediaType socialMediaType = SocialMediaType.FACEBOOK;
 
 	private CouchbaseDatabase couchbaseDatabase;
 	private GameObject socialMediaHandlerObject;
@@ -21,6 +22,7 @@ public class DataUpdater : MonoBehaviour {
 		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
 		if(socialMediaHandlerObject != null){
 			socialMediaHandler = (SocialMediaHandler) socialMediaHandlerObject.GetComponent(typeof(SocialMediaHandler));
+			socialMediaHandler.socialMediaType = this.socialMediaType;
 		}
 
 		if (couchbaseDatabase != null && socialMediaHandler != null) {
