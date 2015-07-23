@@ -26,7 +26,9 @@ namespace AssemblyCSharp
 		}
 
 		public override void Initialized(){
-			FB.Init (SetInit, OnHideUnity);
+			if (!FB.IsInitialized) {
+				FB.Init (SetInit, OnHideUnity);
+			}
 		}
 		public override void Login(){
 			FB.Login ("public_profile,email,user_friends", LoginCallback);
@@ -81,7 +83,7 @@ namespace AssemblyCSharp
 		}
 
 		void SetInit(){
-			if ((PlayerPrefs.GetString(UserAccountDefineKeys.FBLoginStatus) == UserAccountDefineKeys.FBIsLogin) || FB.IsLoggedIn) {
+			if (FB.IsLoggedIn) {
 				OnLoggedIn();
 			}
 		}
@@ -91,6 +93,7 @@ namespace AssemblyCSharp
 		}
 
 		void LoginCallback(FBResult result){
+			Debug.Log ("LoginCallback:" + result.Text);
 			if (FB.IsLoggedIn){
 				OnLoggedIn();
 				PlayerPrefs.SetString(UserAccountDefineKeys.FBLoginStatus, UserAccountDefineKeys.FBIsLogin);
@@ -107,9 +110,12 @@ namespace AssemblyCSharp
 			Debug.Log ("Result:" + result.Text);
 
 			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
-			Debug.Log ("Email:" + fbdata ["email"].ToString());
 
-			fbEmail = fbdata ["email"].ToString ();
+			if (fbdata != null) {
+				Debug.Log ("Email:" + fbdata ["email"].ToString ());
+
+				fbEmail = fbdata ["email"].ToString ();
+			}
 		}
 
 		void GetID(){
@@ -120,9 +126,12 @@ namespace AssemblyCSharp
 			Debug.Log ("Result:" + result.Text);
 			
 			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
-			Debug.Log ("ID:" + fbdata ["id"].ToString());
+
+			if (fbdata != null) {
+				Debug.Log ("ID:" + fbdata ["id"].ToString ());
 			
-			fbID = fbdata ["id"].ToString ();
+				fbID = fbdata ["id"].ToString ();
+			}
 		}
 
 		void GetName(){
