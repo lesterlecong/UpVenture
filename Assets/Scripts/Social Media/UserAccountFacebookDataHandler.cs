@@ -14,21 +14,22 @@ namespace AssemblyCSharp
 {
 	public class UserAccountFacebookDataHandler: IUserAccountDataHandler
 	{
-		private FacebookAccount facebookAccount;
+		private SocialMediaHandler socialMediaAccount;
 		private CouchbaseDatabase couchDatabase;
 		private FBUserAccount fbUserAccount = new FBUserAccount();
 
 		public UserAccountFacebookDataHandler ()
 		{
-			fbUserAccount.SetDatabase(couchDatabase);
+
 		}
 
 		public void ChangeData(){
-			if (facebookAccount != null &&  couchDatabase != null) {
+			Debug.Log ("At UserAccountFacebookDataHandler: ChangeData()");
+			if (socialMediaAccount != null &&  couchDatabase != null) {
 				string UUID = GetUUIDofTemporaryUserAccount();
 				if(!string.IsNullOrEmpty(UUID)){
-					fbUserAccount.UserID = facebookAccount.GetAccountID();
-					fbUserAccount.UserEmail = facebookAccount.GetAccountEmail();
+					fbUserAccount.UserID = socialMediaAccount.GetAccountID();
+					fbUserAccount.UserEmail = socialMediaAccount.GetAccountEmail();
 					fbUserAccount.Update(UUID);
 				}
 			}
@@ -36,12 +37,13 @@ namespace AssemblyCSharp
 
 		public void SocialMediaObject(GameObject socialMediaObject){
 			if (socialMediaObject != null) {
-				facebookAccount = (FacebookAccount) socialMediaObject.GetComponent(typeof(FacebookAccount));
+				socialMediaAccount = (SocialMediaHandler) socialMediaObject.GetComponent(typeof(SocialMediaHandler));
 			}
 		}
 
 		public void SetDatabaseObject(GameObject databaseObject){
 			couchDatabase = (CouchbaseDatabase)databaseObject.GetComponent (typeof(CouchbaseDatabase));
+			fbUserAccount.SetDatabase(couchDatabase);
 		}
 
 		string GetUUIDofTemporaryUserAccount(){
