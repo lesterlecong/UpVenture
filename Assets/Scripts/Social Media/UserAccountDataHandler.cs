@@ -8,10 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
+
 namespace AssemblyCSharp
 {
-	public interface UserAccountDataHandler
+	public interface IUserAccountDataHandler
 	{
+		void ChangeData();
+		void SocialMediaObject(GameObject socialMediaObject);
+		void SetDatabaseObject(GameObject databaseObject);
+
 	}
 }
 
