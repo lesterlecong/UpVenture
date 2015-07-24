@@ -5,6 +5,7 @@ using AssemblyCSharp;
 
 public class FacebookButtonHandler : MonoBehaviour {
 
+	public SocialMediaType socialMediaType = SocialMediaType.FACEBOOK;
 	private GameObject socialMediaHandlerObject;
 	private SocialMediaHandler socialMediaHandler;
 
@@ -18,7 +19,7 @@ public class FacebookButtonHandler : MonoBehaviour {
 		if (socialMediaHandlerObject != null) {
 			socialMediaHandler = (SocialMediaHandler) socialMediaHandlerObject.GetComponent(typeof(SocialMediaHandler));
 			if(socialMediaHandler != null){
-				socialMediaHandler.socialMediaType = SocialMediaType.FACEBOOK;
+				socialMediaHandler.socialMediaType = this.socialMediaType;
 			}
 		}
 	}

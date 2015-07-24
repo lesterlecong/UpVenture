@@ -150,7 +150,7 @@ namespace AssemblyCSharp
 
 		void ApplyLoginCallback(){
 			if (loginCallbackList.Count > 0) {
-				foreach(LoginCallBack callback in loginCallbackList){
+				foreach(LoginCallback callback in loginCallbackList){
 					callback();
 				}
 			}
