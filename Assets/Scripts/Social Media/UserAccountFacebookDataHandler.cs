@@ -8,12 +8,46 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
+
 namespace AssemblyCSharp
 {
-	public class UserAccountFacebookDataHandler
+	public class UserAccountFacebookDataHandler: IUserAccountDataHandler
 	{
+		private FacebookAccount facebookAccount;
+		private CouchbaseDatabase couchDatabase;
+		private FBUserAccount fbUserAccount = new FBUserAccount();
+
 		public UserAccountFacebookDataHandler ()
 		{
+			fbUserAccount.SetDatabase(couchDatabase);
+		}
+
+		public void ChangeData(){
+			if (facebookAccount != null &&  couchDatabase != null) {
+				string UUID = GetUUIDofTemporaryUserAccount();
+				if(!string.IsNullOrEmpty(UUID)){
+					fbUserAccount.UserID = facebookAccount.GetAccountID();
+					fbUserAccount.UserEmail = facebookAccount.GetAccountEmail();
+					fbUserAccount.Update(UUID);
+				}
+			}
+		}
+
+		public void SocialMediaObject(GameObject socialMediaObject){
+			if (socialMediaObject != null) {
+				facebookAccount = (FacebookAccount) socialMediaObject.GetComponent(typeof(FacebookAccount));
+			}
+		}
+
+		public void SetDatabaseObject(GameObject databaseObject){
+			couchDatabase = (CouchbaseDatabase)databaseObject.GetComponent (typeof(CouchbaseDatabase));
+		}
+
+		string GetUUIDofTemporaryUserAccount(){
+			fbUserAccount.UserID = UserAccountDefineKeys.TemporaryID;
+			fbUserAccount.UserEmail = UserAccountDefineKeys.TemporaryEmail;
+			return fbUserAccount.GetUUID ();
 		}
 	}
 }
