@@ -12,10 +12,10 @@ namespace AssemblyCSharp
 {
 	public class UserAccountDataHandlerFactory
 	{	
-		private static UserAccountDataHandlerFactory instance;
+		private static UserAccountDataHandlerFactory instance = null;
 
-		public static void Instance(){
-			if (instance = null) {
+		public static UserAccountDataHandlerFactory Instance(){
+			if (instance == null) {
 				instance = new UserAccountDataHandlerFactory();
 			}
 
