@@ -6,7 +6,10 @@ using AssemblyCSharp;
 public class FacebookButtonHandler : MonoBehaviour {
 
 	public SocialMediaType socialMediaType = SocialMediaType.FACEBOOK;
+	public GameObject couchbaseDatabaseObject;
 	private GameObject socialMediaHandlerObject;
+
+
 	private SocialMediaHandler socialMediaHandler;
 
 	void Awake(){
@@ -27,11 +30,20 @@ public class FacebookButtonHandler : MonoBehaviour {
 	void SetButtonListener(){
 		Button facebookButton = transform.GetComponent<Button> ();
 		facebookButton.onClick.AddListener (() => {
+			SetFacebookCallback();
 			LoginFacebook (); 
 		});
 	}
 	
 	void LoginFacebook(){
 		socialMediaHandler.Login ();
+	}
+
+	void SetFacebookCallback(){
+		IUserAccountDataHandler userAccountDataHandler = UserAccountDataHandlerFactory.Instance ().GetDataHandler (socialMediaType);
+		userAccountDataHandler.SetDatabaseObject (couchbaseDatabaseObject);
+		userAccountDataHandler.SocialMediaObject (socialMediaHandlerObject);
+		socialMediaHandler.AddLoginCallback (userAccountDataHandler.ChangeData);
+	
 	}
 }
