@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 using System.Collections;
@@ -11,6 +11,7 @@ public class SocialMediaHandler : MonoBehaviour {
 
 	private SocialMediaAccount socialMediaAccount;
 	private static SocialMediaHandler instance;
+
 
 	public void Login(){
 		socialMediaAccount.Login ();
@@ -34,6 +35,10 @@ public class SocialMediaHandler : MonoBehaviour {
 
 	public string GetAccountName(){
 		return socialMediaAccount.GetAccountName ();
+	}
+
+	public void AddLoginCallback(LoginCallback callback){
+		socialMediaAccount.AddLoginCallback (callback);
 	}
 
 	void Awake () {

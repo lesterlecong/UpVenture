@@ -78,6 +78,7 @@ namespace AssemblyCSharp
 			socialMediaButton.interactable = false;
 			}
 
+			ApplyLoginCallback ();
 			GetEmail ();
 			GetID ();
 		}
@@ -147,7 +148,13 @@ namespace AssemblyCSharp
 			fbName = fbdata ["name"].ToString ();
 		}
 
-
+		void ApplyLoginCallback(){
+			if (loginCallbackList.Count > 0) {
+				foreach(LoginCallBack callback in loginCallbackList){
+					callback();
+				}
+			}
+		}
 
 
 	}
