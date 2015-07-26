@@ -19,7 +19,7 @@ namespace AssemblyCSharp
 	public abstract class SocialMediaAccount
 	{
 		protected Button socialMediaButton;
-		protected List<LoginCallback> loginCallbackList;
+		protected List<LoginCallback> loginCallbackList = new List<LoginCallback> ();
 
 		public abstract void Initialized();
 		public abstract void Login();
