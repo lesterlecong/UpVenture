@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using AssemblyCSharp;
 
 using Couchbase.Lite;
@@ -16,8 +17,12 @@ public class DataUpdater : MonoBehaviour {
 	private GameObject socialMediaHandlerObject;
 	private SocialMediaHandler socialMediaHandler;
 
+	private Replication pullReplication;
+	private Replication pushReplication;
+
 	void Awake(){
 		SetupDatabase ();
+		SetupReplicator ();
 		SetupSocialMediaHandler ();
 	}
 
@@ -25,10 +30,16 @@ public class DataUpdater : MonoBehaviour {
 
 		if (couchbaseDatabase != null && socialMediaHandler != null) {
 			if(socialMediaHandler.IsLoggedIn()){
+				Debug.Log("At DataUpdater::Start(): Adding Channel to Replication");
+
 				logText.text += "Account ID:" + socialMediaHandler.GetAccountID() + "\n";
-				couchbaseDatabase.AddChannel(socialMediaHandler.GetAccountID());
+				List<string> channels = new List<string>();
+				channels.Add(socialMediaHandler.GetAccountID());
+				pullReplication.Channels = channels;
+
 				Invoke ("StartReplicate", 0.1f);
 			}else{
+				Debug.Log ("At DataUpdater::Start(): socialMediaHandler and socialMediaHandler variables are null");
 				NextScene();
 			}
 		}
@@ -38,6 +49,11 @@ public class DataUpdater : MonoBehaviour {
 
 	void SetupDatabase(){
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
+	}
+
+	void SetupReplicator(){
+		pullReplication = couchbaseDatabase.GetPullReplication ();
+		pushReplication = couchbaseDatabase.GetPushReplication ();
 	}
 
 	void SetupSocialMediaHandler(){
@@ -50,16 +66,28 @@ public class DataUpdater : MonoBehaviour {
 
 	void StartReplicate(){
 
-		couchbaseDatabase.PullDataChanges();
-		if (!couchbaseDatabase.IsPullReplicationOffline() && couchbaseDatabase.IsPullReplicationActive()) {
+		pullReplication.Start ();
+		bool isOffline = (pullReplication.Status == ReplicationStatus.Offline);
+
+		if (!isOffline) {
 			logText.text += "Sync Gateway is Online\n";
-			couchbaseDatabase.PushDataChanges ();
+			pushReplication.Start();
+			StartCoroutine(UpdateProgress());
 		} else {
 			logText.text += "Sync Gateway is Offline\n";
-		}
-	
 			NextScene();
+		}
 		
+	}
+
+	IEnumerator UpdateProgress(){
+		logText.text += "Update Progress";
+		while ((pullReplication.Status == ReplicationStatus.Active) || (pushReplication.Status == ReplicationStatus.Active)) {
+			logText.text += ".";
+			yield return new WaitForSeconds(1.0f);
+		}
+		logText.text += "\n";
+		NextScene ();
 	}
 
 
