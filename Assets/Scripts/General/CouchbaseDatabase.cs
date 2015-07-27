@@ -5,6 +5,7 @@ using Couchbase.Lite.Unity;
 using Couchbase.Lite.Util;
 using Couchbase.Lite.Auth;
 
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -23,37 +24,16 @@ public class CouchbaseDatabase : MonoBehaviour {
 	#region Member Variables
 	private Document doc;
 	private Database database;
-	private Replication pullReplication;
-	private Replication pushReplication;
 	private string documentID;
 	private UserDefineKeys userDefineKey;
 	private string syncGateWayURI;
-	private List<string> replicationChannelList = new List<string>();
 
 	#endregion
 
 	#region Private Methods
 	void Awake(){
-		CreateDatabase ();
-		SetupReplication ();
-	}
-
-	void SetupReplication(){
 		syncGateWayURI = "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
-		pullReplication = database.CreatePullReplication (new Uri (syncGateWayURI));
-		pushReplication = database.CreatePushReplication (new Uri (syncGateWayURI));
-	}
-
-	IEnumerator DoReplication(Replication replication){
-		if (replication.IsPull && (replicationChannelList.Count > 0)) {
-			replication.Channels = replicationChannelList;
-		}
-
-		replication.Start ();
-		
-		while (replication != null && replication.Status == ReplicationStatus.Active) {
-			yield return new WaitForSeconds(0.5f);
-		}
+		CreateDatabase ();
 	}
 
 	void CreateDatabase(){
@@ -94,20 +74,22 @@ public class CouchbaseDatabase : MonoBehaviour {
 	#endregion
 
 	#region Public Method
-
-	public void PullDataChanges(){
-		DoReplication (pullReplication);
-	}
-
-	public void PushDataChanges(){
-		DoReplication (pushReplication);
-	}
-
-	public void AddChannel(string channel){
-		if (!replicationChannelList.Contains(channel)) {
-			replicationChannelList.Add (channel);
+	public Replication GetPullReplication(){
+		if (database == null) {
+			CreateDatabase();
 		}
+
+		return database.CreatePullReplication (new Uri(syncGateWayURI));
 	}
+
+	public Replication GetPushReplication(){
+		if (database == null) {
+			CreateDatabase();
+		}
+
+		return database.CreatePushReplication (new Uri(syncGateWayURI));
+	}
+
 
 	public string CreateDocument(){
 		if (database == null) {
@@ -182,25 +164,6 @@ public class CouchbaseDatabase : MonoBehaviour {
 		return (doc == null);
 	}
 
-	public bool ReplicationsNull(){
-		return ((pullReplication == null) || (pullReplication == null));
-	}
-
-	public bool IsPullReplicationOffline(){
-		return pullReplication.Status == ReplicationStatus.Offline;
-	}
-
-	public bool IsPushReplicationOffline(){
-		return pushReplication.Status == ReplicationStatus.Offline;
-	}
-
-	public bool IsPullReplicationActive(){
-		return pullReplication.Status == ReplicationStatus.Active;
-	}
-
-	public bool IsPushReplicationActive(){
-		return pushReplication.Status == ReplicationStatus.Active;
-	}
 	#endregion
 	
 }
