@@ -106,13 +106,19 @@ public class GameScoreHandler : MonoBehaviour {
 	void Start(){
 		level = 0;
 
-		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
+		SetupDatabase ();
 		SetupSocialMediaHandler ();
 
 		userUUID = GetUserUUID();
 		
 		Debug.Log ("At GameScoreHandler: " + userUUID);
 
+	}
+
+	void SetupDatabase(){
+		if (couchbaseDatabaseObject != null) {
+			couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
+		}
 	}
 
 	void SetupSocialMediaHandler(){
