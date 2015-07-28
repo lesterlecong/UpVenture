@@ -27,10 +27,16 @@ namespace AssemblyCSharp
 			Debug.Log ("At UserAccountFacebookDataHandler: ChangeData()");
 			if (socialMediaAccount != null &&  couchDatabase != null) {
 				string UUID = GetUUIDofTemporaryUserAccount();
+				Debug.Log ("At UserAccountFacebookDataHandler::ChangeData(): UUID: " + UUID);
+
 				if(!string.IsNullOrEmpty(UUID)){
 					fbUserAccount.UserID = socialMediaAccount.GetAccountID();
 					fbUserAccount.UserEmail = socialMediaAccount.GetAccountEmail();
+					Debug.Log("At UserAccountFacebookDataHandler::ChangeData(): UserID: " + fbUserAccount.UserID);
+					Debug.Log("At UserAccountFacebookDataHandler::ChangeData(): UserEmail: " + fbUserAccount.UserEmail);
 					fbUserAccount.Update(UUID);
+				}else{
+					Debug.Log("At UserAccountFacebookDataHandler::ChangeData(): UUID is null");
 				}
 			}
 		}

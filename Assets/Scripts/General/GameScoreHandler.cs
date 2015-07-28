@@ -11,7 +11,6 @@ public class GameScoreHandler : MonoBehaviour {
 
 	public GameType gameType;
 	public GameObject couchbaseDatabaseObject;
-	public GameObject socialMediaHandlerObject;
 
 	private string scoreFieldName;
 	private int level = 0;
@@ -19,6 +18,7 @@ public class GameScoreHandler : MonoBehaviour {
 	private CouchbaseDatabase couchbaseDatabase;
 	private string userUUID;
 	private UserDefineKeys userDefineKey;
+	private GameObject socialMediaHandlerObject;
 	private SocialMediaHandler socialMediaHandler;
 	public int Level{
 		set{
@@ -109,7 +109,7 @@ public class GameScoreHandler : MonoBehaviour {
 
 		userUUID = GetUserUUID();
 		
-		Debug.Log ("At GameScoreHandler: " + userUUID);
+		Debug.Log ("At GameScoreHandler::Start() UUID:" + userUUID);
 
 	}
 
@@ -120,17 +120,26 @@ public class GameScoreHandler : MonoBehaviour {
 	}
 
 	void SetupSocialMediaHandler(){
+		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
 		if (socialMediaHandlerObject != null) {
 			socialMediaHandler = (SocialMediaHandler)socialMediaHandlerObject.GetComponent (typeof(SocialMediaHandler));
 		}
 	}
 
 	string GetUserUUID(){
-		FBUserAccount userAccount = new FBUserAccount(couchbaseDatabase);
-		userAccount.UserEmail = PlayerPrefs.GetString (UserAccountDefineKeys.FBEmail);
-		userAccount.UserID = PlayerPrefs.GetString(UserAccountDefineKeys.FBID);
-		userAccount.UserName = PlayerPrefs.GetString (UserAccountDefineKeys.FBUsername);
-		userAccount.UserToken = PlayerPrefs.GetString (UserAccountDefineKeys.FBToken);
+
+		FBUserAccount userAccount = new FBUserAccount (couchbaseDatabase);
+		bool socialMediaCondition = (socialMediaHandler != null) && (socialMediaHandler.IsLoggedIn ());
+	
+		userAccount.UserEmail = (socialMediaCondition)? socialMediaHandler.GetAccountEmail () :  UserAccountDefineKeys.TemporaryEmail ;
+		userAccount.UserID = (socialMediaCondition)? socialMediaHandler.GetAccountID () : UserAccountDefineKeys.TemporaryID;
+
+		if (!socialMediaHandler.IsLoggedIn () && string.IsNullOrEmpty(userAccount.GetUUID())) {
+			userAccount.Create();
+		}
+		Debug.Log ("User Email: " + userAccount.UserEmail);
+		Debug.Log ("User ID: " + userAccount.UserID);
+
 		return userAccount.GetUUID ();
 	}
 

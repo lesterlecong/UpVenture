@@ -17,9 +17,9 @@ namespace AssemblyCSharp
 {
 	public class FacebookAccount: SocialMediaAccount
 	{
-		private string fbEmail;
-		private string fbID;
-		private string fbName;
+		private string fbEmail = "";
+		private string fbID = "";
+		private string fbName = "";
 
 		public FacebookAccount ()
 		{
@@ -75,12 +75,11 @@ namespace AssemblyCSharp
 			Debug.Log ("Your Facebook is already logged in");
 
 			if (socialMediaButton != null) {
-			socialMediaButton.interactable = false;
+				socialMediaButton.interactable = false;
 			}
 
-			ApplyLoginCallback ();
-			GetEmail ();
-			GetID ();
+			GetFacebookInfo ();
+	
 		}
 
 		void SetInit(){
@@ -103,50 +102,28 @@ namespace AssemblyCSharp
 			}
 		}
 
-		void GetEmail(){
-			FB.API ("/me?fields=email", Facebook.HttpMethod.GET, GetEmailCallback);
+		void GetFacebookInfo(){
+			FB.API ("/me", Facebook.HttpMethod.GET, GetFacebookCallback);
 		}
 
-		void GetEmailCallback(FBResult result){
+		void GetFacebookCallback(FBResult result){
 			Debug.Log ("Result:" + result.Text);
 
 			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
 
 			if (fbdata != null) {
 				Debug.Log ("Email:" + fbdata ["email"].ToString ());
+				Debug.Log ("ID:" + fbdata ["id"].ToString ());
+				Debug.Log ("Name:" + fbdata ["name"].ToString());
 
 				fbEmail = fbdata ["email"].ToString ();
-			}
-		}
-
-		void GetID(){
-			FB.API ("/me?fields=id", Facebook.HttpMethod.GET, GetIDCallback);
-		}
-
-		void GetIDCallback(FBResult result){
-			Debug.Log ("Result:" + result.Text);
-			
-			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
-
-			if (fbdata != null) {
-				Debug.Log ("ID:" + fbdata ["id"].ToString ());
-			
 				fbID = fbdata ["id"].ToString ();
+				fbName = fbdata ["name"].ToString ();
+
+				ApplyLoginCallback();
 			}
 		}
 
-		void GetName(){
-			FB.API ("/me?fields=name", Facebook.HttpMethod.GET, GetNameCallback);
-		}
-		
-		void GetNameCallback(FBResult result){
-			Debug.Log ("Result:" + result.Text);
-			
-			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
-			Debug.Log ("Name:" + fbdata ["name"].ToString());
-			
-			fbName = fbdata ["name"].ToString ();
-		}
 
 		void ApplyLoginCallback(){
 			if (loginCallbackList.Count > 0) {

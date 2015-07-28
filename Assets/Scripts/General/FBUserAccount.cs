@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
 
 namespace AssemblyCSharp {
 
@@ -25,14 +26,14 @@ namespace AssemblyCSharp {
 
 		public override void Update(string UUID){
 
+
+			Debug.Log ("ID to Delete: " + UserAccountDefineKeys.FBID + "::" + UserAccountDefineKeys.TemporaryID);
+			Debug.Log ("Email to Delete: " + UserAccountDefineKeys.FBEmail + "::" + UserAccountDefineKeys.TemporaryEmail);
+
+			couchbaseDatabase.DeleteDocumentWithID (UserAccountDefineKeys.FBID + "::" + UserAccountDefineKeys.TemporaryID);
+			couchbaseDatabase.DeleteDocumentWithID (UserAccountDefineKeys.FBEmail + "::" + UserAccountDefineKeys.TemporaryEmail);
+
 			couchbaseDatabase.SelectDocumentWithID (UUID);
-
-			string fbID = couchbaseDatabase.ReadDataAsString (UserAccountDefineKeys.FBID);
-			couchbaseDatabase.DeleteDocumentWithID (UserAccountDefineKeys.FBID + "::" + fbID);
-
-			string fbEmail = couchbaseDatabase.ReadDataAsString (UserAccountDefineKeys.FBEmail);
-			couchbaseDatabase.DeleteDocumentWithID (UserAccountDefineKeys.FBEmail + "::" + fbEmail);
-			
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.FBID, UserID);
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.FBEmail, UserEmail);
 			
@@ -72,11 +73,11 @@ namespace AssemblyCSharp {
 			
 			string docID = couchbaseDatabase.CreateDocument();
 			couchbaseDatabase.SelectDocumentWithID (docID);
-			
+
 			couchbaseDatabase.SaveData(UserAccountDefineKeys.FBUsername, UserName);
 			couchbaseDatabase.SaveData(UserAccountDefineKeys.FBID, UserID);
 			couchbaseDatabase.SaveData(UserAccountDefineKeys.FBEmail, UserEmail);
-			
+
 			IDDocumentLookUp (docID);
 			EmailDocumentLookUp (docID);
 			
@@ -102,7 +103,7 @@ namespace AssemblyCSharp {
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.FBID, UserID);
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.UUID, ID);
 		}
-
+		
 	}
 }
 
