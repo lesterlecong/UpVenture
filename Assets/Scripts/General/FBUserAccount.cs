@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace AssemblyCSharp {
 
@@ -36,7 +37,8 @@ namespace AssemblyCSharp {
 			couchbaseDatabase.SelectDocumentWithID (UUID);
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.FBID, UserID);
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.FBEmail, UserEmail);
-			
+			couchbaseDatabase.SaveData(UserAccountDefineKeys.Channels, new List<string> {UserID});
+
 			IDDocumentLookUp (UUID);
 			EmailDocumentLookUp (UUID);
 		}
@@ -89,6 +91,7 @@ namespace AssemblyCSharp {
 			couchbaseDatabase.SelectDocumentWithID (UserAccountDefineKeys.FBID + "::" + UserID);
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.FBID, UserID);
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.UUID, ID);
+			couchbaseDatabase.SaveData(UserAccountDefineKeys.Channels, new List<string> {UserID});
 		}
 		
 		protected override void EmailDocumentLookUp(string ID){
@@ -102,6 +105,7 @@ namespace AssemblyCSharp {
 
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.FBID, UserID);
 			couchbaseDatabase.SaveData (UserAccountDefineKeys.UUID, ID);
+			couchbaseDatabase.SaveData(UserAccountDefineKeys.Channels, new List<string> {UserID});
 		}
 		
 	}
