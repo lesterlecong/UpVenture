@@ -33,3 +33,5 @@ _ReSharper*/
 *.exe
 *.userprefs
 *.apk
+Library/*
+Temp/*
