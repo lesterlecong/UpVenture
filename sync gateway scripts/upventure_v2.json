@@ -1,0 +1,21 @@
+{
+	"interface":":4984",
+	"adminInterface":":4985",
+	"log":["REST"],
+	"facebook":{
+		"register":true
+	},
+	"databases":{
+		"adventuredb":{
+			"server":"http://localhost:8091",
+			"bucket":"upventurev1",
+			"users":{
+				"GUEST":{
+					"disabled":true
+				}
+			},
+
+			"sync":`function(doc, oldDoc){if(!doc.owner){throw({forbidden: "Missing owner"});}if(oldDoc && doc.owner != oldDoc.owner){throw({forbidden: "Owner changed"});}channel(doc.FBID);}`
+		}
+	}
+}
