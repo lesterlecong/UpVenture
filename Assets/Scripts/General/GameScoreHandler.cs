@@ -14,7 +14,7 @@ public class GameScoreHandler : MonoBehaviour {
 	public GameObject socialMediaHandlerObject;
 
 	private string scoreFieldName;
-	private int level;
+	private int level = 0;
 	private string documentIDWithLevel;
 	private CouchbaseDatabase couchbaseDatabase;
 	private string userUUID;
@@ -104,8 +104,6 @@ public class GameScoreHandler : MonoBehaviour {
 
 	
 	void Start(){
-		level = 0;
-
 		SetupDatabase ();
 		SetupSocialMediaHandler ();
 
