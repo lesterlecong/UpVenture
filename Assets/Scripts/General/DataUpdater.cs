@@ -29,6 +29,12 @@ public class DataUpdater : MonoBehaviour {
 	void Start () {
 		
 		AddChannel ();
+
+		if (socialMediaHandler.IsLoggedIn ()) {
+			Invoke ("StartReplicate", 0.1f);
+		} else {
+			NextScene();
+		}
 	}
 
 	void SetupDatabase(){
@@ -52,17 +58,13 @@ public class DataUpdater : MonoBehaviour {
 		if (couchbaseDatabase != null && socialMediaHandler != null) {
 			if (socialMediaHandler.IsLoggedIn ()) {
 				Debug.Log ("At DataUpdater::Start(): Adding Channel to Replication");
-			
 				logText.text += "Account ID:" + socialMediaHandler.GetAccountID () + "\n";
+
 				List<string> channels = new List<string> ();
 				channels.Add (socialMediaHandler.GetAccountID ());
 				pullReplication.Channels = channels;
-			
-				Invoke ("StartReplicate", 0.1f);
 			}
-		} else {
-			NextScene();
-		}
+		} 
 	}
 
 	void StartReplicate(){
