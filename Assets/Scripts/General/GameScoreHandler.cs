@@ -11,14 +11,15 @@ public class GameScoreHandler : MonoBehaviour {
 
 	public GameType gameType;
 	public GameObject couchbaseDatabaseObject;
-	
+	public GameObject socialMediaHandlerObject;
+
 	private string scoreFieldName;
 	private int level;
 	private string documentIDWithLevel;
 	private CouchbaseDatabase couchbaseDatabase;
 	private string userUUID;
 	private UserDefineKeys userDefineKey;
-
+	private SocialMediaHandler socialMediaHandler;
 	public int Level{
 		set{
 			level = value;
@@ -106,11 +107,18 @@ public class GameScoreHandler : MonoBehaviour {
 		level = 0;
 
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
+		SetupSocialMediaHandler ();
 
 		userUUID = GetUserUUID();
 		
 		Debug.Log ("At GameScoreHandler: " + userUUID);
 
+	}
+
+	void SetupSocialMediaHandler(){
+		if (socialMediaHandlerObject != null) {
+			socialMediaHandler = (SocialMediaHandler)socialMediaHandlerObject.GetComponent (typeof(SocialMediaHandler));
+		}
 	}
 
 	string GetUserUUID(){
