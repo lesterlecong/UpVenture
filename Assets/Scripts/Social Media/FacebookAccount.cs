@@ -17,9 +17,9 @@ namespace AssemblyCSharp
 {
 	public class FacebookAccount: SocialMediaAccount
 	{
-		private string fbEmail = "";
-		private string fbID = "";
-		private string fbName = "";
+		private static string fbEmail = "";
+		private static string fbID = "";
+		private static string fbName = "";
 
 		public FacebookAccount ()
 		{
