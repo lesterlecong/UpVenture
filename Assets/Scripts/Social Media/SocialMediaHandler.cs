@@ -6,8 +6,9 @@ using AssemblyCSharp;
 
 public class SocialMediaHandler : MonoBehaviour {
 
-	public Button socialMediaButton;
+
 	public SocialMediaType socialMediaType = SocialMediaType.FACEBOOK;
+	public Button socialMediaButton;
 
 	private SocialMediaAccount socialMediaAccount;
 	private static SocialMediaHandler instance;
@@ -41,11 +42,27 @@ public class SocialMediaHandler : MonoBehaviour {
 		socialMediaAccount.AddLoginCallback (callback);
 	}
 
+	public void SetupSocialMediaAccount(){
+		
+		socialMediaAccount = SocialMediaAccountFactory.Instance ().GetSocialMediaAccount (socialMediaType);
+		
+		if (socialMediaAccount != null && socialMediaButton != null) {
+			socialMediaAccount.SocialMediaButton (socialMediaButton);
+			socialMediaButton.interactable = !socialMediaAccount.IsLoggedIn ();
+		}
+		
+		if (socialMediaAccount != null) {
+			if (!socialMediaAccount.IsLoggedIn ()) {
+				socialMediaAccount.Initialized ();
+			}
+		} 
+	}
+
 	void Awake () {
 		CheckInstance ();
 		DontDestroyOnLoad (transform.gameObject);
-		SetupSocialMediaAccount ();
 	}
+
 
 	void CheckInstance(){
 		if (!instance) {
@@ -53,21 +70,8 @@ public class SocialMediaHandler : MonoBehaviour {
 		} else {
 			Destroy(this.gameObject);
 		}
-
 	}
 
-	void SetupSocialMediaAccount(){
-		socialMediaAccount = SocialMediaAccountFactory.Instance ().GetSocialMediaAccount (socialMediaType);
-		if (socialMediaAccount != null && socialMediaButton != null) {
-			Debug.Log ("SocialMediaHandler awake");
-			if (!socialMediaAccount.IsLoggedIn ()) {
-				Debug.Log ("SocialMediaHandler::Initialized");
-				socialMediaAccount.SocialMediaButton (socialMediaButton);
-				socialMediaAccount.Initialized ();
-			}else {
-				socialMediaButton.interactable = false;
-			}
-		} 
-	}
+
 
 }

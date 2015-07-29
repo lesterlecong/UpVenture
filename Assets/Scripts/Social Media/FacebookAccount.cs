@@ -74,12 +74,13 @@ namespace AssemblyCSharp
 		protected override void OnLoggedIn(){
 			Debug.Log ("Your Facebook is already logged in");
 
+			GetFacebookInfo ();
+
 			if (socialMediaButton != null) {
 				socialMediaButton.interactable = false;
+			} else {
+				Debug.Log ("Social Media Button is null");
 			}
-
-			GetFacebookInfo ();
-	
 		}
 
 		void SetInit(){
