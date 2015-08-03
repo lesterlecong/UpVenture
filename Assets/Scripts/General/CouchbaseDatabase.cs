@@ -32,7 +32,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	#region Private Methods
 	void Awake(){
-		syncGateWayURI = "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
+
 		CreateDatabase ();
 	}
 
@@ -56,6 +56,9 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	}
 
+	string GetSyncGatewayURI(){
+		return  ("http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName);
+	}
 	#endregion
 
 	#region Properties
@@ -79,7 +82,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 			CreateDatabase();
 		}
 
-		return database.CreatePullReplication (new Uri(syncGateWayURI));
+		return database.CreatePullReplication (new Uri(GetSyncGatewayURI()));
 	}
 
 	public Replication GetPushReplication(){
@@ -87,7 +90,7 @@ public class CouchbaseDatabase : MonoBehaviour {
 			CreateDatabase();
 		}
 
-		return database.CreatePushReplication (new Uri(syncGateWayURI));
+		return database.CreatePushReplication (new Uri(GetSyncGatewayURI()));
 	}
 
 
