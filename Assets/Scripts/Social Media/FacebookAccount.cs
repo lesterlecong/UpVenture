@@ -39,7 +39,7 @@ namespace AssemblyCSharp
 		}
 
 		public override bool IsLoggedIn(){
-			return FB.IsLoggedIn;
+			return FB.IsLoggedIn || (PlayerPrefs.GetString (UserAccountDefineKeys.FBLoginStatus) == UserAccountDefineKeys.FBIsLogin);
 		}
 
 		public override void ShareMessage(string message){
@@ -88,7 +88,7 @@ namespace AssemblyCSharp
 		}
 
 		void SetInit(){
-			if (FB.IsLoggedIn) {
+			if (IsLoggedIn()) {
 				OnLoggedIn();
 			}
 		}
@@ -139,7 +139,7 @@ namespace AssemblyCSharp
 				}
 			}
 		}
-
+	
 	}
 }
 
