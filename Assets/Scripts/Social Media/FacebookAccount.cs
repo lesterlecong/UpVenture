@@ -20,6 +20,7 @@ namespace AssemblyCSharp
 		private static string fbEmail = "";
 		private static string fbID = "";
 		private static string fbName = "";
+		private bool isSocialMediaButtonPressed = false;
 
 		public FacebookAccount ()
 		{
@@ -31,6 +32,7 @@ namespace AssemblyCSharp
 			}
 		}
 		public override void Login(){
+			isSocialMediaButtonPressed = true;
 			FB.Login ("public_profile,email,user_friends", LoginCallback);
 		}
 
@@ -104,10 +106,10 @@ namespace AssemblyCSharp
 		}
 
 		void GetFacebookInfo(){
-			FB.API ("/me", Facebook.HttpMethod.GET, GetFacebookCallback);
+			FB.API ("/me", Facebook.HttpMethod.GET, GetFacebookInfoCallback);
 		}
 
-		void GetFacebookCallback(FBResult result){
+		void GetFacebookInfoCallback(FBResult result){
 			Debug.Log ("Result:" + result.Text);
 
 			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
@@ -121,7 +123,9 @@ namespace AssemblyCSharp
 				fbID = fbdata ["id"].ToString ();
 				fbName = fbdata ["name"].ToString ();
 
-				ApplyLoginCallback();
+				if(isSocialMediaButtonPressed){
+					ApplyLoginCallback();
+				}
 			}
 		}
 
