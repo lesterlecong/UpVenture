@@ -92,10 +92,12 @@ namespace AssemblyCSharp
 
 		void SaveHighestScorePerLevel(Dictionary<int, int> highestScorePerLevel, string GameAdventureName){
 
-			SetDocumentForGameAdventureDatabase (GameAdventureName);
+			bool docIsNotNull = SetDocumentForGameAdventureDatabase (GameAdventureName);
 
-			for (int level = 1; level <= maxLevel; level++) {
-				couchDatabase.SaveData(GetFieldForLevelScore(level), highestScorePerLevel[level]);
+			if (docIsNotNull) {
+				for (int level = 1; level <= maxLevel; level++) {
+					couchDatabase.SaveData (GetFieldForLevelScore (level), highestScorePerLevel [level]);
+				}
 			}
 		}
 
@@ -105,17 +107,27 @@ namespace AssemblyCSharp
 				total += highestScorePerLevel[level];
 			}
 
-			SetDocumentForGameAdventureDatabase (GameAdventureName);
-			couchDatabase.SaveData (GameScoreDefineKeys.Total, total);
+			bool docIsNotNull = SetDocumentForGameAdventureDatabase (GameAdventureName);
+			if (docIsNotNull) {
+				couchDatabase.SaveData (GameScoreDefineKeys.Total, total);
+			}
 
 		}
 
-		void SetDocumentForGameAdventureDatabase(string GameAdventureName){
+		bool SetDocumentForGameAdventureDatabase(string GameAdventureName){
+			bool documentIsNotNull = false;
 			couchDatabase.SelectDocumentWithID(GameAdventureName + GetUUIDofAccount (socialMediaAccount.GetAccountEmail(), socialMediaAccount.GetAccountID ()));
-			
-			if (couchDatabase.IsDocumentNull ()) {
+
+			documentIsNotNull = !couchDatabase.IsDocumentNull ();
+
+
+			if (!documentIsNotNull) {
 				couchDatabase.SelectDocumentWithID(GameAdventureName + GetUUIDofAccount (UserAccountDefineKeys.TemporaryEmail, UserAccountDefineKeys.TemporaryID));
+				documentIsNotNull = !couchDatabase.IsDocumentNull();
 			}
+
+			return documentIsNotNull;
+
 		}
 
 		string GetFieldForLevelScore(int level){
