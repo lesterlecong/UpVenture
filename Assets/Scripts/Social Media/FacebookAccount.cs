@@ -17,13 +17,15 @@ namespace AssemblyCSharp
 {
 	public class FacebookAccount: SocialMediaAccount
 	{
-		private static string fbEmail = "";
-		private static string fbID = "";
-		private static string fbName = "";
 		private bool isSocialMediaButtonPressed = false;
 
 		public FacebookAccount ()
 		{
+			if (PlayerPrefs.GetString (UserAccountDefineKeys.FBLoginStatus) == UserAccountDefineKeys.FBIsLogout) {
+				PlayerPrefs.SetString (UserAccountDefineKeys.FBID, String.Empty);
+				PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, String.Empty);
+				PlayerPrefs.SetString (UserAccountDefineKeys.FBUsername, String.Empty);
+			}
 		}
 
 		public override void Initialized(){
@@ -52,15 +54,15 @@ namespace AssemblyCSharp
 		}
 
 		public override string GetAccountEmail(){
-			return fbEmail;
+			return PlayerPrefs.GetString(UserAccountDefineKeys.FBEmail);
 		}
 
 		public override string GetAccountID(){
-			return fbID;
+			return PlayerPrefs.GetString(UserAccountDefineKeys.FBID);
 		}
 
 		public override string GetAccountName(){
-			return fbName;
+			return PlayerPrefs.GetString(UserAccountDefineKeys.FBUsername);
 		}
 
 		public string GetAcessToken(){
@@ -119,10 +121,9 @@ namespace AssemblyCSharp
 				Debug.Log ("ID:" + fbdata ["id"].ToString ());
 				Debug.Log ("Name:" + fbdata ["name"].ToString());
 
-				fbEmail = fbdata ["email"].ToString ();
-				fbID = fbdata ["id"].ToString ();
-				fbName = fbdata ["name"].ToString ();
-				SaveFBDataToPlayerPrefs();
+				PlayerPrefs.SetString (UserAccountDefineKeys.FBID,  fbdata ["id"].ToString ());
+				PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, fbdata ["email"].ToString ());
+				PlayerPrefs.SetString (UserAccountDefineKeys.FBUsername, fbdata ["name"].ToString ());
 
 				if(isSocialMediaButtonPressed){
 					ApplyLoginCallback();
@@ -130,13 +131,7 @@ namespace AssemblyCSharp
 			}
 		}
 
-		void SaveFBDataToPlayerPrefs(){
-			PlayerPrefs.SetString (UserAccountDefineKeys.FBID, fbID);
-			PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, fbEmail);
-			PlayerPrefs.SetString (UserAccountDefineKeys.FBUsername, fbName);
-		}
-
-
+	
 		void ApplyLoginCallback(){
 			if (loginCallbackList.Count > 0) {
 				foreach(LoginCallback callback in loginCallbackList){
@@ -144,7 +139,6 @@ namespace AssemblyCSharp
 				}
 			}
 		}
-
 
 	}
 }
