@@ -122,11 +122,18 @@ namespace AssemblyCSharp
 				fbEmail = fbdata ["email"].ToString ();
 				fbID = fbdata ["id"].ToString ();
 				fbName = fbdata ["name"].ToString ();
+				SaveFBDataToPlayerPrefs();
 
 				if(isSocialMediaButtonPressed){
 					ApplyLoginCallback();
 				}
 			}
+		}
+
+		void SaveFBDataToPlayerPrefs(){
+			PlayerPrefs.SetString (UserAccountDefineKeys.FBID, fbID);
+			PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, fbEmail);
+			PlayerPrefs.SetString (UserAccountDefineKeys.FBUsername, fbName);
 		}
 
 
