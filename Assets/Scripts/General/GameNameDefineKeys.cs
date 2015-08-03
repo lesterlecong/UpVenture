@@ -10,24 +10,8 @@
 using System;
 namespace AssemblyCSharp
 {
-	public struct UserDefineKeys
+	public struct GameNameDefineKeys
 	{
-		
-	
-
-		public string NextScene{
-			get{
-				return "NextScene";
-			}
-		}
-
-		public string UpdateSceneName{
-			get{
-				return "data update";
-			}
-		}
-
-
 	}
 }
 

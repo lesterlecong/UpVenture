@@ -55,7 +55,7 @@ public class GameScoreHandler : MonoBehaviour {
 		set{
 			if(value > GetPreviousScore()){
 				int accumulatedScore = GetAccumulatedScore() + (value - GetPreviousScore());
-				couchbaseDatabase.SaveData(userDefineKey.Total, accumulatedScore.ToString());
+				couchbaseDatabase.SaveData(GameScoreDefineKeys.Total, accumulatedScore.ToString());
 				Debug.Log("Save accumulated score:" + accumulatedScore.ToString());
 			}
 		}
@@ -67,10 +67,10 @@ public class GameScoreHandler : MonoBehaviour {
 
 	public int ScoreRequired{
 		set{
-			couchbaseDatabase.SaveData(userDefineKey.Level + Level.ToString () + userDefineKey.RequiredScore, value.ToString()); 
+			couchbaseDatabase.SaveData(GameScoreDefineKeys.Level + Level.ToString () + GameScoreDefineKeys.RequiredScore, value.ToString()); 
 		}
 		get{
-			return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString(userDefineKey.Level + Level.ToString () + userDefineKey.RequiredScore));
+			return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString(GameScoreDefineKeys.Level + Level.ToString () + GameScoreDefineKeys.RequiredScore));
 		}
 
 	}
@@ -93,7 +93,7 @@ public class GameScoreHandler : MonoBehaviour {
 
 	int GetAccumulatedScore(){
 		//Debug.Log ("At GameScoreHandler accumulated score = " + couchbaseDatabase.ReadDataAsString (userDefineKey.Total));
-		return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString (userDefineKey.Total));
+		return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString (GameScoreDefineKeys.Total));
 	}
 	
 	int ConvertDataStoreReadingToInt(string reading){
@@ -166,16 +166,16 @@ public class GameScoreHandler : MonoBehaviour {
 
 		switch (type) {
 			case GameType.MountainAdventure:
-				advetureTypeName = "MA_";
+				advetureTypeName = GameScoreDefineKeys.MountainAdventure;
 				break;
 			case GameType.CityAdventure:
-				advetureTypeName = "CA_";
+				advetureTypeName = GameScoreDefineKeys.CityAdventure;
 				break;
 			case GameType.BeachAdventure:
-				advetureTypeName = "BA_";
+				advetureTypeName = GameScoreDefineKeys.BeachAdventure;
 				break;
 			case GameType.Endless:
-				advetureTypeName = "EL_";
+				advetureTypeName = GameScoreDefineKeys.EndlessAdventure;
 				break;
 			default:
 				break;
@@ -185,7 +185,7 @@ public class GameScoreHandler : MonoBehaviour {
 	}
 
 	string GetFieldNameForHighScore(){
-		return (gameType == GameType.Endless)? scoreFieldName:(userDefineKey.Level + Level.ToString () + ScoreFieldName);
+		return (gameType == GameType.Endless)? scoreFieldName:(GameScoreDefineKeys.Level + Level.ToString () + GameScoreDefineKeys.ScoreName);
 	}
 	
 }
