@@ -12,6 +12,7 @@ public class DataUpdater : MonoBehaviour {
 	public GameObject couchbaseDatabaseObject;
 	public Text logText;
 	public SocialMediaType socialMediaType = SocialMediaType.FACEBOOK;
+	public bool allowProceedToNextScene = true;
 
 	private CouchbaseDatabase couchbaseDatabase;
 	private GameObject socialMediaHandlerObject;
@@ -21,6 +22,8 @@ public class DataUpdater : MonoBehaviour {
 	private Replication pushReplication;
 
 	void Awake(){
+		Debug.Log ("DataUpdater::Awake()");
+
 		SetupDatabase ();
 		SetupReplicator ();
 		SetupSocialMediaHandler ();
@@ -38,6 +41,7 @@ public class DataUpdater : MonoBehaviour {
 	}
 
 	void SetupDatabase(){
+		Debug.Log ("DataUpdater::SetupDatabase()");
 		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
 	}
 
@@ -67,10 +71,11 @@ public class DataUpdater : MonoBehaviour {
 		} 
 	}
 
-	void StartReplicate(){
+	public void StartReplicate(){
 
 		pullReplication.Start ();
 		bool isOffline = (pullReplication.Status == ReplicationStatus.Offline);
+		Debug.Log ("Replication is " + (isOffline ? "Offline" : "Online"));
 
 		if (!isOffline) {
 			logText.text += "Sync Gateway is Online\n";
@@ -96,8 +101,10 @@ public class DataUpdater : MonoBehaviour {
 
 
 	void NextScene(){
-		UserDefineKeys defineKeys;
-		Application.LoadLevel(PlayerPrefs.GetString(defineKeys.NextScene));
+		if (allowProceedToNextScene) {
+			UserDefineKeys defineKeys;
+			Application.LoadLevel (PlayerPrefs.GetString (defineKeys.NextScene));
+		}
 	}
 
 }
