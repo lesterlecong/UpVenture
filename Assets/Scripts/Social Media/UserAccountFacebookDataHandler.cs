@@ -64,6 +64,10 @@ namespace AssemblyCSharp
 			} else {
 				UpdateTemporaryAccount ();
 			}
+
+			if (dataUpdater != null) {
+				dataUpdater.StartReplicate();
+			}
 		}
 
 		void SetupDataUpdater(){
