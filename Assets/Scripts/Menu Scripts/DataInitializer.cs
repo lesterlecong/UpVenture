@@ -27,15 +27,17 @@ public class DataInitializer : MonoBehaviour {
 
 	void InitializeData(){
 
-		FBUserAccount userAccount = new FBUserAccount (couchbaseDatabase);
-		userAccount.UserEmail = UserAccountDefineKeys.TemporaryEmail;
-		userAccount.UserID = UserAccountDefineKeys.TemporaryID;
-		userAccount.UserName = UserAccountDefineKeys.TemporaryUser;
-		userAccount.UserToken = UserAccountDefineKeys.TemporaryToken;
+		if (PlayerPrefs.GetString (UserAccountDefineKeys.FBLoginStatus) == UserAccountDefineKeys.FBIsLogout) {
+			FBUserAccount userAccount = new FBUserAccount (couchbaseDatabase);
+			userAccount.UserEmail = UserAccountDefineKeys.TemporaryEmail;
+			userAccount.UserID = UserAccountDefineKeys.TemporaryID;
+			userAccount.UserName = UserAccountDefineKeys.TemporaryUser;
+			userAccount.UserToken = UserAccountDefineKeys.TemporaryToken;
+			string UUID = userAccount.Create ();
+			PlayerPrefs.SetString (UserAccountDefineKeys.UUID, UUID);
+		}
 
-		string UUID = userAccount.Create ();
 
-		PlayerPrefs.SetString (UserAccountDefineKeys.UUID, UUID);
 	}
 
 	void InvokeHomeMenu(){
