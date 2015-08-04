@@ -45,7 +45,7 @@ namespace AssemblyCSharp
 
 		public void ChangeData(){
 			if (dataUpdater != null) {
-				dataUpdater.StartReplicate();
+				dataUpdater.StartPullData();
 			}
 			Dictionary<int, int> mountainAdvScores = GetHighestScorePerLevel (GameScoreDefineKeys.MountainAdventure);
 			Dictionary<int, int> cityAdvScores = GetHighestScorePerLevel (GameScoreDefineKeys.CityAdventure);
@@ -66,7 +66,7 @@ namespace AssemblyCSharp
 			}
 
 			if (dataUpdater != null) {
-				dataUpdater.StartReplicate();
+				dataUpdater.StartPushData();
 			}
 		}
 

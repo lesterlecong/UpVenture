@@ -79,13 +79,24 @@ public class DataUpdater : MonoBehaviour {
 
 		if (!isOffline) {
 			logText.text += "Sync Gateway is Online\n";
-			pushReplication.Start();
-			StartCoroutine(UpdateProgress());
+			StartPushData();
 		} else {
 			logText.text += "Sync Gateway is Offline\n";
 			NextScene();
 		}
 		
+	}
+
+	public void StartPullData(){
+		logText.text += "Start to Pull Data\n";
+		pullReplication.Start ();
+		StartCoroutine(UpdateProgress());
+	}
+
+	public void StartPushData(){
+		logText.text += "Start to Push Data\n";
+		pushReplication.Start();
+		StartCoroutine(UpdateProgress());
 	}
 
 	IEnumerator UpdateProgress(){
@@ -94,7 +105,7 @@ public class DataUpdater : MonoBehaviour {
 			logText.text += ".";
 			yield return new WaitForSeconds(1.0f);
 		}
-		logText.text += "\n";
+		logText.text += "\nDone \n";
 		NextScene ();
 	}
 
