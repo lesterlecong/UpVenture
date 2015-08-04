@@ -122,13 +122,14 @@ namespace AssemblyCSharp
 
 		void GetFacebookInfoCallback(FBResult result){
 			Debug.Log ("Result:" + result.Text);
+			OnScreenLog.write ("Login Result: " + result.Text);
 
 			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
 
 			if (fbdata != null) {
-				Debug.Log ("Email:" + fbdata ["email"].ToString ());
-				Debug.Log ("ID:" + fbdata ["id"].ToString ());
-				Debug.Log ("Name:" + fbdata ["name"].ToString ());
+				OnScreenLog.write ("ID:" + fbdata ["id"].ToString ());
+				OnScreenLog.write ("Email:" + fbdata ["email"].ToString ());
+				OnScreenLog.write ("Name:" + fbdata ["name"].ToString ());
 
 				PlayerPrefs.SetString (UserAccountDefineKeys.FBID, fbdata ["id"].ToString ());
 				PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, fbdata ["email"].ToString ());
