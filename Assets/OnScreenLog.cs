@@ -8,12 +8,23 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
+using UnityEngine.UI;
+
 namespace AssemblyCSharp
 {
 	public class OnScreenLog
 	{
-		public OnScreenLog ()
-		{
+		private static GameObject textLogObject;
+		private static Text textLog;
+
+		public static void write(string message){
+			if (textLogObject == null && textLog == null) {
+				textLogObject = GameObject.FindGameObjectWithTag("DebugText");
+				textLog = textLogObject.GetComponent<Text>();
+			}
+
+			textLog.text += message + "\n";
 		}
 	}
 }

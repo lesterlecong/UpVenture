@@ -18,6 +18,7 @@ namespace AssemblyCSharp
 	public class FacebookAccount: SocialMediaAccount
 	{
 		private bool isSocialMediaButtonPressed = false;
+		private GameObject debugText;
 
 		public FacebookAccount ()
 		{
@@ -26,6 +27,8 @@ namespace AssemblyCSharp
 				PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, String.Empty);
 				PlayerPrefs.SetString (UserAccountDefineKeys.FBUsername, String.Empty);
 			}
+
+			OnScreenLog.write ("Facebook Initialize");
 		}
 
 		public override void Initialized(){
@@ -34,12 +37,13 @@ namespace AssemblyCSharp
 			}
 		}
 		public override void Login(){
+			Debug.Log ("Social Media button is pressed");
 			isSocialMediaButtonPressed = true;
 			FB.Login ("public_profile,email,user_friends", LoginCallback);
 		}
 
 		public override bool IsLoggedIn(){
-			return FB.IsLoggedIn || (PlayerPrefs.GetString (UserAccountDefineKeys.FBLoginStatus) == UserAccountDefineKeys.FBIsLogin);
+			return FB.IsLoggedIn; 
 		}
 
 		public override void ShareMessage(string message){
@@ -76,20 +80,25 @@ namespace AssemblyCSharp
 		}
 
 		protected override void OnLoggedIn(){
-			Debug.Log ("Your Facebook is already logged in");
-
-			GetFacebookInfo ();
+			OnScreenLog.write ("FB is logged in");
 
 			if (socialMediaButton != null) {
 				socialMediaButton.interactable = false;
-			} else {
-				Debug.Log ("Social Media Button is null");
 			}
+
+			GetFacebookInfo ();
+
+
 		}
 
 		void SetInit(){
-			if (IsLoggedIn()) {
+			if (FB.IsLoggedIn) {
 				OnLoggedIn();
+			}
+
+			if ((PlayerPrefs.GetString (UserAccountDefineKeys.FBLoginStatus) == UserAccountDefineKeys.FBIsLogin) && socialMediaButton != null) {
+				OnScreenLog.write("FB is already logged in before");
+				socialMediaButton.interactable = false;
 			}
 		}
 
@@ -103,7 +112,7 @@ namespace AssemblyCSharp
 				OnLoggedIn();
 				PlayerPrefs.SetString(UserAccountDefineKeys.FBLoginStatus, UserAccountDefineKeys.FBIsLogin);
 			}else{
-				Debug.Log("Failed Logged in");
+				OnScreenLog.write ("Error in logging in FB");
 			}
 		}
 
@@ -119,15 +128,17 @@ namespace AssemblyCSharp
 			if (fbdata != null) {
 				Debug.Log ("Email:" + fbdata ["email"].ToString ());
 				Debug.Log ("ID:" + fbdata ["id"].ToString ());
-				Debug.Log ("Name:" + fbdata ["name"].ToString());
+				Debug.Log ("Name:" + fbdata ["name"].ToString ());
 
-				PlayerPrefs.SetString (UserAccountDefineKeys.FBID,  fbdata ["id"].ToString ());
+				PlayerPrefs.SetString (UserAccountDefineKeys.FBID, fbdata ["id"].ToString ());
 				PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, fbdata ["email"].ToString ());
 				PlayerPrefs.SetString (UserAccountDefineKeys.FBUsername, fbdata ["name"].ToString ());
 
-				if(isSocialMediaButtonPressed){
-					ApplyLoginCallback();
+				if (isSocialMediaButtonPressed) {
+					ApplyLoginCallback ();
 				}
+			} else {
+				OnScreenLog.write("FB Data is Null");
 			}
 		}
 
