@@ -128,11 +128,11 @@ namespace AssemblyCSharp
 
 			if (fbdata != null) {
 				OnScreenLog.write ("ID:" + fbdata ["id"].ToString ());
-				OnScreenLog.write ("Email:" + fbdata ["email"].ToString ());
+				//OnScreenLog.write ("Email:" + fbdata ["email"].ToString ());
 				OnScreenLog.write ("Name:" + fbdata ["name"].ToString ());
 
 				PlayerPrefs.SetString (UserAccountDefineKeys.FBID, fbdata ["id"].ToString ());
-				PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, fbdata ["email"].ToString ());
+				//PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, fbdata ["email"].ToString ());
 				PlayerPrefs.SetString (UserAccountDefineKeys.FBUsername, fbdata ["name"].ToString ());
 
 				if (isSocialMediaButtonPressed) {
