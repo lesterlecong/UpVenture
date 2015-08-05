@@ -127,13 +127,20 @@ namespace AssemblyCSharp
 			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
 
 			if (fbdata != null) {
-				OnScreenLog.write ("ID:" + fbdata ["id"].ToString ());
-				//OnScreenLog.write ("Email:" + fbdata ["email"].ToString ());
-				OnScreenLog.write ("Name:" + fbdata ["name"].ToString ());
+				if(fbdata.Contains("id"))                                                         {
+					OnScreenLog.write ("ID:" + fbdata ["id"].ToString ());
+					PlayerPrefs.SetString (UserAccountDefineKeys.FBID, fbdata ["id"].ToString ());
+				}
 
-				PlayerPrefs.SetString (UserAccountDefineKeys.FBID, fbdata ["id"].ToString ());
-				//PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, fbdata ["email"].ToString ());
-				PlayerPrefs.SetString (UserAccountDefineKeys.FBUsername, fbdata ["name"].ToString ());
+				if(fbdata.Contains("email")){
+					OnScreenLog.write ("Email:" + fbdata ["email"].ToString ());
+					PlayerPrefs.SetString (UserAccountDefineKeys.FBEmail, fbdata ["email"].ToString ());
+				}
+
+				if(fbdata.Contains("name")){
+					OnScreenLog.write ("Name:" + fbdata ["name"].ToString ());
+					PlayerPrefs.SetString (UserAccountDefineKeys.FBUsername, fbdata ["name"].ToString ());
+				}
 
 				if (isSocialMediaButtonPressed) {
 					ApplyLoginCallback ();
