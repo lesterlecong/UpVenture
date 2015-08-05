@@ -21,10 +21,11 @@ namespace AssemblyCSharp
 		public static void write(string message){
 			if (textLogObject == null && textLog == null) {
 				textLogObject = GameObject.FindGameObjectWithTag("DebugText");
-				textLog = textLogObject.GetComponent<Text>();
-			}
 
-			textLog.text += message + "\n";
+			}else {
+				textLog = textLogObject.GetComponent<Text> ();
+				textLog.text += message + "\n";
+			}
 		}
 	}
 }
