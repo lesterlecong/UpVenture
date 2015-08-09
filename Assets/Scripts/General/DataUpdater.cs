@@ -13,12 +13,10 @@ public delegate void CallDelegate();
 public class DataUpdater : MonoBehaviour {
 	public GameObject couchbaseDatabaseObject;
 	public Text logText;
-	public SocialMediaType socialMediaType = SocialMediaType.FACEBOOK;
 	public bool allowProceedToNextScene = true;
 
 	private CouchbaseDatabase couchbaseDatabase;
 	private GameObject socialMediaHandlerObject;
-	private SocialMediaHandler socialMediaHandler;
 
 	private Replication pullReplication;
 	private Replication pushReplication;
@@ -31,18 +29,13 @@ public class DataUpdater : MonoBehaviour {
 
 		SetupDatabase ();
 		SetupReplicator ();
-		SetupSocialMediaHandler ();
 	}
 
 	void Start () {
 		
 		AddChannel ();
-
-		if (socialMediaHandler.IsLoggedIn ()) {
-			Invoke ("StartReplicate", 0.1f);
-		} else {
-			NextScene();
-		}
+		
+		NextScene();
 	}
 
 	void SetupDatabase(){
@@ -55,13 +48,6 @@ public class DataUpdater : MonoBehaviour {
 		pushReplication = couchbaseDatabase.GetPushReplication ();
 	}
 
-	void SetupSocialMediaHandler(){
-		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
-		if(socialMediaHandlerObject != null){
-			socialMediaHandler = (SocialMediaHandler) socialMediaHandlerObject.GetComponent(typeof(SocialMediaHandler));
-			socialMediaHandler.socialMediaType = this.socialMediaType;
-		}
-	}
 
 	public void AddChannel(){
 		if (couchbaseDatabase != null && socialMediaHandler != null) {
