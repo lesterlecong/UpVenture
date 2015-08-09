@@ -124,7 +124,9 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	public void DeleteDocumentWithID(string ID){
 		doc = database.GetDocument(ID);
-		doc.Delete();
+		if (doc != null) {
+			doc.Delete ();
+		}
 	}
 
 	public void SaveData(Dictionary<string, object> data){
@@ -144,16 +146,18 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	public object ReadDataAsObject(string key){
 		object objectData = doc.GetProperty (key);
+
 		return objectData;
 	}
 	
 	public string ReadDataAsString(string key){
 		object objectData = ReadDataAsObject (key);
 		string dataAsString = "";
-		
+
+	
 		if (objectData != null) {
 			dataAsString = objectData.ToString ();
-		} 
+		}
 		
 		return dataAsString;
 	}
