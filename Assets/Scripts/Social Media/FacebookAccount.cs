@@ -122,7 +122,6 @@ namespace AssemblyCSharp
 
 		void GetFacebookInfoCallback(FBResult result){
 			Debug.Log ("Result:" + result.Text);
-			OnScreenLog.write ("Login Result: " + result.Text);
 
 			IDictionary fbdata = Facebook.MiniJSON.Json.Deserialize (result.Text) as IDictionary;
 
