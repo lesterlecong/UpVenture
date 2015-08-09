@@ -14,7 +14,6 @@ public class DataUpdater : MonoBehaviour {
 	public GameObject couchbaseDatabaseObject;
 	public Text logText;
 	public bool allowProceedToNextScene = true;
-	private bool isUpdatingDone = false;
 
 
 	void Awake(){
