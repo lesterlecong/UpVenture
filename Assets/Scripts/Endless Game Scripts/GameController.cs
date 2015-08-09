@@ -21,8 +21,6 @@ public class GameController : MonoBehaviour {
 	protected bool isGameOver = false;
 	protected bool isPaused = false;
 	protected Sprite gameOverSprite;
-	protected GameObject socialMediaHandlerObject;
-	protected SocialMediaHandler socialMediaHandler;
 	#endregion
 
 	#region Public Method
@@ -91,14 +89,6 @@ public class GameController : MonoBehaviour {
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
-		SetupSocialMediaHandlerObject ();
-	}
-
-	protected void SetupSocialMediaHandlerObject(){
-		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
-		if (socialMediaHandlerObject != null) {
-			socialMediaHandler = (SocialMediaHandler) socialMediaHandlerObject.GetComponent(typeof(SocialMediaHandler));
-		}
 	}
 	#endregion
 
