@@ -32,9 +32,6 @@ public class DataUpdater : MonoBehaviour {
 	}
 
 	void Start () {
-		
-		AddChannel ();
-		
 		NextScene();
 	}
 
@@ -48,19 +45,6 @@ public class DataUpdater : MonoBehaviour {
 		pushReplication = couchbaseDatabase.GetPushReplication ();
 	}
 
-
-	public void AddChannel(){
-		if (couchbaseDatabase != null && socialMediaHandler != null) {
-			if (socialMediaHandler.IsLoggedIn ()) {
-				Debug.Log ("At DataUpdater::Start(): Adding Channel to Replication");
-				logText.text += "Account ID:" + socialMediaHandler.GetAccountID () + "\n";
-
-				List<string> channels = new List<string> ();
-				channels.Add (socialMediaHandler.GetAccountID ());
-				pullReplication.Channels = channels;
-			}
-		} 
-	}
 
 	public void StartReplicate(){
 
