@@ -36,7 +36,7 @@ public class AdventureGameController : GameController {
 		}
 
 		scoreHandler = (GameScoreHandler)gameScoreHandler.GetComponent (typeof(GameScoreHandler));
-		scoreHandler.ScoreFieldName = userDefineKey.Score;
+		scoreHandler.ScoreFieldName = GameScoreDefineKeys.ScoreName;
 		scoreHandler.Level = level;
 		scoreHandler.InitGameScoreHandlerDocument ();
 

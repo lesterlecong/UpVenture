@@ -10,24 +10,16 @@
 using System;
 namespace AssemblyCSharp
 {
-	public struct UserDefineKeys
+	public struct GameScoreDefineKeys
 	{
-		
-	
-
-		public string NextScene{
-			get{
-				return "NextScene";
-			}
-		}
-
-		public string UpdateSceneName{
-			get{
-				return "data update";
-			}
-		}
-
-
+		public const string MountainAdventure = "MA_";
+		public const string CityAdventure = "CA_";
+		public const string BeachAdventure = "BA_";
+		public const string EndlessAdventure = "EL_";
+		public const string ScoreName = "_Score";
+		public const string Level = "Level_";
+		public const string RequiredScore = "_Score_Required";
+		public const string Total = "Total";
 	}
 }
 

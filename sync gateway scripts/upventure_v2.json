@@ -11,10 +11,11 @@
 			"bucket":"upventurev1",
 			"users":{
 				"GUEST":{
-					"disabled":false,
-					"admin_channels":["*"]
+					"disabled":true
 				}
-			}
+			},
+
+			"sync":`function(doc, oldDoc){if(!doc.owner){throw({forbidden: "Missing owner"});}if(oldDoc && doc.owner != oldDoc.owner){throw({forbidden: "Owner changed"});}channel(doc.FBID);}`
 		}
 	}
 }

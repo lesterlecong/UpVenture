@@ -10,24 +10,9 @@
 using System;
 namespace AssemblyCSharp
 {
-	public struct UserDefineKeys
+	public enum SocialMediaType
 	{
-		
-	
-
-		public string NextScene{
-			get{
-				return "NextScene";
-			}
-		}
-
-		public string UpdateSceneName{
-			get{
-				return "data update";
-			}
-		}
-
-
+		FACEBOOK
 	}
 }
 

@@ -5,6 +5,7 @@ using Couchbase.Lite.Unity;
 using Couchbase.Lite.Util;
 using Couchbase.Lite.Auth;
 
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -23,31 +24,16 @@ public class CouchbaseDatabase : MonoBehaviour {
 	#region Member Variables
 	private Document doc;
 	private Database database;
-	private Replication pullReplication;
-	private Replication pushReplication;
 	private string documentID;
 	private UserDefineKeys userDefineKey;
 	private string syncGateWayURI;
+
 	#endregion
 
 	#region Private Methods
 	void Awake(){
+
 		CreateDatabase ();
-		SetupReplication ();
-	}
-
-	void SetupReplication(){
-		syncGateWayURI = "http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName;
-		pullReplication = database.CreatePullReplication (new Uri (syncGateWayURI));
-		pushReplication = database.CreatePushReplication (new Uri (syncGateWayURI));
-	}
-
-	IEnumerator DoReplication(Replication replication){
-		replication.Start ();
-		
-		while (replication != null && replication.Status == ReplicationStatus.Active) {
-			yield return new WaitForSeconds(0.5f);
-		}
 	}
 
 	void CreateDatabase(){
@@ -70,6 +56,9 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	}
 
+	string GetSyncGatewayURI(){
+		return  ("http://" + hostName + ":" + portNumber.ToString() + "/" + databaseName);
+	}
 	#endregion
 
 	#region Properties
@@ -88,13 +77,20 @@ public class CouchbaseDatabase : MonoBehaviour {
 	#endregion
 
 	#region Public Method
+	public Replication GetPullReplication(){
+		if (database == null) {
+			CreateDatabase();
+		}
 
-	public void PullDataChanges(){
-		DoReplication (pullReplication);
+		return database.CreatePullReplication (new Uri(GetSyncGatewayURI()));
 	}
 
-	public void PushDataChanges(){
-		DoReplication (pushReplication);
+	public Replication GetPushReplication(){
+		if (database == null) {
+			CreateDatabase();
+		}
+
+		return database.CreatePushReplication (new Uri(GetSyncGatewayURI()));
 	}
 
 
@@ -128,7 +124,9 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	public void DeleteDocumentWithID(string ID){
 		doc = database.GetDocument(ID);
-		doc.Delete();
+		if (doc != null) {
+			doc.Delete ();
+		}
 	}
 
 	public void SaveData(Dictionary<string, object> data){
@@ -148,16 +146,18 @@ public class CouchbaseDatabase : MonoBehaviour {
 
 	public object ReadDataAsObject(string key){
 		object objectData = doc.GetProperty (key);
+
 		return objectData;
 	}
 	
 	public string ReadDataAsString(string key){
 		object objectData = ReadDataAsObject (key);
 		string dataAsString = "";
-		
+
+	
 		if (objectData != null) {
 			dataAsString = objectData.ToString ();
-		} 
+		}
 		
 		return dataAsString;
 	}
@@ -171,17 +171,6 @@ public class CouchbaseDatabase : MonoBehaviour {
 		return (doc == null);
 	}
 
-	public bool ReplicationsNull(){
-		return ((pullReplication == null) || (pullReplication == null));
-	}
-
-	public bool IsPullReplicationOffline(){
-		return pullReplication.Status == ReplicationStatus.Offline;
-	}
-
-	public bool IsPushReplicationOffline(){
-		return pushReplication.Status == ReplicationStatus.Offline;
-	}
 	#endregion
 	
 }

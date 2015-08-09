@@ -8,26 +8,25 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
+using UnityEngine.UI;
+
 namespace AssemblyCSharp
 {
-	public struct UserDefineKeys
+	public class OnScreenLog
 	{
-		
-	
+		private static GameObject textLogObject;
+		private static Text textLog;
 
-		public string NextScene{
-			get{
-				return "NextScene";
+		public static void write(string message){
+			if (textLogObject == null && textLog == null) {
+				textLogObject = GameObject.FindGameObjectWithTag("DebugText");
+
+			}else {
+				textLog = textLogObject.GetComponent<Text> ();
+				textLog.text += message + "\n";
 			}
 		}
-
-		public string UpdateSceneName{
-			get{
-				return "data update";
-			}
-		}
-
-
 	}
 }
 

@@ -34,8 +34,9 @@ public class EndlessGameController : GameController {
 	}
 	
 	public override void ShareScore(){
-		if (facebookHandler != null) {
-			facebookHandler.ShareHighscore (score);
+		if (socialMediaHandler != null) {
+			string shareScoreMessage = "Whooah I passed " + score.ToString() + " obstacle" + ((score > 1)? "s!":"!" + "\n Can you beat my score?");
+			socialMediaHandler.ShareMessage (shareScoreMessage);
 		} else {
 			Debug.LogError("FB Holder is null");
 		}

@@ -8,25 +8,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
+
 namespace AssemblyCSharp
 {
-	public struct UserDefineKeys
+	public interface IUserAccountDataHandler
 	{
-		
-	
-
-		public string NextScene{
-			get{
-				return "NextScene";
-			}
-		}
-
-		public string UpdateSceneName{
-			get{
-				return "data update";
-			}
-		}
-
+		void ChangeData();
+		void SocialMediaObject(GameObject socialMediaObject);
+		void SetDatabaseObject(GameObject databaseObject);
 
 	}
 }
