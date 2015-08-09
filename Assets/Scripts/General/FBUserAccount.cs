@@ -48,14 +48,23 @@ namespace AssemblyCSharp {
 			string UUID = "";
 			
 			couchbaseDatabase.SelectDocumentWithID(UserAccountDefineKeys.FBID + "::" + UserID);
-			if (!couchbaseDatabase.IsDocumentNull()) {
-				UUID = couchbaseDatabase.ReadDataAsString(UserAccountDefineKeys.UUID);
+			OnScreenLog.write ("On FBUserAccount:Selecting " + UserAccountDefineKeys.FBID + "::" + UserID);
+
+			if (!couchbaseDatabase.IsDocumentNull ()) {
+				UUID = couchbaseDatabase.ReadDataAsString (UserAccountDefineKeys.UUID);
+				OnScreenLog.write("On FBUserAccount: FBID::" + UserID + "is not null and UUID = " + UUID);
+				OnScreenLog.write ("Read ID:" + couchbaseDatabase.ReadDataAsString(UserAccountDefineKeys.FBID));
+			} else {
+				OnScreenLog.write("On FBUserAccount: FBID::" + UserID + "is null");
 			}
 			
 			if(string.IsNullOrEmpty(UUID)){
 				couchbaseDatabase.SelectDocumentWithID(UserAccountDefineKeys.FBEmail + "::" + UserEmail);
 				if (!couchbaseDatabase.IsDocumentNull()) {
 					UUID = couchbaseDatabase.ReadDataAsString(UserAccountDefineKeys.UUID);
+					OnScreenLog.write("On FBUserAccount: FBEmail::" + UserEmail + "is not null and UUID = " + UUID);
+				}else{
+					OnScreenLog.write("On FBUserAccount: FBEmail::" + UserEmail + "is null");
 				}
 			}
 			
