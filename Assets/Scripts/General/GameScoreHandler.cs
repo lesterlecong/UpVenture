@@ -18,8 +18,7 @@ public class GameScoreHandler : MonoBehaviour {
 	private CouchbaseDatabase couchbaseDatabase;
 	private string userUUID;
 	private UserDefineKeys userDefineKey;
-	private GameObject socialMediaHandlerObject;
-	private SocialMediaHandler socialMediaHandler;
+
 	public int Level{
 		set{
 			level = value;
@@ -78,11 +77,6 @@ public class GameScoreHandler : MonoBehaviour {
 	public void InitGameScoreHandlerDocument(){
 		couchbaseDatabase.CreateDocumentWithID(GetAdventureType(gameType) + userUUID);
 		couchbaseDatabase.SelectDocumentWithID(GetAdventureType(gameType) + userUUID);
-		if (socialMediaHandler != null) {
-			if(socialMediaHandler.IsLoggedIn()){
-				couchbaseDatabase.SaveData(UserAccountDefineKeys.Channels, new List<string> {socialMediaHandler.GetAccountID ()});
-			}
-		}
 	}
 
 	int GetPreviousScore(){
@@ -110,7 +104,6 @@ public class GameScoreHandler : MonoBehaviour {
 	
 	void Start(){
 		SetupDatabase ();
-		SetupSocialMediaHandler ();
 
 		userUUID = GetUserUUID();
 		
@@ -124,39 +117,23 @@ public class GameScoreHandler : MonoBehaviour {
 		}
 	}
 
-	void SetupSocialMediaHandler(){
-		socialMediaHandlerObject = GameObject.Find ("SocialMediaHandlerObject");
-		if (socialMediaHandlerObject != null) {
-			socialMediaHandler = (SocialMediaHandler)socialMediaHandlerObject.GetComponent (typeof(SocialMediaHandler));
-			socialMediaHandler.SetupSocialMediaAccount();
-		}
-	}
-
 	string GetUserUUID(){
 
 		FBUserAccount userAccount = new FBUserAccount (couchbaseDatabase);
 		string GUUID = "";
+		
+		userAccount.UserEmail = UserAccountDefineKeys.TemporaryEmail;
+		userAccount.UserID =  UserAccountDefineKeys.TemporaryID;
 
-		Debug.Log ("Social Media Handler is " + ((socialMediaHandler != null) ? "instatiated" : "null"));
-
-		if (socialMediaHandler != null) {
-			bool socialMediaCondition = socialMediaHandler.IsLoggedIn ();
-
-			Debug.Log ("Social Media is " + ((socialMediaCondition) ? "logged in" : "not logged in"));
-
-			userAccount.UserEmail = (socialMediaCondition) ? socialMediaHandler.GetAccountEmail () : UserAccountDefineKeys.TemporaryEmail;
-			userAccount.UserID = (socialMediaCondition) ? socialMediaHandler.GetAccountID () : UserAccountDefineKeys.TemporaryID;
-
-			if (string.IsNullOrEmpty (userAccount.GetUUID ())) {
-				userAccount.Create ();
-			}
-
-			Debug.Log ("User Email: " + userAccount.UserEmail);
-			Debug.Log ("User ID: " + userAccount.UserID);
-
-			GUUID = userAccount.GetUUID ();
+		if (string.IsNullOrEmpty (userAccount.GetUUID ())) {
+			userAccount.Create ();
 		}
 
+		Debug.Log ("User Email: " + userAccount.UserEmail);
+		Debug.Log ("User ID: " + userAccount.UserID);
+
+		GUUID = userAccount.GetUUID ();
+		
 		return GUUID;
 	}
 
