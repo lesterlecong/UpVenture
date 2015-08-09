@@ -80,7 +80,7 @@ public class GameScoreHandler : MonoBehaviour {
 		couchbaseDatabase.SelectDocumentWithID(GetAdventureType(gameType) + userUUID);
 		if (socialMediaHandler != null) {
 			if(socialMediaHandler.IsLoggedIn()){
-				couchbaseDatabase.SaveData(UserAccountDefineKeys.Channels, socialMediaHandler.GetAccountID ());
+				couchbaseDatabase.SaveData(UserAccountDefineKeys.Channels, new List<string> {socialMediaHandler.GetAccountID ()});
 			}
 		}
 	}
