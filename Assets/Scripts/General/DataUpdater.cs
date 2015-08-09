@@ -8,6 +8,8 @@ using Couchbase.Lite;
 using Couchbase.Lite.Unity;
 using Newtonsoft;
 
+public delegate void CallDelegate();
+
 public class DataUpdater : MonoBehaviour {
 	public GameObject couchbaseDatabaseObject;
 	public Text logText;
@@ -20,6 +22,9 @@ public class DataUpdater : MonoBehaviour {
 
 	private Replication pullReplication;
 	private Replication pushReplication;
+
+	private bool isUpdatingDone = false;
+	private CallDelegate delegateToCall;
 
 	void Awake(){
 		Debug.Log ("DataUpdater::Awake()");
@@ -58,7 +63,7 @@ public class DataUpdater : MonoBehaviour {
 		}
 	}
 
-	void AddChannel(){
+	public void AddChannel(){
 		if (couchbaseDatabase != null && socialMediaHandler != null) {
 			if (socialMediaHandler.IsLoggedIn ()) {
 				Debug.Log ("At DataUpdater::Start(): Adding Channel to Replication");
@@ -99,13 +104,26 @@ public class DataUpdater : MonoBehaviour {
 		StartCoroutine(UpdateProgress());
 	}
 
+	public bool IsUpdatingDone(){
+		return isUpdatingDone;
+	}
+
+	public void AddDelegateToCallAfterReplication(CallDelegate delegateToCall){
+		this.delegateToCall = delegateToCall;
+	}
+
 	IEnumerator UpdateProgress(){
 		logText.text += "Update Progress";
 		while ((pullReplication.Status == ReplicationStatus.Active) || (pushReplication.Status == ReplicationStatus.Active)) {
 			logText.text += ".";
+			isUpdatingDone = false;
 			yield return new WaitForSeconds(1.0f);
 		}
+		isUpdatingDone = true;
 		logText.text += "\nDone \n";
+		if (delegateToCall != null) {
+			delegateToCall ();
+		}
 		NextScene ();
 	}
 
