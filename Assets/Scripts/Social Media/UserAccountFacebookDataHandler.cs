@@ -25,6 +25,7 @@ namespace AssemblyCSharp
 		private DataUpdater dataUpdater;
 		private UserDefineKeys userDefineKeys;
 		private const int maxLevel = 20;
+		private FunctionCaller funcCaller = new FunctionCaller();
 
 		public UserAccountFacebookDataHandler ()
 		{
@@ -45,29 +46,44 @@ namespace AssemblyCSharp
 
 		public void ChangeData(){
 			if (dataUpdater != null) {
+				dataUpdater.AddChannel();
+				dataUpdater.AddDelegateToCallAfterReplication(UpdateDataOnDatabase);
 				dataUpdater.StartPullData();
 			}
-			Dictionary<int, int> mountainAdvScores = GetHighestScorePerLevel (GameScoreDefineKeys.MountainAdventure);
-			Dictionary<int, int> cityAdvScores = GetHighestScorePerLevel (GameScoreDefineKeys.CityAdventure);
-			Dictionary<int, int> beachAdvScores = GetHighestScorePerLevel (GameScoreDefineKeys.BeachAdventure);
 
-			SaveHighestScorePerLevel (mountainAdvScores, GameScoreDefineKeys.MountainAdventure);
-			SaveHighestScorePerLevel (cityAdvScores, GameScoreDefineKeys.CityAdventure);
-			SaveHighestScorePerLevel (beachAdvScores, GameScoreDefineKeys.BeachAdventure);
 
-			SaveTotalScoreFromPerLevel (mountainAdvScores, GameScoreDefineKeys.MountainAdventure);
-			SaveTotalScoreFromPerLevel (cityAdvScores, GameScoreDefineKeys.CityAdventure);
-			SaveTotalScoreFromPerLevel (beachAdvScores, GameScoreDefineKeys.BeachAdventure);
 
-			if (CheckIfOnlineAccountExist ()) {
-				DeleteTemporaryAccount();
-			} else {
-				UpdateTemporaryAccount ();
-			}
 
-			if (dataUpdater != null) {
-				dataUpdater.StartPushData();
-			}
+		}
+
+		void UpdateDataOnDatabase(){
+
+			OnScreenLog.write("Update Database");
+
+				Dictionary<int, int> mountainAdvScores = GetHighestScorePerLevel (GameScoreDefineKeys.MountainAdventure);
+				Dictionary<int, int> cityAdvScores = GetHighestScorePerLevel (GameScoreDefineKeys.CityAdventure);
+				Dictionary<int, int> beachAdvScores = GetHighestScorePerLevel (GameScoreDefineKeys.BeachAdventure);
+				
+				SaveHighestScorePerLevel (mountainAdvScores, GameScoreDefineKeys.MountainAdventure);
+				SaveHighestScorePerLevel (cityAdvScores, GameScoreDefineKeys.CityAdventure);
+				SaveHighestScorePerLevel (beachAdvScores, GameScoreDefineKeys.BeachAdventure);
+				
+				SaveTotalScoreFromPerLevel (mountainAdvScores, GameScoreDefineKeys.MountainAdventure);
+				SaveTotalScoreFromPerLevel (cityAdvScores, GameScoreDefineKeys.CityAdventure);
+				SaveTotalScoreFromPerLevel (beachAdvScores, GameScoreDefineKeys.BeachAdventure);
+				
+				OnScreenLog.write ("The Online Account does " + ((CheckIfOnlineAccountExist ()) ? "" : "not") + "exist");
+				
+				if (CheckIfOnlineAccountExist ()) {
+					DeleteTemporaryAccount();
+				} else {
+					UpdateTemporaryAccount ();
+				}
+				
+				if (dataUpdater != null) {
+					dataUpdater.StartPushData();
+				}
+
 		}
 
 		void SetupDataUpdater(){
@@ -81,6 +97,12 @@ namespace AssemblyCSharp
 
 			string tempAccountGUUID = GetUUIDofAccount (UserAccountDefineKeys.TemporaryEmail, UserAccountDefineKeys.TemporaryID);
 			string socialMedAccountGUUID = GetUUIDofAccount (socialMediaAccount.GetAccountEmail(), socialMediaAccount.GetAccountID ());
+			/*
+			OnScreenLog.write ("At UserAccountFacebookDataHandler: tempAccountUUID:" + tempAccountGUUID);
+			OnScreenLog.write ("At UserAccountFacebookDataHandler: socialMedAccountGUUID:" + socialMedAccountGUUID);
+			OnScreenLog.write ("At UserAccountFacebookDataHandler::GetHighestScorePerLevel: Email:" + socialMediaAccount.GetAccountEmail () + 
+				", ID:" + socialMediaAccount.GetAccountID());
+			*/
 
 			Dictionary<int, int> tempAccountScores = GetScores (GameAdventureName + tempAccountGUUID);
 			Dictionary<int, int> socialMedAccountScores = GetScores (GameAdventureName + socialMedAccountGUUID);
@@ -168,7 +190,7 @@ namespace AssemblyCSharp
 
 		bool CheckIfOnlineAccountExist(){
 			couchDatabase.SelectDocumentWithID(UserAccountDefineKeys.FBEmail + "::" + socialMediaAccount.GetAccountEmail ());
-			return couchDatabase.IsDocumentNull ();
+			return !couchDatabase.IsDocumentNull ();
 		}
 
 		void UpdateTemporaryAccount(){
