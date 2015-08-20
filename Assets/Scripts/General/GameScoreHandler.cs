@@ -101,9 +101,12 @@ public class GameScoreHandler : MonoBehaviour {
 
 	}
 
-	
-	void Start(){
+	void Awake(){
 		SetupDatabase ();
+	}
+
+	void Start(){
+
 
 		userUUID = GetUserUUID();
 		
