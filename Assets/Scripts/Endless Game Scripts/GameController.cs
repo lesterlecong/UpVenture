@@ -21,6 +21,9 @@ public class GameController : MonoBehaviour {
 	protected bool isGameOver = false;
 	protected bool isPaused = false;
 	protected Sprite gameOverSprite;
+	protected GameObject gameAdsHandlerObject;
+	protected GameAdsHandler gameAdsHandler;
+
 	#endregion
 
 	#region Public Method
@@ -31,7 +34,13 @@ public class GameController : MonoBehaviour {
 	public void PlayerDied(){
 		birdSpawner.StopSpawn ();
 		isGameOver = true;
+
+		if (gameAdsHandler != null) {
+			gameAdsHandler.ShowAds();
+		}
+
 		gameOverObject.SetActive (true);
+
 		SaveToDatabase ();
 		SetupGameOverObject ();
 	}
@@ -40,12 +49,19 @@ public class GameController : MonoBehaviour {
 		isPaused = true;
 		pauseButton.gameObject.SetActive (false);
 		playButton.gameObject.SetActive (true);
+		if (gameAdsHandler != null) {
+			gameAdsHandler.ShowAds();
+		}
+
 	}
 
 	public void Play(){
 		isPaused = false;
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
+		if (gameAdsHandler != null) {
+			gameAdsHandler.HideAds();
+		}
 	}
 	
 	public bool IsPaused(){
@@ -85,7 +101,12 @@ public class GameController : MonoBehaviour {
 		} else if (current != this) {
 			Destroy(gameObject);
 		}
-		
+
+		gameAdsHandlerObject = GameObject.Find ("GameAdsHandler");
+		if (gameAdsHandlerObject != null) {
+			gameAdsHandler = (GameAdsHandler) gameAdsHandlerObject.GetComponent(typeof(GameAdsHandler));
+		}
+
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
