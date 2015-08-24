@@ -5,16 +5,23 @@ using GoogleMobileAds.Api;
 
 public class GameAdsHandler : MonoBehaviour {
 
+	public static GameAdsHandler current;
 	public string adMobAndroidUnitID = "";
 	public string adMobiOSUnitID = "";
 	public bool isTesting = false;
 	public AdPosition position = AdPosition.Bottom;
-	private BannerView bannerView = null;
-	private AdRequest request = null;
+
+	private static BannerView bannerView = null;
+	private static AdRequest request = null;
 
 	// Use this for initialization
 	void Start () {
-		SetupAds ();
+		if (current == null) {
+			current = this;
+			SetupAds ();
+		} else if (current != this) {
+			Destroy(gameObject);
+		}
 	}
 	
 	// Update is called once per frame
@@ -35,22 +42,32 @@ public class GameAdsHandler : MonoBehaviour {
 		#else
 		string adUnitId = "unexpected_platform";
 		#endif
-		
-		bannerView = new BannerView (adUnitId, AdSize.Banner, position);
-		if (isTesting) {
-			request = new AdRequest.Builder ().AddTestDevice (AdRequest.TestDeviceSimulator).AddTestDevice ("36086015333251D9").Build ();
-		} else {
-			request = new AdRequest.Builder().Build();
-		}
-		bannerView.LoadAd (request);
 
+		if (bannerView == null) {	
+			bannerView = new BannerView (adUnitId, AdSize.Banner, position);
+			if (isTesting) {
+				request = new AdRequest.Builder ()
+					.AddTestDevice (AdRequest.TestDeviceSimulator)
+					.AddTestDevice ("36086015333251D9")
+					.AddTestDevice ("571260770879168")
+					.Build ();
+			} else {
+				request = new AdRequest.Builder ().Build ();
+			}
+			bannerView.LoadAd (request);
+		}
 	}
 
 	public void ShowAds(){
-		bannerView.Show ();
+		if (bannerView != null) {
+			bannerView.Show ();
+		}
 	}
 
 	public void HideAds(){
-		bannerView.Hide ();
+		if (bannerView != null) {
+			bannerView.Hide ();
+		}
+		
 	}
 }
