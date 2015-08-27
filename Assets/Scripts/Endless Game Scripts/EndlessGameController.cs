@@ -16,12 +16,14 @@ public class EndlessGameController : GameController {
 		scoreHandler.ScoreFieldName = scoreField;
 		scoreHandler.InitGameScoreHandlerDocument ();
 	}
-	
+
+
+
 	public override void PlayerScored(){
 		if (isGameOver) {
 			return;
 		}
-		
+		PlayScoreSoundFX ();
 		score++;
 		
 		if (score >= (previousGameLevel + 2)) {

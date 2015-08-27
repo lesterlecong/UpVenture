@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour {
 	public Text highScoreText;
 	public Button playButton;
 	public Button pauseButton;
+	public AudioClip scoreSound;
 	#endregion
 	#region Protected Member Variables
 	protected bool isGameOver = false;
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour {
 	protected Sprite gameOverSprite;
 	protected GameObject gameAdsHandlerObject;
 	protected GameAdsHandler gameAdsHandler;
+	protected AudioSource gameObjectAudioSource;
 
 	#endregion
 
@@ -36,7 +38,7 @@ public class GameController : MonoBehaviour {
 		isGameOver = true;
 
 		if (gameAdsHandlerObject != null && gameAdsHandler != null) {
-			gameAdsHandlerObject.SetActive(true);
+			//gameAdsHandlerObject.SetActive(true);
 			gameAdsHandler.ShowAds();
 		}
 
@@ -52,7 +54,7 @@ public class GameController : MonoBehaviour {
 		playButton.gameObject.SetActive (true);
 
 		if (gameAdsHandlerObject != null && gameAdsHandler != null) {
-			gameAdsHandlerObject.SetActive(true);
+			//gameAdsHandlerObject.SetActive(true);
 			gameAdsHandler.ShowAds();
 		}
 	}
@@ -63,7 +65,7 @@ public class GameController : MonoBehaviour {
 		playButton.gameObject.SetActive (false);
 
 		if (gameAdsHandlerObject != null && gameAdsHandler != null) {
-			gameAdsHandlerObject.SetActive(false);
+			//gameAdsHandlerObject.SetActive(false);
 			gameAdsHandler.HideAds();
 		}
 	}
@@ -106,10 +108,16 @@ public class GameController : MonoBehaviour {
 		} else if (current != this) {
 			Destroy(gameObject);
 		}
-		
+
+		gameObjectAudioSource = gameObject.GetComponent<AudioSource> ();
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
+	}
+
+	protected void PlayScoreSoundFX(){
+		gameObjectAudioSource.clip = scoreSound;
+		gameObjectAudioSource.Play ();
 	}
 	#endregion
 
@@ -118,7 +126,7 @@ public class GameController : MonoBehaviour {
 		gameAdsHandlerObject = GameObject.Find ("GameAdsHandler");
 		if (gameAdsHandlerObject != null) {
 			gameAdsHandler = (GameAdsHandler) gameAdsHandlerObject.GetComponent(typeof(GameAdsHandler));
-			gameAdsHandlerObject.SetActive(false);
+			//gameAdsHandlerObject.SetActive(false);
 			
 		}
 	}
