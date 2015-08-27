@@ -23,11 +23,6 @@ public class GameAdsHandler : MonoBehaviour {
 			Destroy(gameObject);
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
 	void OnDestroy(){
 		bannerView.Destroy ();
@@ -50,24 +45,34 @@ public class GameAdsHandler : MonoBehaviour {
 					.AddTestDevice (AdRequest.TestDeviceSimulator)
 					.AddTestDevice ("36086015333251D9")
 					.AddTestDevice ("571260770879168")
+					.AddTestDevice("351811072354090")
+					.AddKeyword("Upventure")
+					.SetGender(Gender.Male)
+					.AddExtra("color_bg", "9B30FF")
 					.Build ();
 			} else {
 				request = new AdRequest.Builder ().Build ();
 			}
 			bannerView.LoadAd (request);
+			HideAds();
 		}
 	}
 
+
 	public void ShowAds(){
-		if (bannerView != null) {
-			bannerView.Show ();
+		if (bannerView == null) {
+			SetupAds();
 		}
+			bannerView.Show ();
+		
 	}
 
 	public void HideAds(){
-		if (bannerView != null) {
-			bannerView.Hide ();
+		if (bannerView == null) {
+			SetupAds();
 		}
+			bannerView.Hide ();
+
 		
 	}
 }
