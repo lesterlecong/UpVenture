@@ -15,13 +15,8 @@ public class DataUpdater : MonoBehaviour {
 	public Text logText;
 	public bool allowProceedToNextScene = true;
 
-
-	void Awake(){
-		Debug.Log ("DataUpdater::Awake()");
-	}
-
 	void Start () {
-		NextScene();
+		Invoke("NextScene", 1.0f);
 	}
 
 	void NextScene(){
