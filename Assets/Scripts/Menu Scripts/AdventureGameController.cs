@@ -15,6 +15,7 @@ public class AdventureGameController : GameController {
 	public int level;
 	public Button forwardButton;
 	public Image gameOverBackground;
+	public AudioClip perfectScoreSound;
 
 	private Sprite perfectPanelSprite;
 	private int starCount = 0;
@@ -51,16 +52,22 @@ public class AdventureGameController : GameController {
 		
 		gameOverBackground.sprite = gameOverSprite;
 	}
-	
+
+	void PlayPerfectScoreSoundFX(){
+		gameObjectAudioSource.clip = perfectScoreSound;
+		gameObjectAudioSource.Play ();
+	}
+
 	public override void PlayerScored(){
 		if (isGameOver) {
 			return;
 		}
-
+		PlayScoreSoundFX ();
 		scoreStar [starCount].enabled = true;
 		starCount++;
 
 		if (starCount >=  (scoreStar.Length)) {
+			PlayPerfectScoreSoundFX();
 			gameOverBackground.sprite = perfectPanelSprite;
 			this.PlayerDied();
 		}
