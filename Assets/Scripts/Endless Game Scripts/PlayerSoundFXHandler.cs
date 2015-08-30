@@ -24,12 +24,15 @@ public class PlayerSoundFXHandler : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		if (other.tag == "Bird" || other.tag == "BirdGroup") {
+		if ((other.tag == "Bird" || other.tag == "BirdGroup") && !gameOverSoundFxAlreadyPlay) {
 			PlayClip (gameOverSound);
 			gameOverSoundFxAlreadyPlay = true;
 		} 
+
 		if (other.tag == "BottomBorder" && !gameOverSoundFxAlreadyPlay) {
 			PlayClip (gameOverSound);
+		} else if(other.tag == "BottomBorder" && gameOverSoundFxAlreadyPlay) {
+			gameOverSoundFxAlreadyPlay = false;
 		}
 	}
 	
