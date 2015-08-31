@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 public class BirdSoundWhenOnCamera : MonoBehaviour {
 	
@@ -21,8 +22,10 @@ public class BirdSoundWhenOnCamera : MonoBehaviour {
 	}
 
 	void ActivateSound(AudioClip audioClip){
-		audioSource.clip = audioClip;
-		audioSource.Play ();
+		if (PlayerPrefs.GetInt (GameSystemDefineKeys.SoundFXState) == 1) {
+			audioSource.clip = audioClip;
+			audioSource.Play ();
+		}
 	}
 
 	void DeactivateSound(){

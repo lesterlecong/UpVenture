@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 public class PlayerSoundFXHandler : MonoBehaviour {
 
@@ -37,8 +38,10 @@ public class PlayerSoundFXHandler : MonoBehaviour {
 	}
 	
 	void PlayClip(AudioClip clip){
-		audioSource.clip = clip;
-		audioSource.Play();
+		if (PlayerPrefs.GetInt (GameSystemDefineKeys.SoundFXState) == 1) {
+			audioSource.clip = clip;
+			audioSource.Play ();
+		}
 	}
 
 }

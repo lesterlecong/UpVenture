@@ -116,8 +116,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	protected void PlayScoreSoundFX(){
-		gameObjectAudioSource.clip = scoreSound;
-		gameObjectAudioSource.Play ();
+		if (PlayerPrefs.GetInt (GameSystemDefineKeys.SoundFXState) == 1) {
+			gameObjectAudioSource.clip = scoreSound;
+			gameObjectAudioSource.Play ();
+		}
 	}
 	#endregion
 

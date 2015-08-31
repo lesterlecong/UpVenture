@@ -54,8 +54,10 @@ public class AdventureGameController : GameController {
 	}
 
 	void PlayPerfectScoreSoundFX(){
-		gameObjectAudioSource.clip = perfectScoreSound;
-		gameObjectAudioSource.Play ();
+		if (PlayerPrefs.GetInt (GameSystemDefineKeys.SoundFXState) == 1) {
+			gameObjectAudioSource.clip = perfectScoreSound;
+			gameObjectAudioSource.Play ();
+		}
 	}
 
 	public override void PlayerScored(){
