@@ -25,7 +25,8 @@ public class GameController : MonoBehaviour {
 	protected GameObject gameAdsHandlerObject;
 	protected GameAdsHandler gameAdsHandler;
 	protected AudioSource gameObjectAudioSource;
-
+	protected GameObject facebookHandlerObject = null;
+	protected FacebookHandler facebookHandler = null;
 	#endregion
 
 	#region Public Method
@@ -105,6 +106,7 @@ public class GameController : MonoBehaviour {
 		if (current == null) {
 			current = this;
 			SetupGameAds();
+			SetupFacebookHandler();
 		} else if (current != this) {
 			Destroy(gameObject);
 		}
@@ -130,6 +132,13 @@ public class GameController : MonoBehaviour {
 			gameAdsHandler = (GameAdsHandler) gameAdsHandlerObject.GetComponent(typeof(GameAdsHandler));
 			//gameAdsHandlerObject.SetActive(false);
 			
+		}
+	}
+
+	private void SetupFacebookHandler(){
+		facebookHandlerObject = GameObject.Find ("FacebookHandler");
+		if (facebookHandlerObject != null) {
+			facebookHandler = (FacebookHandler) facebookHandlerObject.GetComponent(typeof(FacebookHandler));
 		}
 	}
 	#endregion
