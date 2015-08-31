@@ -7,6 +7,7 @@ using Couchbase.Lite.Unity;
 
 public class DataInitializer : MonoBehaviour {
 
+	public string version;
 	public GameObject couchbaseDatabaseObject;
 	public string homeMenuSceneName ="home menu";
 
@@ -31,6 +32,7 @@ public class DataInitializer : MonoBehaviour {
 		userAccount.UserID = UserAccountDefineKeys.TemporaryID;
 		userAccount.UserName = UserAccountDefineKeys.TemporaryUser;
 		userAccount.UserToken = UserAccountDefineKeys.TemporaryToken;
+		userAccount.Version = version;
 		string UUID = userAccount.Create ();
 		PlayerPrefs.SetString (UserAccountDefineKeys.UUID, UUID);
 	}

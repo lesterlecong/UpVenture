@@ -88,7 +88,7 @@ namespace AssemblyCSharp {
 			couchbaseDatabase.SaveData(UserAccountDefineKeys.FBUsername, UserName);
 			couchbaseDatabase.SaveData(UserAccountDefineKeys.FBID, UserID);
 			couchbaseDatabase.SaveData(UserAccountDefineKeys.FBEmail, UserEmail);
-
+			couchbaseDatabase.SaveData (UserAccountDefineKeys.Version, Version);
 			IDDocumentLookUp (docID);
 			EmailDocumentLookUp (docID);
 			

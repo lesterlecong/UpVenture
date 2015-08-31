@@ -19,6 +19,7 @@ namespace AssemblyCSharp {
 		protected string userEmail ="";
 		protected string userId = "";
 		protected string userName = "";
+		protected string version = "";
 		protected CouchbaseDatabase couchbaseDatabase;
 
 
@@ -78,7 +79,15 @@ namespace AssemblyCSharp {
 				return userId;
 			}
 		}
-		
+
+		public string Version{
+			set{
+				version = value;
+			}
+			get{
+				return version;
+			}
+		}
 		#endregion
 
 		#region Protected Methods
