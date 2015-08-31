@@ -21,7 +21,7 @@ public class DataInitializer : MonoBehaviour {
 			PlayerPrefs.SetString (UserAccountDefineKeys.FBLoginStatus, UserAccountDefineKeys.FBIsLogout);
 			InitializeData();
 		}
-
+		InitializeSettings ();
 		Invoke ("InvokeHomeMenu", 2.0f);
 	}
 
@@ -33,6 +33,12 @@ public class DataInitializer : MonoBehaviour {
 		userAccount.UserToken = UserAccountDefineKeys.TemporaryToken;
 		string UUID = userAccount.Create ();
 		PlayerPrefs.SetString (UserAccountDefineKeys.UUID, UUID);
+	}
+
+	void InitializeSettings(){
+		if (!PlayerPrefs.HasKey (GameSystemDefineKeys.SoundFXState)) {
+			PlayerPrefs.SetInt(GameSystemDefineKeys.SoundFXState, 0);
+		}
 	}
 
 	void InvokeHomeMenu(){
