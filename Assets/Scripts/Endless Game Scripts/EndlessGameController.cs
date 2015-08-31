@@ -7,6 +7,8 @@ public class EndlessGameController : GameController {
 	private GameScoreHandler scoreHandler;
 	private string scoreField = "score";
 
+
+
 	void Awake(){
 		Initialized ();
 	}
@@ -36,7 +38,12 @@ public class EndlessGameController : GameController {
 	}
 	
 	public override void ShareScore(){
-
+		if (facebookHandler != null) {
+			if(!facebookHandler.IsLoggedIn()){
+				facebookHandler.LoginFacebook();
+			}
+			facebookHandler.ShareMessage("Whooah I passed " + score.ToString() + " obstacle" + ((score > 1)? "s!":"!") + "\n Can you beat my score? #upventure");
+		}
 	}
 	
 	protected override void SetupGameOverObject(){
