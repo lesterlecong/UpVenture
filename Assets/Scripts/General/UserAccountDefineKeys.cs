@@ -28,6 +28,7 @@ namespace AssemblyCSharp
 		public const string TemporaryToken = "fffffff";
 
 		public const string Channels = "channels";
+		public const string Version = "version";
 	}
 
 }
