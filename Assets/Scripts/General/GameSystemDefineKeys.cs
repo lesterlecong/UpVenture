@@ -12,6 +12,7 @@ namespace AssemblyCSharp
 {
 	public struct GameSystemDefineKeys
 	{
+		public const string SoundFXState = "SoundFXState";
 	}
 }
 
