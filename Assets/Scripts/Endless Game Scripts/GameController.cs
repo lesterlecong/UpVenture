@@ -29,16 +29,13 @@ public class GameController : MonoBehaviour {
 	#region Public Method
 	public void RestartScene(){
 		Application.LoadLevel(Application.loadedLevel);
+
 	}
 
 	public void PlayerDied(){
 		birdSpawner.StopSpawn ();
 		isGameOver = true;
-
-		if (gameAdsHandlerObject != null && gameAdsHandler != null) {
-			gameAdsHandlerObject.SetActive(true);
-			gameAdsHandler.ShowAds();
-		}
+		GameAdsHandler.instance.ShowAds ();
 
 		gameOverObject.SetActive (true);
 
@@ -51,21 +48,17 @@ public class GameController : MonoBehaviour {
 		pauseButton.gameObject.SetActive (false);
 		playButton.gameObject.SetActive (true);
 
-		if (gameAdsHandlerObject != null && gameAdsHandler != null) {
-			gameAdsHandlerObject.SetActive(true);
-			gameAdsHandler.ShowAds();
-		}
 	}
 
 	public void Play(){
 		isPaused = false;
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
+		GameAdsHandler.instance.HideAds ();
+	}
 
-		if (gameAdsHandlerObject != null && gameAdsHandler != null) {
-			gameAdsHandlerObject.SetActive(false);
-			gameAdsHandler.HideAds();
-		}
+	public void ShowAdsOnPause(){
+		GameAdsHandler.instance.ShowAds ();
 	}
 	
 	public bool IsPaused(){
@@ -102,25 +95,15 @@ public class GameController : MonoBehaviour {
 	protected void Initialized(){
 		if (current == null) {
 			current = this;
-			SetupGameAds();
 		} else if (current != this) {
 			Destroy(gameObject);
 		}
-		
+
+		GameAdsHandler.instance.HideAds ();
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
 	}
 	#endregion
 
-	#region Private Method
-	private void SetupGameAds(){
-		gameAdsHandlerObject = GameObject.Find ("GameAdsHandler");
-		if (gameAdsHandlerObject != null) {
-			gameAdsHandler = (GameAdsHandler) gameAdsHandlerObject.GetComponent(typeof(GameAdsHandler));
-			gameAdsHandlerObject.SetActive(false);
-			
-		}
-	}
-	#endregion
 }

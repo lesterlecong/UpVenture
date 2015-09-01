@@ -14,17 +14,32 @@ public class GameAdsHandler : MonoBehaviour {
 	private static BannerView bannerView = null;
 	private static AdRequest request = null;
 
-	// Use this for initialization
-	void Start () {
+	public static GameAdsHandler instance{
+		get{
+			if(current == null){
+				current = GameObject.FindObjectOfType<GameAdsHandler>();
+			}
+
+			return current;
+		}
+	}
+
+	void Awake(){
 		if (current == null) {
 			current = this;
 			SetupAds ();
-		} else if (current != this) {
-			Destroy(gameObject);
+		} else {
+			if(this != current){
+				Destroy(this.gameObject);
+			}
 		}
 	}
 
 	void OnDestroy(){
+		HideAds ();
+	}
+
+	void OnApplicationQuit(){
 		bannerView.Destroy ();
 	}
 
@@ -54,25 +69,17 @@ public class GameAdsHandler : MonoBehaviour {
 				request = new AdRequest.Builder ().Build ();
 			}
 			bannerView.LoadAd (request);
-			HideAds();
 		}
+
+		HideAds ();
 	}
 
 
 	public void ShowAds(){
-		if (bannerView == null) {
-			SetupAds();
-		}
 			bannerView.Show ();
-		
 	}
 
 	public void HideAds(){
-		if (bannerView == null) {
-			SetupAds();
-		}
 			bannerView.Hide ();
-
-		
 	}
 }
