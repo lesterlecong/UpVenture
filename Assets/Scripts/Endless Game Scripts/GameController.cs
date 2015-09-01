@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour {
 	protected bool isPaused = false;
 	protected Sprite gameOverSprite;
 	protected GameObject gameAdsHandlerObject;
-	protected GameAdsHandler gameAdsHandler;
+	protected GameAdMobHandler gameAdsHandler;
 
 	#endregion
 
@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour {
 	public void PlayerDied(){
 		birdSpawner.StopSpawn ();
 		isGameOver = true;
-		GameAdsHandler.instance.ShowAds ();
+		GameAdMobHandler.instance.ShowAds ();
 
 		gameOverObject.SetActive (true);
 
@@ -54,11 +54,11 @@ public class GameController : MonoBehaviour {
 		isPaused = false;
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
-		GameAdsHandler.instance.HideAds ();
+		GameAdMobHandler.instance.HideAds ();
 	}
 
 	public void ShowAdsOnPause(){
-		GameAdsHandler.instance.ShowAds ();
+		GameAdMobHandler.instance.ShowAds ();
 	}
 	
 	public bool IsPaused(){
@@ -99,7 +99,7 @@ public class GameController : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		GameAdsHandler.instance.HideAds ();
+		GameAdMobHandler.instance.HideAds ();
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);

@@ -3,9 +3,9 @@ using System.Collections;
 
 using GoogleMobileAds.Api;
 
-public class GameAdsHandler : MonoBehaviour {
+public class GameAdMobHandler : MonoBehaviour {
 
-	public static GameAdsHandler current;
+	public static GameAdMobHandler current;
 	public string adMobAndroidUnitID = "";
 	public string adMobiOSUnitID = "";
 	public bool isTesting = false;
@@ -14,10 +14,10 @@ public class GameAdsHandler : MonoBehaviour {
 	private static BannerView bannerView = null;
 	private static AdRequest request = null;
 
-	public static GameAdsHandler instance{
+	public static GameAdMobHandler instance{
 		get{
 			if(current == null){
-				current = GameObject.FindObjectOfType<GameAdsHandler>();
+				current = GameObject.FindObjectOfType<GameAdMobHandler>();
 			}
 
 			return current;
