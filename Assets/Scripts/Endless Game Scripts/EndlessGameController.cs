@@ -7,13 +7,9 @@ public class EndlessGameController : GameController {
 	private GameScoreHandler scoreHandler;
 	private string scoreField = "score";
 
-
-
-	void Awake(){
-		Initialized ();
-	}
 	
 	void Start(){
+		Initialized ();
 		scoreHandler = (GameScoreHandler)gameScoreHandler.GetComponent (typeof(GameScoreHandler));
 		scoreHandler.ScoreFieldName = scoreField;
 		scoreHandler.InitGameScoreHandlerDocument ();

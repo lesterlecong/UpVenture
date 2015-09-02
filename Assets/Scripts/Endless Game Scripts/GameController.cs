@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using AssemblyCSharp;
-
+using ChartboostSDK;
 
 public class GameController : MonoBehaviour {
 
@@ -23,25 +23,36 @@ public class GameController : MonoBehaviour {
 	protected bool isPaused = false;
 	protected Sprite gameOverSprite;
 	protected GameObject gameAdsHandlerObject;
-	protected GameAdsHandler gameAdsHandler;
 	protected AudioSource gameObjectAudioSource;
 	protected GameObject facebookHandlerObject = null;
 	protected FacebookHandler facebookHandler = null;
+	protected GameAdMobHandler gameAdsHandler;
+	protected const int adShowScaler = 5; 
+	#endregion
+	#region Private Member Variables
+	private const string adShowCountKey = "AdShowCount";
+
 	#endregion
 
 	#region Public Method
 	public void RestartScene(){
 		Application.LoadLevel(Application.loadedLevel);
+
 	}
 
 	public void PlayerDied(){
 		birdSpawner.StopSpawn ();
 		isGameOver = true;
+		
+		int adShowCount = PlayerPrefs.HasKey (adShowCountKey) ? PlayerPrefs.GetInt (adShowCountKey) : 0;
 
-		if (gameAdsHandlerObject != null && gameAdsHandler != null) {
-			//gameAdsHandlerObject.SetActive(true);
-			gameAdsHandler.ShowAds();
+		if (Chartboost.hasInterstitial (CBLocation.GameOver)) {
+			Chartboost.showInterstitial (CBLocation.GameOver);
+		} else {
+			GameAdMobHandler.instance.ShowAds ();
 		}
+
+		//PlayerPrefs.SetInt(adShowCountKey, adShowCount + 1);
 
 		gameOverObject.SetActive (true);
 
@@ -53,22 +64,17 @@ public class GameController : MonoBehaviour {
 		isPaused = true;
 		pauseButton.gameObject.SetActive (false);
 		playButton.gameObject.SetActive (true);
-
-		if (gameAdsHandlerObject != null && gameAdsHandler != null) {
-			//gameAdsHandlerObject.SetActive(true);
-			gameAdsHandler.ShowAds();
-		}
 	}
 
 	public void Play(){
 		isPaused = false;
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
+		GameAdMobHandler.instance.HideAds ();
+	}
 
-		if (gameAdsHandlerObject != null && gameAdsHandler != null) {
-			//gameAdsHandlerObject.SetActive(false);
-			gameAdsHandler.HideAds();
-		}
+	public void ShowAdsOnPause(){
+		GameAdMobHandler.instance.ShowAds ();
 	}
 	
 	public bool IsPaused(){
@@ -105,13 +111,15 @@ public class GameController : MonoBehaviour {
 	protected void Initialized(){
 		if (current == null) {
 			current = this;
-			SetupGameAds();
+
 			SetupFacebookHandler();
 		} else if (current != this) {
 			Destroy(gameObject);
 		}
-
+		
 		gameObjectAudioSource = gameObject.GetComponent<AudioSource> ();
+		GameAdMobHandler.instance.HideAds ();
+		Chartboost.setAutoCacheAds (true);
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
@@ -126,14 +134,6 @@ public class GameController : MonoBehaviour {
 	#endregion
 
 	#region Private Method
-	private void SetupGameAds(){
-		gameAdsHandlerObject = GameObject.Find ("GameAdsHandler");
-		if (gameAdsHandlerObject != null) {
-			gameAdsHandler = (GameAdsHandler) gameAdsHandlerObject.GetComponent(typeof(GameAdsHandler));
-			//gameAdsHandlerObject.SetActive(false);
-			
-		}
-	}
 
 	private void SetupFacebookHandler(){
 		facebookHandlerObject = GameObject.Find ("FacebookHandler");
