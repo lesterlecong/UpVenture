@@ -18,6 +18,7 @@ public class GameAdMobHandler : MonoBehaviour {
 		get{
 			if(current == null){
 				current = GameObject.FindObjectOfType<GameAdMobHandler>();
+
 			}
 
 			return current;
@@ -44,7 +45,6 @@ public class GameAdMobHandler : MonoBehaviour {
 	}
 
 	void SetupAds(){
-
 		#if UNITY_ANDROID
 		string adUnitId =   adMobAndroidUnitID;// "ca-app-pub-6867538652048315/8768168980";
 		#elif UNITY_IPHONE

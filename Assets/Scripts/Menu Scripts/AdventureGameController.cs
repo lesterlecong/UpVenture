@@ -21,12 +21,9 @@ public class AdventureGameController : GameController {
 	private UserDefineKeys userDefineKey;
 	private GameScoreHandler scoreHandler;
 
-	void Awake(){
-		Initialized ();
-	}
 
 	void Start () {
-
+		Initialized ();
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
 
