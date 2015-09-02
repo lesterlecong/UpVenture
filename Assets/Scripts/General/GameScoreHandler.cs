@@ -11,9 +11,9 @@ public class GameScoreHandler : MonoBehaviour {
 
 	public GameType gameType;
 	public GameObject couchbaseDatabaseObject;
-	
+
 	private string scoreFieldName;
-	private int level;
+	private int level = 0;
 	private string documentIDWithLevel;
 	private CouchbaseDatabase couchbaseDatabase;
 	private string userUUID;
@@ -54,7 +54,7 @@ public class GameScoreHandler : MonoBehaviour {
 		set{
 			if(value > GetPreviousScore()){
 				int accumulatedScore = GetAccumulatedScore() + (value - GetPreviousScore());
-				couchbaseDatabase.SaveData(userDefineKey.Total, accumulatedScore.ToString());
+				couchbaseDatabase.SaveData(GameScoreDefineKeys.Total, accumulatedScore.ToString());
 				Debug.Log("Save accumulated score:" + accumulatedScore.ToString());
 			}
 		}
@@ -66,10 +66,10 @@ public class GameScoreHandler : MonoBehaviour {
 
 	public int ScoreRequired{
 		set{
-			couchbaseDatabase.SaveData(userDefineKey.Level + Level.ToString () + userDefineKey.RequiredScore, value.ToString()); 
+			couchbaseDatabase.SaveData(GameScoreDefineKeys.Level + Level.ToString () + GameScoreDefineKeys.RequiredScore, value.ToString()); 
 		}
 		get{
-			return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString(userDefineKey.Level + Level.ToString () + userDefineKey.RequiredScore));
+			return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString(GameScoreDefineKeys.Level + Level.ToString () + GameScoreDefineKeys.RequiredScore));
 		}
 
 	}
@@ -80,14 +80,14 @@ public class GameScoreHandler : MonoBehaviour {
 	}
 
 	int GetPreviousScore(){
-		Debug.Log ("At GameScoreHandler::GetPreviousScore Field: " + GetFieldNameForHighScore ());
+		//Debug.Log ("At GameScoreHandler::GetPreviousScore Field: " + GetFieldNameForHighScore ());
 		return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString (GetFieldNameForHighScore()));
 	}
 	
 
 	int GetAccumulatedScore(){
-		Debug.Log ("At GameScoreHandler accumulated score = " + couchbaseDatabase.ReadDataAsString (userDefineKey.Total));
-		return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString (userDefineKey.Total));
+		//Debug.Log ("At GameScoreHandler accumulated score = " + couchbaseDatabase.ReadDataAsString (userDefineKey.Total));
+		return ConvertDataStoreReadingToInt(couchbaseDatabase.ReadDataAsString (GameScoreDefineKeys.Total));
 	}
 	
 	int ConvertDataStoreReadingToInt(string reading){
@@ -101,25 +101,43 @@ public class GameScoreHandler : MonoBehaviour {
 
 	}
 
-	
-	void Start(){
-		level = 0;
+	void Awake(){
+		SetupDatabase ();
+	}
 
-		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
+	void Start(){
+
 
 		userUUID = GetUserUUID();
 		
-		Debug.Log ("At GameScoreHandler: " + userUUID);
+		Debug.Log ("At GameScoreHandler::Start() UUID:" + userUUID);
 
 	}
 
+	void SetupDatabase(){
+		if (couchbaseDatabaseObject != null) {
+			couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
+		}
+	}
+
 	string GetUserUUID(){
-		UserAccount userAccount = new UserAccount(couchbaseDatabase);
-		userAccount.UserEmail = PlayerPrefs.GetString (userDefineKey.FBEmail);
-		userAccount.UserID = PlayerPrefs.GetString(userDefineKey.FBUserID);
-		userAccount.UserName = PlayerPrefs.GetString (userDefineKey.FBUsername);
-		userAccount.UserToken = PlayerPrefs.GetString (userDefineKey.FBToken);
-		return userAccount.GetUUID ();
+
+		FBUserAccount userAccount = new FBUserAccount (couchbaseDatabase);
+		string GUUID = "";
+		
+		userAccount.UserEmail = UserAccountDefineKeys.TemporaryEmail;
+		userAccount.UserID =  UserAccountDefineKeys.TemporaryID;
+
+		if (string.IsNullOrEmpty (userAccount.GetUUID ())) {
+			userAccount.Create ();
+		}
+
+		Debug.Log ("User Email: " + userAccount.UserEmail);
+		Debug.Log ("User ID: " + userAccount.UserID);
+
+		GUUID = userAccount.GetUUID ();
+		
+		return GUUID;
 	}
 
 	
@@ -128,16 +146,16 @@ public class GameScoreHandler : MonoBehaviour {
 
 		switch (type) {
 			case GameType.MountainAdventure:
-				advetureTypeName = "MA_";
+				advetureTypeName = GameScoreDefineKeys.MountainAdventure;
 				break;
 			case GameType.CityAdventure:
-				advetureTypeName = "CA_";
+				advetureTypeName = GameScoreDefineKeys.CityAdventure;
 				break;
 			case GameType.BeachAdventure:
-				advetureTypeName = "BA_";
+				advetureTypeName = GameScoreDefineKeys.BeachAdventure;
 				break;
 			case GameType.Endless:
-				advetureTypeName = "EL_";
+				advetureTypeName = GameScoreDefineKeys.EndlessAdventure;
 				break;
 			default:
 				break;
@@ -147,7 +165,7 @@ public class GameScoreHandler : MonoBehaviour {
 	}
 
 	string GetFieldNameForHighScore(){
-		return (gameType == GameType.Endless)? scoreFieldName:(userDefineKey.Level + Level.ToString () + ScoreFieldName);
+		return (gameType == GameType.Endless)? scoreFieldName:(GameScoreDefineKeys.Level + Level.ToString () + GameScoreDefineKeys.ScoreName);
 	}
 	
 }

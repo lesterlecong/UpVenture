@@ -1,44 +1,29 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using AssemblyCSharp;
 
 using Couchbase.Lite;
 using Couchbase.Lite.Unity;
 using Newtonsoft;
 
+public delegate void CallDelegate();
+
 public class DataUpdater : MonoBehaviour {
 	public GameObject couchbaseDatabaseObject;
 	public Text logText;
-
-	private CouchbaseDatabase couchbaseDatabase;
+	public bool allowProceedToNextScene = true;
 
 	void Start () {
-
-		couchbaseDatabase = (CouchbaseDatabase)couchbaseDatabaseObject.GetComponent (typeof(CouchbaseDatabase));
-	
-		Invoke ("StartReplicate", 0.1f);
+		Invoke("NextScene", 1.0f);
 	}
-
-	void StartReplicate(){
-
-		couchbaseDatabase.PullDataChanges();
-		if (!couchbaseDatabase.IsPullReplicationOffline()) {
-			logText.text += "Sync Gateway is Online\n";
-			couchbaseDatabase.PushDataChanges ();
-		} else {
-			logText.text += "Sync Gateway is Offline\n";
-		}
-	
-			NextScene();
-		
-	}
-
-
 
 	void NextScene(){
-		UserDefineKeys defineKeys;
-		Application.LoadLevel(PlayerPrefs.GetString(defineKeys.NextScene));
+		if (allowProceedToNextScene) {
+			UserDefineKeys defineKeys;
+			Application.LoadLevel (PlayerPrefs.GetString (defineKeys.NextScene));
+		}
 	}
 
 }

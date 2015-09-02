@@ -15,18 +15,16 @@ public class AdventureGameController : GameController {
 	public int level;
 	public Button forwardButton;
 	public Image gameOverBackground;
+	public AudioClip perfectScoreSound;
 
 	private Sprite perfectPanelSprite;
 	private int starCount = 0;
 	private UserDefineKeys userDefineKey;
 	private GameScoreHandler scoreHandler;
 
-	void Awake(){
-		Initialized ();
-	}
 
 	void Start () {
-
+		Initialized ();
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
 
@@ -36,7 +34,7 @@ public class AdventureGameController : GameController {
 		}
 
 		scoreHandler = (GameScoreHandler)gameScoreHandler.GetComponent (typeof(GameScoreHandler));
-		scoreHandler.ScoreFieldName = userDefineKey.Score;
+		scoreHandler.ScoreFieldName = GameScoreDefineKeys.ScoreName;
 		scoreHandler.Level = level;
 		scoreHandler.InitGameScoreHandlerDocument ();
 
@@ -51,16 +49,24 @@ public class AdventureGameController : GameController {
 		
 		gameOverBackground.sprite = gameOverSprite;
 	}
-	
+
+	void PlayPerfectScoreSoundFX(){
+		if (PlayerPrefs.GetInt (GameSystemDefineKeys.SoundFXState) == 1) {
+			gameObjectAudioSource.clip = perfectScoreSound;
+			gameObjectAudioSource.Play ();
+		}
+	}
+
 	public override void PlayerScored(){
 		if (isGameOver) {
 			return;
 		}
-
+		PlayScoreSoundFX ();
 		scoreStar [starCount].enabled = true;
 		starCount++;
 
 		if (starCount >=  (scoreStar.Length)) {
+			PlayPerfectScoreSoundFX();
 			gameOverBackground.sprite = perfectPanelSprite;
 			this.PlayerDied();
 		}

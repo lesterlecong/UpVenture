@@ -16,5 +16,7 @@ public class NavigationController : MonoBehaviour {
 		Application.LoadLevel (SceneNumber);
 	}
 
-
+	public void OpenURL(string url){
+		Application.OpenURL (url);
+	}
 }

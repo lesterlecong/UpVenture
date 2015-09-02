@@ -7,21 +7,21 @@ public class EndlessGameController : GameController {
 	private GameScoreHandler scoreHandler;
 	private string scoreField = "score";
 
-	void Awake(){
-		Initialized ();
-	}
 	
 	void Start(){
+		Initialized ();
 		scoreHandler = (GameScoreHandler)gameScoreHandler.GetComponent (typeof(GameScoreHandler));
 		scoreHandler.ScoreFieldName = scoreField;
 		scoreHandler.InitGameScoreHandlerDocument ();
 	}
-	
+
+
+
 	public override void PlayerScored(){
 		if (isGameOver) {
 			return;
 		}
-		
+		PlayScoreSoundFX ();
 		score++;
 		
 		if (score >= (previousGameLevel + 2)) {
@@ -35,9 +35,10 @@ public class EndlessGameController : GameController {
 	
 	public override void ShareScore(){
 		if (facebookHandler != null) {
-			facebookHandler.ShareHighscore (score);
-		} else {
-			Debug.LogError("FB Holder is null");
+			if(!facebookHandler.IsLoggedIn()){
+				facebookHandler.LoginFacebook();
+			}
+			facebookHandler.ShareMessage("Whooah I passed " + score.ToString() + " obstacle" + ((score > 1)? "s!":"!") + "\n Can you beat my score? #upventure");
 		}
 	}
 	

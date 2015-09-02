@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using AssemblyCSharp;
-
+using ChartboostSDK;
 
 public class GameController : MonoBehaviour {
 
@@ -16,24 +16,46 @@ public class GameController : MonoBehaviour {
 	public Text highScoreText;
 	public Button playButton;
 	public Button pauseButton;
+	public AudioClip scoreSound;
 	#endregion
 	#region Protected Member Variables
 	protected bool isGameOver = false;
 	protected bool isPaused = false;
 	protected Sprite gameOverSprite;
-	protected GameObject fbObject;
-	protected FacebookHandler facebookHandler;
+	protected GameObject gameAdsHandlerObject;
+	protected AudioSource gameObjectAudioSource;
+	protected GameObject facebookHandlerObject = null;
+	protected FacebookHandler facebookHandler = null;
+	protected GameAdMobHandler gameAdsHandler;
+	protected const int adShowScaler = 5; 
+	#endregion
+	#region Private Member Variables
+	private const string adShowCountKey = "AdShowCount";
+
 	#endregion
 
 	#region Public Method
 	public void RestartScene(){
 		Application.LoadLevel(Application.loadedLevel);
+
 	}
 
 	public void PlayerDied(){
 		birdSpawner.StopSpawn ();
 		isGameOver = true;
+		
+		int adShowCount = PlayerPrefs.HasKey (adShowCountKey) ? PlayerPrefs.GetInt (adShowCountKey) : 0;
+
+		if (Chartboost.hasInterstitial (CBLocation.GameOver)) {
+			Chartboost.showInterstitial (CBLocation.GameOver);
+		} else {
+			GameAdMobHandler.instance.ShowAds ();
+		}
+
+		//PlayerPrefs.SetInt(adShowCountKey, adShowCount + 1);
+
 		gameOverObject.SetActive (true);
+
 		SaveToDatabase ();
 		SetupGameOverObject ();
 	}
@@ -48,6 +70,11 @@ public class GameController : MonoBehaviour {
 		isPaused = false;
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
+		GameAdMobHandler.instance.HideAds ();
+	}
+
+	public void ShowAdsOnPause(){
+		GameAdMobHandler.instance.ShowAds ();
 	}
 	
 	public bool IsPaused(){
@@ -70,7 +97,7 @@ public class GameController : MonoBehaviour {
 	#region Protected Virtual Method
 
 	
-	protected virtual void SetupGameOverObject(){
+	protected virtual void SetupGameOverObject(){ 
 		
 	}
 	
@@ -84,22 +111,37 @@ public class GameController : MonoBehaviour {
 	protected void Initialized(){
 		if (current == null) {
 			current = this;
+
+			SetupFacebookHandler();
 		} else if (current != this) {
 			Destroy(gameObject);
 		}
 		
+		gameObjectAudioSource = gameObject.GetComponent<AudioSource> ();
+
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
-		SetupFBObject ();
+
+		GameAdMobHandler.instance.HideAds ();
+		Chartboost.cacheInterstitial (CBLocation.GameOver);
 	}
 
-	protected void SetupFBObject(){
-		fbObject = GameObject.Find ("fbObject");
-		if (fbObject != null) {
-			facebookHandler = (FacebookHandler) fbObject.GetComponent(typeof(FacebookHandler));
+	protected void PlayScoreSoundFX(){
+		if (PlayerPrefs.GetInt (GameSystemDefineKeys.SoundFXState) == 1) {
+			gameObjectAudioSource.clip = scoreSound;
+			gameObjectAudioSource.Play ();
 		}
 	}
 	#endregion
 
+	#region Private Method
+
+	private void SetupFacebookHandler(){
+		facebookHandlerObject = GameObject.Find ("FacebookHandler");
+		if (facebookHandlerObject != null) {
+			facebookHandler = (FacebookHandler) facebookHandlerObject.GetComponent(typeof(FacebookHandler));
+		}
+	}
+	#endregion
 }
