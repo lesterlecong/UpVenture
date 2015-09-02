@@ -57,10 +57,8 @@ public class FacebookHandler : MonoBehaviour {
 
 	public void ShareMessage(string message){
 		FB.Feed (
-			linkName: message,
-			picture: "https://farm1.staticflickr.com/355/19332490282_5e3201c652_n.jpg",
-			linkCaption: "Play this exciting Game!!!",
-			link: "www.facebook.com/upventuregame"
+			linkDescription: message,
+			picture: "https://farm1.staticflickr.com/355/19332490282_5e3201c652_n.jpg"
 			);
 		
 	}
