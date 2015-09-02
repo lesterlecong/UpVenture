@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using AssemblyCSharp;
-
+using ChartboostSDK;
 
 public class GameController : MonoBehaviour {
 
@@ -23,7 +23,10 @@ public class GameController : MonoBehaviour {
 	protected Sprite gameOverSprite;
 	protected GameObject gameAdsHandlerObject;
 	protected GameAdMobHandler gameAdsHandler;
-
+	protected const int adShowScaler = 5; 
+	#endregion
+	#region Private Member Variables
+	private const string adShowCountKey = "AdShowCount";
 	#endregion
 
 	#region Public Method
@@ -35,7 +38,16 @@ public class GameController : MonoBehaviour {
 	public void PlayerDied(){
 		birdSpawner.StopSpawn ();
 		isGameOver = true;
-		GameAdMobHandler.instance.ShowAds ();
+
+		int adShowCount = PlayerPrefs.HasKey (adShowCountKey) ? PlayerPrefs.GetInt (adShowCountKey) : 0;
+
+		if (Chartboost.hasInterstitial (CBLocation.GameOver)) {
+			Chartboost.showInterstitial (CBLocation.GameOver);
+		} else {
+			GameAdMobHandler.instance.ShowAds ();
+		}
+
+		//PlayerPrefs.SetInt(adShowCountKey, adShowCount + 1);
 
 		gameOverObject.SetActive (true);
 
@@ -55,6 +67,7 @@ public class GameController : MonoBehaviour {
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
 		GameAdMobHandler.instance.HideAds ();
+
 	}
 
 	public void ShowAdsOnPause(){
@@ -100,10 +113,12 @@ public class GameController : MonoBehaviour {
 		}
 
 		GameAdMobHandler.instance.HideAds ();
+		Chartboost.setAutoCacheAds (true);
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
 	}
 	#endregion
+
 
 }
