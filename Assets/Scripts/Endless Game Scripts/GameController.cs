@@ -118,11 +118,13 @@ public class GameController : MonoBehaviour {
 		}
 		
 		gameObjectAudioSource = gameObject.GetComponent<AudioSource> ();
-		GameAdMobHandler.instance.HideAds ();
-		Chartboost.setAutoCacheAds (true);
+
 		gameOverObject.SetActive (false);
 		pauseButton.gameObject.SetActive (true);
 		playButton.gameObject.SetActive (false);
+
+		GameAdMobHandler.instance.HideAds ();
+		Chartboost.cacheInterstitial (CBLocation.GameOver);
 	}
 
 	protected void PlayScoreSoundFX(){
